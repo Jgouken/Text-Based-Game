@@ -2369,16 +2369,237 @@ module.exports = {
 			alvlmult: 1,
 			evasion: 0.06,
 			encounter: 0.05
-		}	
-	]
-},
-  	{
+		},
+		{
 			name: "Damaged Cloak",
 			description: "A brown cloak that seems to have been used extensively based on the heavily faded color and abundant tears",
-			armor: 27,
+			armor: 42,
 			plvlmult: 5,
 			level: Math.random() * (10 - 1) + 1,
-			alvlmult: 1,
-			evasion: 0.06,
+			alvlmult: 2,
+			evasion: 0.05,
 			encounter: 0.05
 		},
+		{
+			name: "Rogues Cloak",
+			description: "A brown cloak that's still in good condition that should provide light protection due to it's a strong fabric",
+			armor: 5,
+			plvlmult: 5,
+			level: Math.random() * (12 - 4) + 4,
+			alvlmult: 2,
+			evasion: 0.09,
+			encounter: 0.05
+		},
+		{
+			name: "Perfect Leaf",
+			description: "A leaf with a vibrant hue of green, no missing leaves, damage, and a impressive shape that seems completely symmetrical it must be special.",
+			armor: 47,
+			plvlmult: 5,
+			level: Math.random() * (12 - 4) + 4,
+			alvlmult: 1,
+			evasion: 0.13,
+			encounter: 0.05
+		},
+		{
+			name: "Padded Ckothing",
+			description: "Multiple layers of normal clothing sown together to create a thick set shirt and pants , simple but surprisingly effective.",
+			armor: 17,
+			plvlmult: 5,
+			level: Math.random() * (14 - 6) + 6,
+			alvlmult: 2,
+			evasion: 0.07,
+			encounter: 0.05
+		},
+		{
+			name: "Confidence",
+			description: "Who needs armor or even clothing for that fact when you have such a magnificently strong body and mind? Clearly not you since you're just that impressive of an individual.",
+			armor: 198,
+			plvlmult: 5,
+			level: Math.random() * (45 - 25) + 25,
+			alvlmult: 10,
+			evasion: 0.30,
+			encounter: 0.05
+		},
+		{
+			name: "Leather Armor",
+			description: "A set of armor made from the tough hide of some kind of unlucky animal which provides good protect from a variety of attacks.",
+			armor: 10,
+			plvlmult: 5,
+			level: Math.random() * (24 - 13) + 13,
+			alvlmult: 4,
+			evasion: 0.12,
+			encounter: 0.05
+		},
+		{
+			name: "Light Armor",
+			description: "A set of leather armor that comes with a small set of metal coverings protecting most vital spots.",
+			armor: 3,
+			plvlmult: 5,
+			level: Math.random() * (28 - 15) + 15,
+			alvlmult: 7,
+			evasion: 0.09,
+			encounter: 0.05
+		},
+		{
+			name: "Hunter Cloak",
+			description: "A set of very light armor made from leather that provides decent protection without inhibiting mobility, topped of with a dark green cloak that conceals movement and provides even more protection.",
+			armor: 70,
+			plvlmult: 5,
+			level: Math.random() * (32 - 19) + 19,
+			alvlmult: 6,
+			evasion: 0.25,
+			encounter: 0.05
+		},
+		{
+			name: "Assassin Cloak",
+			description: "A black cloak made from a very light material with a set of padded clothing underneath.",
+			armor: 25,
+			plvlmult: 5,
+			level: Math.random() * (32 - 19) + 19,
+			alvlmult: 7,
+			evasion: 0.10,
+			encounter: 0.05
+		},
+		{
+			name: "Lumberjack Atire",
+			description: "A plaid long shirt and extra large black jeans a combo that just feels right for some unknown reason.",
+			armor: 9,
+			plvlmult: 5,
+			level: Math.random() * (38 - 26) + 26,
+			alvlmult: 14,
+			evasion: 0.08,
+			encounter: 0.05
+		},
+		{
+			name: "Thick Sleevelss Hoodie",
+			description: "A very large black hoodie that had it's sleeves cut off with a pair of baggy jeans.",
+			armor: 105,
+			plvlmult: 5,
+			level: Math.random() * (40 - 25) + 25,
+			alvlmult: 9,
+			evasion: 0.20,
+			encounter: 0.05
+		},
+		{
+			name: "Leather Apron & Mask",
+			description: "A stained apron made from leather and cloth facial covering that shields your nose and mouth.",
+			armor: 270,
+			plvlmult: 5,
+			level: Math.random() * (50 - 26) + 26,
+			alvlmult: 19,
+			evasion: 0.14,
+			encounter: 0.05
+		},
+		{
+			name: "Iron Armor",
+			description: "A full set of iron armor that protects your body from the neck down at the cost of mobility.",
+			armor: 10,
+			plvlmult: 5,
+			level: Math.random() * (38 - 26) + 26,
+			alvlmult: 15,
+			evasion: 0.0,
+			encounter: 0.05
+
+		},
+		{
+			name: "Dragon Cloak",
+			description: "A stylish jet-black cloak made from a extremely durable material rumored to actually be acquired by slaying a black dragon.",
+			armor: 60,
+			plvlmult: 5,
+			level: Math.random() * (40 - 30) + 30,
+			alvlmult: 12,
+			evasion: 0.15,
+			encounter: 0.05
+		},
+		{
+			name: "Spiked Leather Armor",
+			description: "Leather armor that's thin at the joints and extremely thick at vitals providing a mix of both maneuverability and protection. Having the mini spikes on it is mostly a bonus.",
+			armor: 21,
+			plvlmult: 5,
+			level: Math.random() * (40 - 30) + 30,
+			alvlmult: 17,
+			evasion: 0.13,
+			encounter: 0.05
+		},
+		{
+			name: "Shinobi Garments",
+			description: "The traditionally attire of those who practice ninjutsu consisting of a black jacket, black trousers, light sandals, and a hooded cowl.",
+			armor: 244,
+			plvlmult: 5,
+			level: Math.random() * (50 - 30) + 30,
+			alvlmult: 16,
+			evasion: 0.15,
+			encounter: 0.05
+		},
+		{
+			name: "Holy Knights Armor",
+			description: "A shiny suit of iron armor that's been blessed by the holy church and made from the finest iron",
+			armor: 272,
+			plvlmult: 5,
+			level: Math.random() * (50 - 30) + 30,
+			alvlmult: 24,
+			evasion: 0.07,
+			encounter: 0.05
+		},
+		{
+			name: "Coat of Darkness",
+			description: "WORK IN PROGRESS",
+			armor: 244,
+			plvlmult: 5,
+			level: Math.random() * (50 - 30) + 30,
+			alvlmult: 16,
+			evasion: 0.15,
+			encounter: 0.05
+		},
+		{
+			name: "Blessed GI",
+			description: "A martial artist GI that has been extensively blessed by the church till it's been imbued holy energy.",
+			armor: 247,
+			plvlmult: 5,
+			level: Math.random() * (50 - 40) + 40,
+			alvlmult: 28,
+			evasion: 0.14,
+			encounter: 0.05
+		},
+		{
+			name: "Sinner Jacket",
+			description: "WORK IN PROGRESS",
+			armor: 261,
+			plvlmult: 5,
+			level: Math.random() * (50 - 40) + 40,
+			alvlmult: 19,
+			evasion: 0.23,
+			encounter: 0.05
+		},
+		{
+			name: "Walking Church",
+			description: "A sacred treasure of the Holy Church, it's a priest robe bestowed with a blessing of protection of the highest grade that virtually makes the robe indestructible while protecting the wearer from most forms of damage.",
+			armor: 250,
+			plvlmult: 5,
+			level: Math.random() * (50 - 45) + 45,
+			alvlmult: 37,
+			evasion: 0.0,
+			encounter: 0.05
+		},
+		{
+			name: "Black Mourning",
+			description: "A black hooded cloak that's constantly secreting a black fog that's unnaturally cold to the touch. Instincts alone is enough to know this isn't a normal cloak...",
+			armor: 47,
+			plvlmult: 5,
+			level: Math.random() * (50 - 45) + 45,
+			alvlmult: 20,
+			evasion: 0.25,
+			encounter: 0.05
+		},
+		{
+			name: "Equinox",
+			description: "WORK IN PROGRESS",
+			armor: 247,
+			plvlmult: 5,
+			level: Math.random() * (50 - 45) + 45,
+			alvlmult: 24,
+			evasion: 0.15,
+			encounter: 0.05
+		},
+	]
+}
