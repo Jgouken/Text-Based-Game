@@ -76,9 +76,9 @@ module.exports = {
 
 		interaction.reply(await embed()).then(async (m) => {
 			async function battle() {
+				var i = 0
 				if (chatLog.length >= 10) chatLog = chatLog.slice(5)
 				if (p.health > 0) {
-					var i = 0
 					const collectorFilter = i => i.user.id === interaction.user.id;
 					const confirmation = await m.awaitMessageComponent({ filter: collectorFilter });
 					if (confirmation.customId === 'block') {
@@ -154,7 +154,7 @@ module.exports = {
 						}
 					}
 					await disableButtons(true, m)
-					setTimeout(async () => { await confirmation.update(await embed()).catch(async () => { m.edit(await embed()) }) }, timer * i)
+					await confirmation.update(await embed()).catch(async () => { m.edit(await embed()) })
 				} else {
 					if (ended) return;
 					ended = true
@@ -168,13 +168,13 @@ module.exports = {
 						if (await estatus.find(({ id }) => id == '🏴') && !await estatus.find(({ id }) => id == '✨')) {
 							chatLog.push(`${e.name}'s positive effects were erradicated 🏴`)
 							estatus.forEach(async stat => {
-								if (!stat.positive) estatus.splice(estatus.indexOf(stat), 1)
+								if (stat.positive === true) estatus.splice(estatus.indexOf(stat), 1)
 							})
 							setTimeout(async () => { m.edit(await embed()) }, 500)
 						} else if (!await estatus.find(({ id }) => id == '🏴') && await estatus.find(({ id }) => id == '✨')) {
 							chatLog.push(`${e.name}'s negative effects were cleansed ✨`)
 							estatus.forEach(async stat => {
-								if (!stat.positive) estatus.splice(estatus.indexOf(stat), 1)
+								if (stat.positive === false) estatus.splice(estatus.indexOf(stat), 1)
 							})
 							setTimeout(async () => { m.edit(await embed()) }, 500)
 						} else if (await estatus.find(({ id }) => id == '🏴') && await estatus.find(({ id }) => id == '✨')) {
@@ -183,7 +183,7 @@ module.exports = {
 							setTimeout(async () => { m.edit(await embed()) }, 500)
 						}
 
-						var i = 0
+						var x = 0
 						estatus.forEach(async status => {
 							if (ehealth > 0) {
 								setTimeout(async () => {
@@ -194,9 +194,9 @@ module.exports = {
 										chatLog = end.chatLog
 										m.edit(await embed())
 									} catch {
-										return i--
+										return x--
 									}
-								}, (timer / 2) * i++)
+								}, (timer / 2) * x++)
 							} else setTimeout(() => { if (!ended) ebattle() }, 500 * i++)
 						})
 
@@ -206,14 +206,14 @@ module.exports = {
 							m.edit(embed())
 							setTimeout(async () => {
 								await disableButtons(false, m)
-								setTimeout(() => { if (!ended) battle() }, 500 * i++)
+								setTimeout(() => { if (!ended) battle() }, 500 * x++)
 							}, timer)
 						} else {
-							if (p.health > 0) setTimeout(() => { if (!ended) ebattle() }, (timer / 2) * i++)
-							else setTimeout(() => { if (!ended) battle() }, (timer / 2) * i++)
+							if (p.health > 0) setTimeout(() => { if (!ended) ebattle() }, (timer / 2) * x++)
+							else setTimeout(() => { if (!ended) battle() }, (timer / 2) * x++)
 						}
-					} else setTimeout(() => { if (!ended) ebattle() }, 500 * i++)
-				}, timer)
+					} else setTimeout(() => { if (!ended) ebattle() }, 500 * x++)
+				}, timer * i)
 			}
 
 			async function ebattle() {
@@ -269,13 +269,13 @@ module.exports = {
 								if (await pstatus.find(({ id }) => id == '🏴') && !await pstatus.find(({ id }) => id == '✨')) {
 									chatLog.push(`${interaction.user.username}'s positive effects were erradicated 🏴`)
 									pstatus.forEach(async stat => {
-										if (!stat.positive) pstatus.splice(pstatus.indexOf(stat), 1)
+										if (stat.positive === true) pstatus.splice(pstatus.indexOf(stat), 1)
 									})
 									setTimeout(async () => { m.edit(await embed()) }, 500)
 								} else if (!await pstatus.find(({ id }) => id == '🏴') && await pstatus.find(({ id }) => id == '✨')) {
 									chatLog.push(`${interaction.user.username}'s negative effects were cleansed ✨`)
 									pstatus.forEach(async stat => {
-										if (!stat.positive) pstatus.splice(pstatus.indexOf(stat), 1)
+										if (stat.positive === false) pstatus.splice(pstatus.indexOf(stat), 1)
 									})
 									setTimeout(async () => { m.edit(await embed()) }, 500)
 								} else if (await pstatus.find(({ id }) => id == '🏴') && await pstatus.find(({ id }) => id == '✨')) {
@@ -419,6 +419,8 @@ module.exports = {
 					})
 				}
 			}
+
+			return true;
 		}
 
 		async function hitMissCrit(hitChance, critChance, statuses) {

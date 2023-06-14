@@ -1566,7 +1566,7 @@ module.exports = {
 			]
 		},
 		{
-			name: "Wodden Bow",
+			name: "Wooden Bow",
 			level: Math.floor(Math.random() * (32 - 19) + 19),
 			description: `A lightweight ranged weapon to get your enemies from afar.`,
 			attack: 15,

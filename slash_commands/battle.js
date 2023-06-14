@@ -86,6 +86,11 @@ module.exports = {
 		),
 
 	async execute(bot, interaction, db) {
-		battling.execute(bot, interaction, db, Number(interaction.options.getString('enemy')) - 1, Number(interaction.options.getString('weapon')) || Number(interaction.options.getString('bossweapon')), (interaction.options.getString('level')))
+		var enemy = Number(interaction.options.getString('enemy')) - 1
+		var weapon = Number(interaction.options.getString('weapon')) || Number(interaction.options.getString('bossweapon'))
+		var level = interaction.options.getString('level')
+		if (level < 0) level = level * -1
+		if (level > 50) level = 50
+		battling.execute(bot, interaction, db, enemy, weapon, level)
 	}
 }
