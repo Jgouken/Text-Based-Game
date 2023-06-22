@@ -227,7 +227,7 @@ module.exports = {
 		},
 		{
 			name: `Blacksmith Goblin`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1121514870832124034/image_2.gif',
 			weapon: "blacksmith hammer",
 			maxHealth: 75,
 			attack: 30,
@@ -291,7 +291,7 @@ module.exports = {
 		},
 		{
 			name: `Cursed Goblin`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1121510851543842907/image_1.gif',
 			weapon: "cursed rusted dagger",
 			accuracy: 0.75,
 			critical: 0.08,
@@ -591,7 +591,7 @@ module.exports = {
 		},
 		{
 			name: `Blue Fox`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1121537810432794684/image_3.gif',
 			weapon: "steel dagger",
 			accuracy: 0.8,
 			critical: 0.1,
@@ -2361,6 +2361,16 @@ module.exports = {
 	// Choose level from 6 to 12: Math.random() * (12 - 6) + 6
 	armor: [
 		{
+			name: "None",
+			description: "Go commando.",
+			armor: 0,
+			plvlmult: 1,
+			level: 0,
+			alvlmult: 1,
+			evasion: 0,
+			encounter: 0
+		},
+		{
 			name: "Tattered Rags",
 			description: "Torn clothing together enough to cover the most important part and keep warm.",
 			armor: 27,
@@ -2401,7 +2411,7 @@ module.exports = {
 			encounter: 0.05
 		},
 		{
-			name: "Padded Ckothing",
+			name: "Padded Clothing",
 			description: "Multiple layers of normal clothing sown together to create a thick set shirt and pants , simple but surprisingly effective.",
 			armor: 17,
 			plvlmult: 5,
@@ -2451,7 +2461,7 @@ module.exports = {
 			encounter: 0.05
 		},
 		{
-			name: "Assassin Cloak",
+			name: "Assassin's Cloak",
 			description: "A black cloak made from a very light material with a set of padded clothing underneath.",
 			armor: 25,
 			plvlmult: 5,
@@ -2471,7 +2481,7 @@ module.exports = {
 			encounter: 0.05
 		},
 		{
-			name: "Thick Sleevelss Hoodie",
+			name: "Thick Sleeveless Hoodie",
 			description: "A very large black hoodie that had it's sleeves cut off with a pair of baggy jeans.",
 			armor: 105,
 			plvlmult: 5,
@@ -2532,7 +2542,7 @@ module.exports = {
 			encounter: 0.05
 		},
 		{
-			name: "Holy Knights Armor",
+			name: "Holy Knight's Armor",
 			description: "A shiny suit of iron armor that's been blessed by the holy church and made from the finest iron",
 			armor: 272,
 			plvlmult: 5,

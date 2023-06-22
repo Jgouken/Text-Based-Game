@@ -4,29 +4,34 @@ const assets = require('./assets.js')
 module.exports = {
 	name: `battling`,
 
-	async execute(bot, interaction, db, choice, weapon, level) {
+	async execute(bot, interaction, db, choice, weapon, armor, level) {
 		if (!await db.get(`gamer_${interaction.user.id}`)) {
-			await db.set(`gamer_${interaction.user.id}`, `1&100&100&30&0&10&30&0.95&0&0&0`)
+			await db.set(`gamer_${interaction.user.id}`, `1&100&100&30&0&10&30&0.95&0&0&0&0`)
 		}
 		let player = await db.get(`gamer_${interaction.user.id}`)
 		player = player.split('&')
+		weapon = assets.weapons[Number(weapon)] || assets.weapons[Number(player[10])]
+		level = Number(level || player[0])
+		armor = assets.armor[Number(armor)] || assets.armor[Number(player[11])]
 		var p = {
-			level: Number(level) || Number(player[0]),
-			maxHealth: Math.round(Number(player[2]) + Number(50 * Number(level || Number(player[0]) - 1))),
-			health: Math.round(Number(player[2]) + Number(50 * Number(level || Number(player[0]) - 1))),
-			attack: Math.round(Number(player[3]) + Number(6 * Number(level || Number(player[0]) - 1)) + Number(assets.weapons[Number(weapon)].attack || assets.weapons[Number(player[10])].attack) + Number(assets.weapons[Number(weapon)].level || assets.weapons[Number(player[10])].level) + Number((Number(level) || Number(player[0])) * Number(assets.weapons[Number(weapon)].plvlmult || assets.weapons[Number(player[10])].plvlmult))),
-			defense: Number(player[4]) + Math.floor(0.2 * Number(Number(level) || Number(player[0]))),
-			armor: Number(player[5]),
-			stamina: Number(player[6]) + (5 * Number(Number(level) || Number(player[0]) - 1)),
-			maxStamina: Number(player[6]) + (5 * Number(Number(level) || Number(player[0]) - 1)),
+			level: level,
+			maxHealth: Math.round(Number(player[2]) + Number(50 * (level - 1))),
+			health: Math.round(Number(player[2]) + Number(50 * (level - 1))),
+			attack: Math.round(Number(player[3]) + Number(6 * (level - 1)) + Number(weapon.attack) + Number(weapon.level) + Number(level * Number(weapon.plvlmult))),
+			defense: Number(player[4]) + Math.floor(0.2 * level),
+			armor: Number(10 + Number(armor.armor) + Number(level * Number(armor.plvlmult)) + Number(Number(armor.level) * Number(armor.alvlmult))),
+			stamina: Number(player[6]) + (5 * (level - 1)),
+			maxStamina: Number(player[6]) + (5 * (level - 1)),
 			accuracy: Number(player[7]),
 			xp: Number(player[8]),
 			blocking: false,
-			critical: Number(assets.weapons[weapon].crit) || Number(assets.weapons[player[9]].crit),
-			weapon: assets.weapons[Number(weapon)] || assets.weapons[Number(player[10])]
+			critical: weapon.crit,
+			weapon: weapon,
+			evasion: armor.evasion
 		}
 
 		var e = assets.enemies[choice] || assets.enemies[Math.floor(Math.random() * assets.enemies.length)]
+		e.accuracy -= p.evasion
 		var ehealth = e.maxHealth
 		var pstatus = []
 		var estatus = []
@@ -87,70 +92,67 @@ module.exports = {
 					} else {
 						let skill = await p.weapon.skills.find(({ name }) => name == confirmation.customId)
 						let hit = await hitMissCrit(p.accuracy, p.critical, pstatus)
+						var logging = [`+ ${interaction.user.username} used ${skill.name}`]
 						p.stamina -= skill.cost ? skill.cost : 0
 						await playerSkill(hit, skill)
 
 						if (skill.times && hit > 0) {
-							chatLog.push(`+ ${interaction.user.username} used ${skill.name} on ${e.name}${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`)
+							chatLog.push(logging)
+							logging[0] = `+ ${interaction.user.username} used ${skill.name} and hit ${e.name} for `
 							m.edit(await embed())
 							for (i = 0; i < skill.times; i++) {
 								setTimeout(async () => {
-									//if (e.health > 0) {
-									let hit = await hitMissCrit(p.accuracy, p.critical, pstatus)
-									let draft = (p.attack * (skill.damage || 1)) * hit
+									//if (p.health > 0) {
+									let draft = (p.attack * (skill.damage || 1))
 									let draft2 = draft + await debuffs(pstatus, draft, estatus)
-									let finalHit = Math.round((draft2 + (draft2 * Math.random() * 0.05)) * (1 - e.defense / 10)) 
-									if (hit == 1) chatLog.push(`+ ${interaction.user.username}'s ${skill.name} hit ${e.name} for ⚔️${finalHit}`)
-									else if (hit == 2) chatLog.push(`+ ${interaction.user.username}'s ${skill.name} hit ${e.name} for a CRITICAL ⚔️${finalHit}!`)
-									else chatLog.push(`${interaction.user.username} missed`)
+									let finalHit = Math.round((draft2 + (draft2 * Math.random() * 0.05)) * (1 - e.defense / 10) * hit)
+									if (hit == 1) logging.push(`⚔️${finalHit}`)
+									else if (hit == 1.6) logging.push(`CRIT ⚔️${finalHit}`)
+									else logging.push(`0`)
 									ehealth = Math.round(ehealth - finalHit)
+
+									logging = logging.filter((str) => str !== '')
+									if (logging.length + 1 < skill.times) {
+										if (logging.length == 2) chatLog[chatLog.length - 1] = logging.join('')
+										else if (logging.length >= 3) chatLog[chatLog.length - 1] = logging[0] + logging.slice(1).join(', ')
+									} else {
+										chatLog[chatLog.length - 1] = logging[0] + logging.slice(1, -1).join(', ') + ', and ' + logging[logging.length - 1]
+									}
+									
+									chatLog[chatLog.length - 1] = chatLog[chatLog.length - 1] + `${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`
 									m.edit(await embed())
-									//} else { setTimeout(async () => { if (!ended) ebattle() }, 500 * i) }
+									if (i < skill.times - 1) chatLog[chatLog.length - 1] = String(chatLog[chatLog.length - 1]).replace(/(?<=\n).*/g, '')
+									//} else { setTimeout(async () => { if (!ended) battle() }, 500 * i) }
 								}, 500 * i)
 							}
-						} else if (skill.health && skill.damage) {
-							let draft = (p.attack * (skill.damage || 1)) * hit
-							let draft2 = draft + await debuffs(pstatus, draft, estatus)
-							let finalHit = Math.round((draft2 + (draft2 * Math.random() * 0.05)) * (1 - e.defense / 10))
-							if (hit == 0) {
-								if (hit == 0) hit = 1
-								let healing = Math.round(p.maxHealth * skill.health * hit)
-								chatLog.push(`+ ${interaction.user.username} used ${skill.name} and healed for 💗${(p.health + healing > p.maxHealth) ? p.maxHealth - p.health : healing} and but missed their attack`)
-							} else if (hit == 1) {
-								let healing = Math.round(p.maxHealth * skill.health * hit)
-								chatLog.push(`+ ${interaction.user.username} used ${skill.name} and healed for 💗${(p.health + healing > p.maxHealth) ? p.maxHealth - p.health : healing} and hit for ⚔️${finalHit}${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`)
-								ehealth = Math.round(ehealth - finalHit)
-							} else {
-								let healing = Math.round(p.maxHealth * skill.health * hit)
-								chatLog.push(`+ ${interaction.user.username} used ${skill.name} and CRITICAL healed for 💗${(p.health + healing > p.maxHealth) ? p.maxHealth - p.health : healing} and hit for ⚔️${finalHit}${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`)
-								ehealth = Math.round(ehealth - finalHit)
-							}
-							p.health += (p.health + healing > p.maxHealth) ? p.maxHealth - p.health : healing
-							setTimeout(async () => {
-								m.edit(await embed())
-							}, 500)
-						} else if (skill.health) {
-							if (hit == 0) hit = 1
-							let healing = Math.round(p.maxHealth * skill.health * hit)
-							if (hit <= 1) chatLog.push(`+ ${interaction.user.username} used ${skill.name} and healed for 💗${(p.health + healing > p.maxHealth) ? p.maxHealth - p.health : healing}${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`)
-							else chatLog.push(`+ ${interaction.user.username} used ${skill.name} and CRITICAL healed for 💗${(p.health + healing > p.maxHealth) ? p.maxHealth - p.health : healing}${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`)
-							p.health += (p.health + healing > p.maxHealth) ? p.maxHealth - p.health : healing
-							setTimeout(async () => {
-								m.edit(await embed())
-							}, 500)
 						} else {
-							if (skill.attack) {
-								let draft = (p.attack * (skill.damage || 1)) * hit
-								let draft2 = draft + await debuffs(pstatus, draft, estatus)
-								let finalHit = Math.round((draft2 + (draft2 * Math.random() * 0.05)) * (1 - e.defense / 10))
-								if (hit == 1) chatLog.push(`+ ${interaction.user.username} used ${skill.name} on ${e.name} for ⚔️${finalHit}${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`)
-								else if (hit == 2) chatLog.push(`+ ${interaction.user.username} used ${skill.name} on ${e.name} for a CRITICAL ⚔️${finalHit}!${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`)
-								else chatLog.push(`${interaction.user.username} tried to use ${skill.name} on ${e.name} and missed`)
-								ehealth = Math.round(ehealth - finalHit)
-							} else {
-								if (hit > 0) chatLog.push(`+ ${interaction.user.username} used ${skill.name}${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`)
-								else chatLog.push(`${interaction.user.username} tried to use ${skill.name} and failed`)
+							if (skill.health) {
+								let hit2 = hit
+								if (hit2 == 0) hit2 = 1
+								var healing = Math.round(p.maxHealth * skill.health * hit2)
+								healing = (p.health + healing > p.maxHealth) ? p.maxHealth - p.health : healing
+								if (hit2 == 1) logging.push(`healed for 💗${healing}`)
+								else logging.push(`CRITICAL healed for 💗${healing}`)
+								p.health += healing
 							}
+
+							if (skill.attack || skill.damage) {
+								let draft = (p.attack * (skill.damage || 1))
+								let draft2 = draft + await debuffs(pstatus, draft, estatus)
+								let finalHit = Math.round((draft2 + (draft2 * Math.random() * 0.05)) * (1 - e.defense / 10) * hit)
+								if (hit == 1) logging.push(`hit ${e.name} for ⚔️${finalHit}`)
+								else if (hit == 1.6) logging.push(`hit ${e.name} for a CRITICAL ⚔️${finalHit}!`)
+								else logging[0] = logging[0].replace('+ ', '') + ' and missed'
+								ehealth = ehealth - finalHit
+							} else {
+								if (hit == 0 && !skill.health) logging[0] = logging[0].replace('+ ', '') + ' and missed'
+							}
+
+							(skill.pstatus || skill.estatus) && hit > 0 ? logging.push(`${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`) : false
+							chatLog.push(logging.filter((str) => str !== '').join(' and '))
+							setTimeout(async () => {
+								m.edit(await embed())
+							}, 500)
 						}
 					}
 					await disableButtons(true, m)
@@ -221,47 +223,66 @@ module.exports = {
 					if (ehealth > 0) {
 						let hit = await hitMissCrit(e.accuracy, e.critical, estatus)
 						let skill = await choose(hit)
+						var logging = [`- ${e.name} used ${skill.name}`]
+						var i = 1
 						if (skill.times && hit > 0) {
-							chatLog.push(`- ${e.name} used ${skill.name} on ${interaction.user.username}${skill.pstatus ? `\nInflicted: ${skill.pstatus.join('')}` : ''}${skill.estatus ? `\nGained: ${skill.estatus.join('')}` : ''}`)
+							chatLog.push(logging)
+							logging[0] = `- ${e.name} used ${skill.name} and hit ${interaction.user.username} for `
 							m.edit(await embed())
 							for (i = 0; i < skill.times; i++) {
 								setTimeout(async () => {
 									//if (p.health > 0) {
 									let hit = await hitMissCrit(e.accuracy, e.critical, estatus)
-									let draft = (e.attack * (skill.damage || 1)) * hit
+									let draft = (e.attack * (skill.damage || 1))
 									let draft2 = draft + await debuffs(estatus, draft, pstatus)
-									let finalHit = Math.round((draft2 + (draft2 * Math.random() * 0.05)) * (p.blocking ? (1 - p.defense / 10) : 1))
-									if (hit == 1) chatLog.push(`- ${e.name}'s ${skill.name} hit ${interaction.user.username} for ⚔️${finalHit}`)
-									else if (hit == 2) chatLog.push(`- ${e.name}'s ${skill.name} hit ${interaction.user.username} for a CRITICAL ⚔️${finalHit}!`)
-									else chatLog.push(`${e.name} missed`)
+									let finalHit = Math.round((draft2 + (draft2 * Math.random() * 0.05)) * (p.blocking ? (1 - p.defense / 10) : 1) * hit)
+									if (hit == 1) logging.push(`⚔️${finalHit}`)
+									else if (hit == 1.6) logging.push(`CRIT ⚔️${finalHit}`)
+									else logging.push(`0`)
 									p.health = Math.round(p.health - finalHit)
+
+									logging = logging.filter((str) => str !== '')
+									if (logging.length + 1 < skill.times) {
+										if (logging.length == 2) chatLog[chatLog.length - 1] = logging.join('')
+										else if (logging.length >= 3) chatLog[chatLog.length - 1] = logging[0] + logging.slice(1).join(', ')
+									} else {
+										chatLog[chatLog.length - 1] = logging[0] + logging.slice(1, -1).join(', ') + ', and ' + logging[logging.length - 1]
+									}
+
+									chatLog[chatLog.length - 1] = chatLog[chatLog.length - 1] + `${skill.pstatus ? `\nInflicted: ${skill.pstatus.join('')}` : ''}${skill.estatus ? `\nGained: ${skill.estatus.join('')}` : ''}`
 									m.edit(await embed())
+									if (i < skill.times - 1) chatLog[chatLog.length - 1] = String(chatLog[chatLog.length - 1]).replace(/(?<=\n).*/g, '')
 									//} else { setTimeout(async () => { if (!ended) battle() }, 500 * i) }
 								}, 500 * i)
 							}
-						} else if (skill.health) {
-							if (hit == 0) hit = 1
-							let healing = Math.round(e.maxHealth * skill.health * hit)
-							if (hit <= 1) chatLog.push(`- ${e.name} used ${skill.name} and healed for 💗${(ehealth + healing > e.maxHealth) ? e.maxHealth - ehealth : healing}${skill.pstatus ? `\nInflicted: ${skill.pstatus.join('')}` : ''}${skill.estatus ? `\nGained: ${skill.estatus.join('')}` : ''}`)
-							else chatLog.push(`- ${e.name} used ${skill.name} and CRITICAL healed for 💗${(ehealth + healing > e.maxHealth) ? e.maxHealth - ehealth : healing}${skill.pstatus ? `\nInflicted: ${skill.pstatus.join('')}` : ''}${skill.estatus ? `\nGained: ${skill.estatus.join('')}` : ''}`)
-							ehealth += (ehealth + healing > e.maxHealth) ? e.maxHealth - ehealth : healing
+						} else {
+							if (skill.health) {
+								let hit2 = hit
+								if (hit2 == 0) hit2 = 1
+								var healing = Math.round(e.maxHealth * skill.health * hit2)
+								healing = (ehealth + healing > e.maxHealth) ? e.maxHealth - ehealth : healing
+								if (hit2 == 1) logging.push(`healed for 💗${healing}`)
+								else logging.push(`CRITICAL healed for 💗${healing}`)
+								ehealth += healing
+							}
+
+							if (skill.attack || skill.damage) {
+								let draft = (e.attack * (skill.damage || 1))
+								let draft2 = draft + await debuffs(estatus, draft, pstatus)
+								let finalHit = Math.round((draft2 + (draft2 * Math.random() * 0.05)) * (p.blocking ? (1 - p.defense / 10) : 1) * hit)
+								if (hit == 1) logging.push(`hit ${interaction.user.username} for ⚔️${finalHit}`)
+								else if (hit == 1.6) logging.push(`hit ${interaction.user.username} for a CRITICAL ⚔️${finalHit}!`)
+								else logging[0] = logging[0].replace('- ', '') + ' and missed'
+								p.health = p.health - finalHit
+							} else {
+								if (hit == 0 && !skill.health) logging[0] = logging[0].replace('- ', '') + ' and missed'
+							}
+
+							(skill.pstatus || skill.estatus) && hit > 0 ? logging.push(`${skill.pstatus ? `\nInflicted: ${skill.pstatus.join('')}` : ''}${skill.estatus ? `\nGained: ${skill.estatus.join('')}` : ''}`) : false
+							chatLog.push(logging.filter((str) => str !== '').join(' and '))
 							setTimeout(async () => {
 								m.edit(await embed())
 							}, 500)
-						} else {
-							if (skill.attack) {
-								let draft = (e.attack * (skill.damage || 1)) * hit
-								let draft2 = draft + await debuffs(estatus, draft, pstatus)
-								let finalHit = Math.round((draft2 + (draft2 * Math.random() * 0.05)) * (p.blocking ? (1 - p.defense / 10) : 1))
-								if (hit == 1) chatLog.push(`- ${e.name} used ${skill.name} on ${interaction.user.username} for ⚔️${finalHit}${skill.pstatus ? `\nInflicted: ${skill.pstatus.join('')}` : ''}${skill.estatus ? `\nGained: ${skill.estatus.join('')}` : ''}`)
-								else if (hit == 2) chatLog.push(`- ${e.name} used ${skill.name} on ${interaction.user.username} for a CRITICAL ⚔️${finalHit}!${skill.pstatus ? `\nInflicted: ${skill.pstatus.join('')}` : ''}${skill.estatus ? `\nGained: ${skill.estatus.join('')}` : ''}`)
-								else chatLog.push(`${e.name} tried to use ${skill.name} on ${interaction.user.username} and missed`)
-								p.health = Math.round(p.health - finalHit)
-							} else {
-								if (hit > 0) chatLog.push(`- ${e.name} used ${skill.name}${skill.pstatus ? `\nInflicted: ${skill.pstatus.join('')}` : ''}${skill.estatus ? `\nGained: ${skill.estatus.join('')}` : ''}`)
-								else chatLog.push(`${e.name} tried to use ${skill.name} and failed`)
-							}
-							m.edit(await embed())
 						}
 
 						setTimeout(async () => {
@@ -316,7 +337,7 @@ module.exports = {
 
 								}, (timer / 2) * i++)
 							} else setTimeout(() => { if (!ended) battle() }, 500)
-						}, timer)
+						}, timer * i)
 					} else {
 						if (ended) return;
 						ended = true
@@ -327,6 +348,73 @@ module.exports = {
 			}
 			battle()
 		})
+		async function embed() {
+			let embed = {
+				embeds: [
+					{
+						title: `${interaction.user.username.toUpperCase()} vs. ${e.name.toUpperCase()}`,
+						thumbnail: {
+							url: e.sprite
+						},
+						fields: [
+							{
+								name: `❤️ Enemy Health`,
+								value: `${ehealth}/${e.maxHealth}\n${await statusList(estatus)}`,
+								inline: true
+							},
+							{
+								name: `⚔️ Enemy Attack`,
+								value: `${e.attack}`,
+								inline: true
+							},
+							{
+								name: `🛡️ Enemy Defense`,
+								value: `${e.defense}`,
+								inline: true
+							},
+							{
+								name: `Combat Log`,
+								value: `\`\`\`diff\n${chatLog.slice(-5).join('\n')}\n\`\`\``,
+								inline: false
+							},
+							{
+								name: `❤️ Health`,
+								value: `${p.health}/${p.maxHealth}\n${(await statusList(pstatus))}`,
+								inline: true
+							},
+							{
+								name: `⚔️ Attack`,
+								value: `${p.attack}`,
+								inline: true
+							},
+							{
+								name: `🛡️ Defense`,
+								value: `${p.defense}`,
+								inline: true
+							},
+							{
+								name: `👟 Stamina`,
+								value: `${p.stamina}/${p.maxStamina}`,
+								inline: true
+							},
+							{
+								name: `${["🗡️", "🔪", "🏹"][Math.floor(Math.random() * 3)]} Weapon`,
+								value: `${p.weapon.name}`,
+								inline: true
+							},
+							{
+								name: `👕 Armor`,
+								value: `${armor.name}`,
+								inline: true
+							},
+						]
+					}
+				],
+				components: [row]
+			}
+
+			return embed;
+		}
 
 		async function disableButtons(boolean, m) {
 			buttons.forEach(async (bt) => {
@@ -458,7 +546,7 @@ module.exports = {
 
 			if (Math.random() < hit) {
 				if (Math.random() < crit) {
-					return 2
+					return 1.6
 				} else return 1
 			} else return 0
 		}
@@ -469,64 +557,6 @@ module.exports = {
 				array.push(status.id.replace(/[a-zA-Z ]+/g, ''))
 			})
 			return `${array[0] ? `\`${array.join('')}\`` : ''}`;
-		}
-
-		async function embed() {
-			let embed = {
-				embeds: [
-					{
-						title: `${interaction.user.username.toUpperCase()} vs. ${e.name.toUpperCase()}`,
-						thumbnail: {
-							url: e.sprite
-						},
-						fields: [
-							{
-								name: `❤️ Health`,
-								value: `${p.health}/${p.maxHealth}\n${(await statusList(pstatus))}`,
-								inline: true
-							},
-							{
-								name: `⚔️ Attack`,
-								value: `${p.attack}`,
-								inline: true
-							},
-							{
-								name: `🛡️ Defense`,
-								value: `${p.defense}`,
-								inline: true
-							},
-							{
-								name: `👟 Stamina`,
-								value: `${p.stamina}/${p.maxStamina}`,
-								inline: true
-							},
-							{
-								name: `Combat Log`,
-								value: `\`\`\`diff\n${chatLog.slice(-5).join('\n')}\n\`\`\``,
-								inline: false
-							},
-							{
-								name: `❤️ Enemy Health`,
-								value: `${ehealth}/${e.maxHealth}\n${await statusList(estatus)}`,
-								inline: true
-							},
-							{
-								name: `⚔️ Enemy Attack`,
-								value: `${e.attack}`,
-								inline: true
-							},
-							{
-								name: `🛡️ Enemy Defense`,
-								value: `${e.defense}`,
-								inline: true
-							},
-						]
-					}
-				],
-				components: [row]
-			}
-
-			return embed;
 		}
 
 		async function debuffs(EorP, currentAttack, EorP2) {
@@ -548,7 +578,14 @@ module.exports = {
 					final -= final * 0.20
 				}
 			})
-			return final == currentAttack ? 0 : final;
+
+			if (EorP === estatus) {
+				final -= Number(p.armor)
+			}
+
+			if (final == currentAttack) return 0;
+			else if (final * -1 > currentAttack) return currentAttack;
+			else return final;
 		}
 	}
 }
