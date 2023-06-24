@@ -203,7 +203,7 @@ module.exports = {
 		{
 			name: `Lazy Goblin`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1117502969370382366/New_Piskel_4_2.gif',
-			weapon: "rusted dagger",
+			weapon: "Rusted Dagger",
 			maxHealth: 50,
 			attack: 10,
 			accuracy: 0.75,
@@ -228,7 +228,7 @@ module.exports = {
 		{
 			name: `Blacksmith Goblin`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1121514870832124034/image_2.gif',
-			weapon: "blacksmith hammer",
+			weapon: "Blacksmith's Hammer",
 			maxHealth: 75,
 			attack: 30,
 			accuracy: 0.8,
@@ -261,7 +261,7 @@ module.exports = {
 		{
 			name: `Armorer Goblin`,
 			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
-			weapon: "spear & shield",
+			weapon: "Spear & Shield",
 			maxHealth: 100,
 			attack: 20,
 			accuracy: 0.75,
@@ -292,7 +292,7 @@ module.exports = {
 		{
 			name: `Cursed Goblin`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1121510851543842907/image_1.gif',
-			weapon: "cursed rusted dagger",
+			weapon: "Cursed Rusted Dagger",
 			accuracy: 0.75,
 			critical: 0.08,
 			maxHealth: 75,
@@ -323,7 +323,7 @@ module.exports = {
 		{
 			name: `Orc`,
 			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
-			weapon: "orc club",
+			weapon: "Orc Club",
 			accuracy: 0.65,
 			critical: 0.1,
 			maxHealth: 150,
@@ -517,7 +517,7 @@ module.exports = {
 		{
 			name: `Orange Fox`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1117522664253300907/New_Piskel_4_2_1.gif',
-			weapon: "steel dagger",
+			weapon: "Steel Dagger",
 			accuracy: 0.8,
 			critical: 0.1,
 			maxHealth: 125,
@@ -554,7 +554,7 @@ module.exports = {
 		{
 			name: `White Fox`,
 			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
-			weapon: "steel dagger",
+			weapon: "Steel Dagger",
 			accuracy: 0.8,
 			critical: 0.1,
 			maxHealth: 125,
@@ -592,7 +592,7 @@ module.exports = {
 		{
 			name: `Blue Fox`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1121537810432794684/image_3.gif',
-			weapon: "steel dagger",
+			weapon: "Steel Dagger",
 			accuracy: 0.8,
 			critical: 0.1,
 			maxHealth: 150,
@@ -636,7 +636,7 @@ module.exports = {
 		{
 			name: `Vampire`,
 			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
-			weapon: "fangs",
+			weapon: "Fangs",
 			accuracy: 0.95,
 			critical: 0.2,
 			maxHealth: 90,
@@ -1106,9 +1106,9 @@ module.exports = {
 
 	weapons: [
 		{
-			name: "2-Piece No Sauce",
+			name: "Hands & Feet",
 			level: 1,
-			description: `These hands.`,
+			description: `The enemies can catch these hands.`,
 			attack: 0,
 			plvlmult: 1,
 			crit: 0,
@@ -1313,10 +1313,9 @@ module.exports = {
 				},
 				{
 					name: "Swift Attack",
-					description: `Stab faster than they can see! Deal 110% damage, inflict Blindness, and gain Luck`,
+					description: `Stab faster than they can see! Deal 110% damage and gain Evasion`,
 					cost: 9,
-					estatus: ["👁️"],
-					pstatus: ["🍀"],
+					pstatus: ["💨"],
 					damage: 1.1,
 					attack: true
 				},
@@ -1439,8 +1438,8 @@ module.exports = {
 				},
 				{
 					name: "Golden Standard",
-					description: `Recover 25% health and gain Empowerment, Blessing, and Focus`,
-					pstatus: ["🏳️", "✨", "🎯"],
+					description: `Recover 25% health and gain Empowerment, Blessing, and Evasion`,
+					pstatus: ["🏳️", "✨", "💨"],
 					cost: 20,
 					haelth: 0.25,
 					attack: false
@@ -1820,7 +1819,8 @@ module.exports = {
 				},
 				{
 					name: "Immense Impact",
-					description: "Slam your hammer down on a foe with all your might. Deal 400% damage and inflict Weakness",
+					description: "Slam your hammer down on a foe with all your might. Deal 400% damage and inflict Weakness and Stun",
+					estatus: ["🌀", "💫"],
 					cost: 40,
 					damage: 4,
 					attack: true
@@ -2153,10 +2153,10 @@ module.exports = {
 				},
 				{
 					name: "Blazing Fury",
-					description: "Ignite your weapon before unleashing a blazing series of attacks. Deal 45% damage 4 times, inflict Bad Omen, Cursed, and Burning, and gain Empowerment",
+					description: "Ignite your weapon before unleashing a blazing series of attacks. Deal 45% damage 4 times, inflict Bad Omen, Cursed, and Burning, and gain Berserk",
 					cost: 45,
 					damage: 0.45,
-					pstatus: ["🏳️"],
+					pstatus: ["💢"],
 					estatus: ["🏴", "🖤", "🔥"],
 					attack: true
 				},
@@ -2240,9 +2240,9 @@ module.exports = {
 				{
 					name: "Destined Death",
 					cost: 65,
-					description: "Focus immense power into the Orcus before swinging it to unleash a condensed wave of cursed energy. Deals 400% damage, inflict Weakness, Bad Omen, and Cursed, and gain Empowerment and Berserk",
+					description: "Focus immense power into the Orcus before swinging it to unleash a condensed wave of cursed energy. Deals 400% damage, inflict Bad Omen and Cursed, and gain Empowerment and Berserk",
 					damage: 4,
-					estatus: ["🌀", "🏴", "🖤"],
+					estatus: ["🏴", "🖤"],
 					pstatus: ["🏳️", "💢"],
 					attack: true
 				},
@@ -2358,15 +2358,14 @@ module.exports = {
 		},
 	],
 
-	// Choose level from 6 to 12: Math.random() * (12 - 6) + 6
 	armor: [
 		{
 			name: "None",
 			description: "Go commando.",
 			armor: 0,
-			plvlmult: 1,
+			plvlmult: 0,
 			level: 0,
-			alvlmult: 1,
+			alvlmult: 0,
 			evasion: 0,
 			encounter: 0
 		},
@@ -2611,5 +2610,14 @@ module.exports = {
 			evasion: 0.15,
 			encounter: 0.05
 		},
+	],
+
+	areas: [
+		{
+			name: "Warhamshire",
+			minlvl: 1,
+			maxlvl: 5,
+			enemies: ["Lazy Goblin", "Health Slime", "Attack Slime"]
+		}
 	]
 }
