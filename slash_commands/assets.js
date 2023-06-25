@@ -1,3 +1,5 @@
+let mult = 9
+
 module.exports = {
 	statuses: [
 		{
@@ -8,8 +10,10 @@ module.exports = {
 			length: 3,
 			use: async function(EorP, statuses, currentHealth, chatLog, name) {
 				let status = statuses.find(({ id }) => id == this.id)
-				currentHealth = Math.round(currentHealth - (EorP.maxHealth * 0.05))
-				chatLog.push(`${name} is posioned - 💀${Math.round(EorP.maxHealth * 0.05)}`)
+				var crit = 1
+				if (Math.random() * 100 < 8) crit = 2
+				currentHealth = Math.round(currentHealth - (EorP.maxHealth * 0.05 * crit))
+				chatLog.push(`${name} is posioned - ${crit == 2 ? 'CRITICAL ' : ''}💀${Math.round(EorP.maxHealth * 0.05 * crit)}`)
 				status.length = status.length -= 1
 				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
 				return {
@@ -29,8 +33,12 @@ module.exports = {
 			length: 6,
 			use: async function(EorP, statuses, currentHealth, chatLog, name) {
 				let status = statuses.find(({ id }) => id == this.id)
-				currentHealth = Math.round(currentHealth + (EorP.maxHealth * 0.05))
-				chatLog.push(`${name} has regeneration - 💗${Math.round(EorP.maxHealth * 0.05)}`)
+				var crit = 1
+				if (Math.random() * 100 < 8) crit = 2
+				var heal = Math.round(EorP.maxHealth * 0.05 * crit)
+				if (currentHealth + heal > EorP.maxHealth) heal = EorP.maxHealth - currentHealth
+				currentHealth -= heal
+				chatLog.push(`${name} has regeneration - ${crit == 2 ? 'CRITICAL ' : ''}💗${heal}`)
 				status.length = status.length -= 1
 				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
 				return {
@@ -50,8 +58,10 @@ module.exports = {
 			length: 3,
 			use: async function(EorP, statuses, currentHealth, chatLog, name) {
 				let status = statuses.find(({ id }) => id == this.id)
-				currentHealth = Math.round(currentHealth - (status.damage * 0.15))
-				chatLog.push(`${name} is bleeding - 🩸${Math.round(status.damage * 0.15)}`)
+				var crit = 1
+				if (Math.random() * 100 < 8) crit = 2
+				currentHealth = Math.round(currentHealth - (status.damage * 0.15 * crit))
+				chatLog.push(`${name} is bleeding - ${crit == 2 ? 'CRITICAL ' : ''}🩸${Math.round(status.damage * 0.15 * crit)}`)
 				status.length = status.length -= 1
 				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
 				return {
@@ -71,8 +81,10 @@ module.exports = {
 			length: 3,
 			use: async function(EorP, statuses, currentHealth, chatLog, name) {
 				let status = statuses.find(({ id }) => id == this.id)
-				currentHealth = Math.round(currentHealth - (status.damage * 0.05))
-				chatLog.push(`${name} is burned - 🔥${Math.round(status.damage * 0.05)}`)
+				var crit = 1
+				if (Math.random() * 100 < 8) crit = 2
+				currentHealth = Math.round(currentHealth - (status.damage * 0.05 * crit))
+				chatLog.push(`${name} is burned - ${crit == 2 ? 'CRITICAL ' : ''}🔥${Math.round(status.damage * 0.05 * crit)}`)
 				status.length = status.length -= 1
 				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
 				return {
@@ -94,14 +106,14 @@ module.exports = {
 		{
 			name: 'Strength',
 			id: '💪',
-			description: `Deal 25% more damage over 3 rounds.`,
+			description: `Deal 15% more damage over 3 rounds.`,
 			positive: true,
 			length: 3
 		},
 		{
 			name: 'Empowerment',
 			id: '🏳️',
-			description: `Deal 50% more damage over 3 rounds.`,
+			description: `Deal 40% more damage over 3 rounds.`,
 			positive: true,
 			length: 3
 		},
@@ -141,8 +153,10 @@ module.exports = {
 			length: 8,
 			use: async function(EorP, statuses, currentHealth, chatLog, name) {
 				let status = statuses.find(({ id }) => id == this.id)
-				currentHealth = Math.round(currentHealth - (status.damage * 0.15))
-				chatLog.push(`${name} is cursed - 🖤${Math.round(status.damage * 0.15)}`)
+				var crit = 1
+				if (Math.random() * 100 < 8) crit = 2
+				currentHealth = Math.round(currentHealth - (status.damage * 0.15 * crit))
+				chatLog.push(`${name} is cursed - ${crit == 2 ? 'CRITICAL ' : ''}🖤${Math.round(status.damage * 0.15 * crit)}`)
 				status.length = status.length -= 1
 				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
 				return {
@@ -157,28 +171,28 @@ module.exports = {
 		{
 			name: 'Luck',
 			id: '🍀',
-			description: `Increases critical hit chance by 25% over 3 rounds.`,
+			description: `Increases critical hit chance by 25% for 3 turns.`,
 			positive: true,
 			length: 3
 		},
 		{
 			name: 'Bad Luck',
 			id: '🐈‍⬛',
-			description: `Decreases critical hit chance by 20% over 3 rounds.`,
+			description: `Decreases critical hit chance by 20% for 3 turns.`,
 			positive: false,
 			length: 3
 		},
 		{
 			name: 'Berserk',
 			id: '💢',
-			description: `Increases attack by 50% and decreases armor by 30%.`,
+			description: `Increases attack by 40% and decreases armor by 30%.`,
 			positive: true,
 			length: 3
 		},
 		{
 			name: 'Evasion',
 			id: '💨',
-			description: `Decreases enemy attack accuracy by 15%.`,
+			description: `Decreases enemy attack accuracy by 15% for 3 turns.`,
 			positive: true,
 			length: 3
 		},
@@ -204,7 +218,7 @@ module.exports = {
 			name: `Lazy Goblin`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1117502969370382366/New_Piskel_4_2.gif',
 			weapon: "Rusted Dagger",
-			maxHealth: 50,
+			maxHealth: 50*Math.round(mult/2),
 			attack: 10,
 			accuracy: 0.75,
 			critical: 0.05,
@@ -229,7 +243,7 @@ module.exports = {
 			name: `Blacksmith Goblin`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1121514870832124034/image_2.gif',
 			weapon: "Blacksmith's Hammer",
-			maxHealth: 75,
+			maxHealth: 75*mult,
 			attack: 30,
 			accuracy: 0.8,
 			critical: 0.05,
@@ -262,7 +276,7 @@ module.exports = {
 			name: `Armorer Goblin`,
 			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
 			weapon: "Spear & Shield",
-			maxHealth: 100,
+			maxHealth: 100*mult,
 			attack: 20,
 			accuracy: 0.75,
 			critical: 0.08,
@@ -295,7 +309,7 @@ module.exports = {
 			weapon: "Cursed Rusted Dagger",
 			accuracy: 0.75,
 			critical: 0.08,
-			maxHealth: 75,
+			maxHealth: 75*mult,
 			defense: Math.floor(Math.random() * (4 - 1) + 1),
 			attack: 45,
 			skills: [
@@ -324,9 +338,9 @@ module.exports = {
 			name: `Orc`,
 			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
 			weapon: "Orc Club",
-			accuracy: 0.65,
+			accuracy: 0.8,
 			critical: 0.1,
-			maxHealth: 150,
+			maxHealth: 150*mult,
 			attack: 50,
 			defense: Math.floor(Math.random() * (4 - 2) + 2),
 			skills: [
@@ -366,7 +380,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 1,
 			critical: 0.1,
-			maxHealth: 150,
+			maxHealth: 150*Math.round(mult/2),
 			attack: 10,
 			defense: 0,
 			skills: [
@@ -404,8 +418,8 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.75,
 			critical: 0.07,
-			maxHealth: 50,
-			attack: 50,
+			maxHealth: 50*Math.round(mult/1.25),
+			attack: 80,
 			defense: 0,
 			skills: [
 				{
@@ -416,6 +430,7 @@ module.exports = {
 				{
 					name: "Lunge",
 					pstatus: ["🩸"],
+					wait: 3,
 					chance: 0.08,
 					attack: true
 				},
@@ -423,18 +438,14 @@ module.exports = {
 					name: "Burning Slide",
 					pstatus: ["🔥"],
 					chance: 0.08,
+					wait: 5,
 					attack: false
 				},
 				{
 					name: "Slime Secretion",
-					pstatus: ["💀"],
+					pstatus: ["💀", "💪"],
 					chance: 0.08,
-					attack: false
-				},
-				{
-					name: "Slime Secretion",
-					estatus: ["💪"],
-					chance: 0.08,
+					wait: 3,
 					attack: false
 				},
 			]
@@ -443,11 +454,11 @@ module.exports = {
 			name: `Defense Slime`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1116446666917158932/New_Piskel_2_1.gif',
 			weapon: null,
-			maxHealth: 50,
+			maxHealth: 50*mult,
 			attack: 20,
 			accuracy: 0.85,
 			critical: 0.05,
-			defense: Math.floor(Math.random() * (7 - 5) + 5),
+			defense: Math.floor(Math.random() * (10 - 5) + 5),
 			skills: [
 				{
 					name: "Jump",
@@ -483,7 +494,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.8,
 			critical: 0.05,
-			maxHealth: 50,
+			maxHealth: 50*mult,
 			attack: 25,
 			defense: Math.floor(Math.random() * (2 - 1) + 1),
 			skills: [
@@ -518,10 +529,10 @@ module.exports = {
 			name: `Orange Fox`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1117522664253300907/New_Piskel_4_2_1.gif',
 			weapon: "Steel Dagger",
-			accuracy: 0.8,
+			accuracy: 0.85,
 			critical: 0.1,
-			maxHealth: 125,
-			attack: 30,
+			maxHealth: 175*mult,
+			attack: 35,
 			defense: Math.floor(Math.random() * (3 - 1) + 1),
 			skills: [
 				{
@@ -538,8 +549,7 @@ module.exports = {
 				},
 				{
 					name: "Swift Movement",
-					pstatus: ["👁️"],
-					estatus: ["🎯"],
+					estatus: ["🎯", "💨"],
 					chance: 0.1,
 					attack: false
 				},
@@ -557,8 +567,8 @@ module.exports = {
 			weapon: "Steel Dagger",
 			accuracy: 0.8,
 			critical: 0.1,
-			maxHealth: 125,
-			attack: 25,
+			maxHealth: 150*mult,
+			attack: 45,
 			defense: Math.floor(Math.random() * (3 - 2) + 2),
 			skills: [
 				{
@@ -569,23 +579,23 @@ module.exports = {
 				{
 					name: "Smoke Bomb",
 					pstatus: ["👁️"],
+					estatus: ["💨"],
 					chance: 0.05,
 					attack: false,
 					wait: 3
 				},
 				{
 					name: "Swift Movement",
-					pstatus: ["👁️"],
-					estatus: ["🎯"],
+					estatus: ["🎯", "💨"],
 					chance: 0.1,
 					attack: false
 				},
 				{
-					name: "Double Strike",
+					name: "Quintuple Strike",
 					times: 5,
-					damage: 0.5,
+					damage: 0.8,
 					chance: 0.15,
-					attack: true
+					attack: true,
 				},
 			]
 		},
@@ -595,8 +605,8 @@ module.exports = {
 			weapon: "Steel Dagger",
 			accuracy: 0.8,
 			critical: 0.1,
-			maxHealth: 150,
-			attack: 30,
+			maxHealth: 175*mult,
+			attack: 55,
 			defense: Math.floor(Math.random() * (3 - 2) + 2),
 			skills: [
 				{
@@ -607,21 +617,21 @@ module.exports = {
 				{
 					name: "Smoke Bomb",
 					pstatus: ["👁️"],
-					chance: 0.15,
+					estatus: ["💨"],
+					chance: 0.05,
 					attack: false,
 					wait: 3
 				},
 				{
 					name: "Swift Movement",
-					pstatus: ["👁️"],
-					estatus: ["🎯"],
+					estatus: ["🎯", "💨"],
 					chance: 0.1,
 					attack: false
 				},
 				{
 					name: "Onslaught",
 					times: 10,
-					damage: 0.25,
+					damage: 0.8,
 					chance: 0.05,
 					attack: true
 				},
@@ -639,7 +649,7 @@ module.exports = {
 			weapon: "Fangs",
 			accuracy: 0.95,
 			critical: 0.2,
-			maxHealth: 90,
+			maxHealth: 90*mult,
 			attack: 40,
 			defense: Math.floor(Math.random() * 6),
 			skills: [
@@ -678,7 +688,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.85,
 			critical: 0.15,
-			maxHealth: 100,
+			maxHealth: 100*mult,
 			attack: 50,
 			defense: Math.floor(Math.random() * (6 - 2) + 2),
 			skills: [
@@ -731,8 +741,8 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.8,
 			critical: 0.25,
-			maxHealth: 125,
-			attack: 45,
+			maxHealth: 115*mult,
+			attack: 40,
 			defense: Math.floor(Math.random() * 4),
 			skills: [
 				{
@@ -769,7 +779,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.9,
 			critical: 0.05,
-			maxHealth: 75,
+			maxHealth: 75*mult,
 			attack: 45,
 			defense: Math.floor(Math.random() * 3),
 			skills: [
@@ -821,7 +831,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.5,
 			critical: 0.1,
-			maxHealth: 10,
+			maxHealth: 10*mult,
 			attack: 15,
 			defense: Math.floor(Math.random() * 1),
 			skills: [
@@ -843,7 +853,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.5,
 			critical: 0.1,
-			maxHealth: 20,
+			maxHealth: 20*mult,
 			attack: 0,
 			defense: Math.floor(Math.random() * 2),
 			skills: [
@@ -865,7 +875,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.5,
 			critical: 0.1,
-			maxHealth: 5,
+			maxHealth: 5*mult,
 			attack: 10,
 			defense: 0,
 			skills: [
@@ -885,11 +895,11 @@ module.exports = {
 			name: `Cyclops Overlord`,
 			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
 			weapon: null,
-			accuracy: 0.8,
+			accuracy: 0.78,
 			critical: 0.15,
-			maxHealth: 250,
-			attack: 100,
-			defense: Math.floor(Math.random() * (9 - 6) + 6),
+			maxHealth: 250*Math.round(mult/1.5),
+			attack: 80,
+			defense: Math.floor(Math.random() * (7 - 5) + 5),
 			skills: [
 				{
 					name: "Swing",
@@ -933,7 +943,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 1,
 			critical: 0.15,
-			maxHealth: 225,
+			maxHealth: 225*mult,
 			attack: 150,
 			defense: Math.floor(Math.random() * (7 - 4) + 4),
 			skills: [
@@ -944,22 +954,22 @@ module.exports = {
 				},
 				{
 					name: "Smoke Bomb",
-					pstatus: ["👁️", "🏴"],
-					chance: 0.15,
+					pstatus: ["👁️"],
+					estatus: ["💨"],
+					chance: 0.05,
 					attack: false,
 					wait: 3
 				},
 				{
 					name: "Swift Movement",
-					estatus: ["🎯"],
-					pstatus: ["👁️"],
+					estatus: ["🎯", "💨"],
 					chance: 0.1,
 					attack: false,
 					wait: 3
 				},
 				{
 					name: "Onslaught",
-					damage: 0.25,
+					damage: 0.8,
 					times: 10,
 					chance: 0.05,
 					attack: true
@@ -979,7 +989,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.9,
 			critical: 0.15,
-			maxHealth: 300,
+			maxHealth: 300*mult,
 			attack: 175,
 			defense: Math.floor(Math.random() * (7 - 5) + 5),
 			skills: [
@@ -1034,8 +1044,8 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.99,
 			critical: 0.15,
-			maxHealth: 500,
-			attack: 250,
+			maxHealth: 600*mult,
+			attack: 125,
 			defense: Math.floor(Math.random() * (10 - 9) + 9),
 			skills: [
 				{
@@ -1353,7 +1363,7 @@ module.exports = {
 				{
 					name: "All or Nothing",
 					description: `Put all your eggs in one basket and deal 325% damage but gain Stun`,
-					cost: 9,
+					cost: 25,
 					pstatus: ["💫"],
 					damage: 3.25,
 					attack: true
@@ -1463,10 +1473,10 @@ module.exports = {
 				},
 				{
 					name: "Swift Barrage",
-					description: `Unleash a quick barrage of slashes. Deal 45% damage 7 times and inflict Bleed.`,
+					description: `Unleash a quick barrage of slashes. Deal 25% damage 7 times and inflict Bleed.`,
 					cost: 16,
 					times: 7,
-					damage: 0.45,
+					damage: 0.25,
 					attack: true
 				},
 				{
@@ -1591,6 +1601,7 @@ module.exports = {
 					name: "Rapid Barrage",
 					description: "Swiftly fire multiple arrows. Deal 25% damage 9 times",
 					cost: 20,
+					damage: 25,
 					times: 9,
 					attack: true
 				},
@@ -1742,7 +1753,7 @@ module.exports = {
 					estatus: ["🩸"],
 					cost: 40,
 					times: 10,
-					damage: 0.25,
+					damage: 0.8,
 					attack: true
 				},
 				{
@@ -2297,7 +2308,7 @@ module.exports = {
 					description: "Receive a minor blessing and fire off a quick burst of holy blasts at the enemy. Deal 25% damage 8 times, inflict burning, and gain Luck and Strength",
 					estatus: ["🔥"],
 					pstatus: ["🍀", "💪"],
-					damage: 0.25,
+					damage: 0.8,
 					times: 8,
 					attack: true
 				},
@@ -2618,6 +2629,61 @@ module.exports = {
 			minlvl: 1,
 			maxlvl: 5,
 			enemies: ["Lazy Goblin", "Health Slime", "Attack Slime"]
-		}
+		},
+    		{
+			name: "Warham Castle",
+			minlvl: 5,
+			maxlvl: 10,
+			enemies: ["Blacksmith Goblin", "Health Slime", "Cyclops Overlord"]
+		},
+		{
+			name: "Hinterland",
+			minlvl: 8,
+			maxlvl: 14,
+			enemies: ["Lazy Goblin", "Health Slime", "Attack Slime", "Defense Slime", "Orc", "Antidote Slime", "Werewolf", "Orange Fox"]
+		},
+		{
+			name: "Uralan Mountains",
+			minlvl: 12,
+			maxlvl: 18,
+			enemies: ["White Fox", "Blue Fox", "Attack Slime", "Orc"]
+		},
+		{
+			name: "Vulpeston",
+			minlvl: 16,
+			maxlvl: 22,
+			enemies: ["Orange Fox", "Blue Fox", "White Fox", "Health Slime"]
+		},
+		{
+			name: "Vulpes Tower",
+			minlvl: 21,
+			maxlvl: 29,
+			enemies: ["Orange Fox", "White Fox", "Blue Fox", "Fox King"]
+		},
+		{
+			name: "Vexadel",
+			minlvl: 30,
+			maxlvl: 35,
+			enemies: ["Lazy Goblin", "Health Slime", "Attack Slime", "Antidote Slime", "Blacksmith Goblin", "Armorer Goblin", "Cursed Goblin"]
+		},
+		{
+			name: "Vexadel Gaillard",
+			minlvl: 35,
+			maxlvl: 40,
+			enemies: ["Blacksmith Goblin", "Armorer Goblin", "Cursed Goblin", "Goblin King"]
+		},
+		{
+			name: "Sanguisuge",
+			minlvl: 40,
+			maxlvl: 45,
+			enemies: ["Cursed Goblin", "Health Slime", "Attack Slime", "Antidote Slime", "Demon", "Werewolf", "Witch"]
+		},
+		{
+			name: "Sangston Mansion",
+			minlvl: 45,
+			maxlvl: 50,
+			enemies: ["Cursed Goblin", "Demon", "Werewolf", "Witch", "Demon Queen"]
+		},
+
 	]
 }
