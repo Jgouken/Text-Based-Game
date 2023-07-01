@@ -1044,7 +1044,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.99,
 			critical: 0.15,
-			maxHealth: 600*mult,
+			maxHealth: 550*mult,
 			attack: 125,
 			defense: Math.floor(Math.random() * (10 - 9) + 9),
 			skills: [
@@ -1579,8 +1579,8 @@ module.exports = {
 			level: Math.floor(Math.random() * (32 - 19) + 19),
 			description: `A lightweight ranged weapon to get your enemies from afar.`,
 			attack: 15,
-			plvlmult: 1.5,
-			crit: 0.25,
+			plvlmult: 1,
+			crit: 0.15,
 			drop: 0.05,
 			chest: 3,
 			skills: [
@@ -1590,18 +1590,18 @@ module.exports = {
 				},
 				{
 					name: "Jackpot",
-					description: "Unleash a powerful shot concentrated on an enemy's weakpoint. Deal 225% damage and inflict Weakness, Stun, and Bleeding, and gain Focus and Luck.",
+					description: "Unleash a powerful shot concentrated on an enemy's weakpoint. Deal 200% damage and inflict Weakness, Stun, and Bleeding, and gain Focus and Luck.",
 					cost: 25,
-					damage: 2.25,
+					damage: 2,
 					pstatus: ["🎯", "🍀"],
 					estatus: ["🌀", "💫", "🩸"],
 					attack: true
 				},
 				{
 					name: "Rapid Barrage",
-					description: "Swiftly fire multiple arrows. Deal 25% damage 9 times",
-					cost: 20,
-					damage: 25,
+					description: "Swiftly fire multiple arrows. Deal 20% damage 9 times",
+					cost: 40,
+					damage: 0.2,
 					times: 9,
 					attack: true
 				},
@@ -1616,7 +1616,7 @@ module.exports = {
 			]
 		},
 		{
-			name: "LumberJack Axe",
+			name: "Lumberjack Axe",
 			level: Math.floor(Math.random() * (32 - 19) + 19),
 			description: `A lumberjack's best friend.`,
 			attack: 26,
@@ -1656,7 +1656,7 @@ module.exports = {
 			name: "Silver Knife",
 			level: Math.floor(Math.random() * (32 - 19) + 19),
 			description: `A knife colored silver. Great for murder!`,
-			attack: 20,
+			attack: 15,
 			plvlmult: 1.25,
 			crit: 0.15,
 			drop: 0.05,
@@ -2049,7 +2049,7 @@ module.exports = {
 					cost: 25,
 					description: "Rapidly fire arrows, inciting the bow's poisonous ability. Deal 30% damage 5 times and inflict Fatal Poison.",
 					estatus: ["💀"],
-					damage: 30,
+					damage: 0.30,
 					times: 5,
 					attack: true
 				},
@@ -2336,7 +2336,6 @@ module.exports = {
 					name: "Dual Strike",
 					damage: 0.5,
 					times: 2,
-					estatus: ["🎯"],
 					attack: true,
 				},
 				{
@@ -2684,6 +2683,5 @@ module.exports = {
 			maxlvl: 50,
 			enemies: ["Cursed Goblin", "Demon", "Werewolf", "Witch", "Demon Queen"]
 		},
-
 	]
 }

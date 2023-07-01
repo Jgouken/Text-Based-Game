@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const battling = require('./battling.js')
+const battling = require('./battling.js');
+const assets = require('./assets.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -243,6 +244,6 @@ module.exports = {
 		if (level < 0) level = level * -1
 		if (enemylvl < 0) enemylvl = level * -1
 		if (level > 50) level = 50
-		battling.execute(bot, interaction, db, weapon, armor, level, choice, area, enemylvl)
+		battling.execute(bot, interaction, db, weapon, armor, level, choice, area, enemylvl, assets)
 	}
 }
