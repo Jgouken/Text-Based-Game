@@ -117,14 +117,18 @@ module.exports = {
 							{ name: 'Alectrona & Melanie', value: '30' },
 						)
 				)
-				.addStringOption(option =>
+				.addIntegerOption(option =>
 					option.setName('level')
 						.setDescription('The level of the player')
+						.setMinValue(1)
+            			.setMaxValue(50)
 						.setRequired(false)
 				)
-				.addStringOption(option =>
+				.addIntegerOption(option =>
 					option.setName('enemylvl')
 						.setDescription('The level of the enemy')
+						.setMinValue(1)
+            			.setMaxValue(50)
 						.setRequired(false)
 				)
 		)
@@ -136,16 +140,17 @@ module.exports = {
 					option.setName('area')
 						.setDescription('The area to go to')
 						.addChoices(
-							{ name: 'Warhamshire', value: '0' },
-							{ name: 'Warham Castle', value: '1' },
-							{ name: 'Hinterland', value: '2' },
-							{ name: 'Uralan Mountains', value: '3' },
-							{ name: 'Vulpeston', value: '4' },
-							{ name: 'Vulpes Tower', value: '5' },
-							{ name: 'Vexadel', value: '6' },
-							{ name: 'Vexadel Gaillard', value: '7' },
-							{ name: 'Sanguisuge', value: '8' },
-							{ name: 'Sangston Mansion', value: '9' },
+							{ name: '1-5 Warhamshire', value: '0' },
+							{ name: '5-10 Warham Castle', value: '1' },
+							{ name: '8-14 Hinterland', value: '2' },
+							{ name: '12-18 Uralan Mountains', value: '3' },
+							{ name: '16-22 Vulpeston', value: '4' },
+							{ name: '21-29 Vulpes Tower', value: '5' },
+							{ name: '30-35 Vexadel', value: '6' },
+							{ name: '35-40 Vexadel Gaillard', value: '7' },
+							{ name: '40-45 Sanguisuge', value: '8' },
+							{ name: '45-50 Sangston Mansion', value: '9' },
+							{ name: '50+ Eternal Damnation', value: '10' },
 						)
 						.setRequired(true)
 				)
@@ -226,9 +231,11 @@ module.exports = {
 							{ name: 'Alectrona & Melanie', value: '30' },
 						)
 				)
-				.addStringOption(option =>
+				.addIntegerOption(option =>
 					option.setName('level')
 						.setDescription('The level of the player')
+						.setMinValue(1)
+            			.setMaxValue(50)
 						.setRequired(false)
 				)
 		),
@@ -236,14 +243,12 @@ module.exports = {
 	async execute(bot, interaction, db) {
 		var area = false
 		if (interaction.options.getSubcommand() === 'area') area = true
+		if (Number(interaction.options.getString('area') == 10)) return interaction.reply({content: "For eternal damnation, use the `/encounter enemy` command. As of currently, however, it is of any level that you choose.", ephemeral: true})
 		var choice = Number(interaction.options.getString('enemy')) || Number(interaction.options.getString('area'))
 		var weapon = Number(interaction.options.getString('weapon')) || Number(interaction.options.getString('bossweapon'))
 		var armor = Number(interaction.options.getString('armor'))
-		var level = interaction.options.getString('level')
-		var enemylvl = interaction.options.getString('enemylvl')
-		if (level < 0) level = level * -1
-		if (enemylvl < 0) enemylvl = level * -1
-		if (level > 50) level = 50
+		var level = interaction.options.getInteger('level')
+		var enemylvl = interaction.options.getInteger('enemylvl')
 		battling.execute(bot, interaction, db, weapon, armor, level, choice, area, enemylvl, assets)
 	}
 }

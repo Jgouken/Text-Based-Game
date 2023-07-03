@@ -11,7 +11,7 @@ module.exports = {
 			use: async function(EorP, statuses, currentHealth, chatLog, name) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
-				if (Math.random() * 100 < 8) crit = 2
+				if (Math.random() * 100 < 5) crit = 1.6
 				currentHealth = Math.round(currentHealth - (EorP.maxHealth * 0.05 * crit))
 				chatLog.push(`${name} is posioned - ${crit == 2 ? 'CRITICAL ' : ''}💀${Math.round(EorP.maxHealth * 0.05 * crit)}`)
 				status.length = status.length -= 1
@@ -34,7 +34,7 @@ module.exports = {
 			use: async function(EorP, statuses, currentHealth, chatLog, name) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
-				if (Math.random() * 100 < 8) crit = 2
+				if (Math.random() * 100 < 5) crit = 1.6
 				var heal = Math.round(EorP.maxHealth * 0.05 * crit)
 				if (currentHealth + heal > EorP.maxHealth) heal = EorP.maxHealth - currentHealth
 				currentHealth -= heal
@@ -59,7 +59,7 @@ module.exports = {
 			use: async function(EorP, statuses, currentHealth, chatLog, name) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
-				if (Math.random() * 100 < 8) crit = 2
+				if (Math.random() * 100 < 5) crit = 1.6
 				currentHealth = Math.round(currentHealth - (status.damage * 0.15 * crit))
 				chatLog.push(`${name} is bleeding - ${crit == 2 ? 'CRITICAL ' : ''}🩸${Math.round(status.damage * 0.15 * crit)}`)
 				status.length = status.length -= 1
@@ -82,7 +82,7 @@ module.exports = {
 			use: async function(EorP, statuses, currentHealth, chatLog, name) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
-				if (Math.random() * 100 < 8) crit = 2
+				if (Math.random() * 100 < 5) crit = 1.6
 				currentHealth = Math.round(currentHealth - (status.damage * 0.05 * crit))
 				chatLog.push(`${name} is burned - ${crit == 2 ? 'CRITICAL ' : ''}🔥${Math.round(status.damage * 0.05 * crit)}`)
 				status.length = status.length -= 1
@@ -154,7 +154,7 @@ module.exports = {
 			use: async function(EorP, statuses, currentHealth, chatLog, name) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
-				if (Math.random() * 100 < 8) crit = 2
+				if (Math.random() * 100 < 5) crit = 1.6
 				currentHealth = Math.round(currentHealth - (status.damage * 0.15 * crit))
 				chatLog.push(`${name} is cursed - ${crit == 2 ? 'CRITICAL ' : ''}🖤${Math.round(status.damage * 0.15 * crit)}`)
 				status.length = status.length -= 1
@@ -185,7 +185,7 @@ module.exports = {
 		{
 			name: 'Berserk',
 			id: '💢',
-			description: `Increases attack by 40% and decreases armor by 30%.`,
+			description: `Increases attack by 40% but increases damage taken by 30%.`,
 			positive: true,
 			length: 3
 		},
@@ -211,6 +211,10 @@ module.exports = {
 			length: 5,
 		},
 
+	],
+
+	presets: [
+		
 	],
 
 	enemies: [
@@ -551,6 +555,7 @@ module.exports = {
 					name: "Swift Movement",
 					estatus: ["🎯", "💨"],
 					chance: 0.1,
+					wait: 3,
 					attack: false
 				},
 				{
@@ -587,6 +592,7 @@ module.exports = {
 				{
 					name: "Swift Movement",
 					estatus: ["🎯", "💨"],
+					wait: 3,
 					chance: 0.1,
 					attack: false
 				},
@@ -625,6 +631,7 @@ module.exports = {
 				{
 					name: "Swift Movement",
 					estatus: ["🎯", "💨"],
+					wait: 3,
 					chance: 0.1,
 					attack: false
 				},
@@ -2305,10 +2312,10 @@ module.exports = {
 				{
 					name: "Sacred Barrage",
 					cost: 30,
-					description: "Receive a minor blessing and fire off a quick burst of holy blasts at the enemy. Deal 25% damage 8 times, inflict burning, and gain Luck and Strength",
+					description: "Receive a minor blessing and fire off a quick burst of holy blasts at the enemy. Deal 20% damage 8 times, inflict burning, and gain Luck and Strength",
 					estatus: ["🔥"],
 					pstatus: ["🍀", "💪"],
-					damage: 0.8,
+					damage: 0.2,
 					times: 8,
 					attack: true
 				},
