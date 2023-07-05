@@ -1,7 +1,7 @@
 {
-  "name": "royal-bot",
+  "name": "text-based-game",
   "version": "1.0.0",
-  "description": "Official Bot for the Black Royalty Discord Server.",
+  "description": "Official Bot for Jgouken's game.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

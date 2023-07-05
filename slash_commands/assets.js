@@ -8,12 +8,12 @@ module.exports = {
 			description: `Inflict 5% of Max HP damage over 3 rounds.`,
 			positive: false,
 			length: 3,
-			use: async function(EorP, statuses, currentHealth, chatLog, name) {
+			use: async function(EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
-				currentHealth = Math.round(currentHealth - (EorP.maxHealth * 0.05 * crit))
-				chatLog.push(`${name} is posioned - ${crit == 2 ? 'CRITICAL ' : ''}💀${Math.round(EorP.maxHealth * 0.05 * crit)}`)
+				currentHealth = Math.round(currentHealth - ((EorP.armor ? EorP.maxHealth : emaxHealth) * 0.05 * crit))
+				chatLog.push(`${name} is posioned - ${crit == 2 ? 'CRITICAL ' : ''}💀${Math.round((EorP.armor ? EorP.maxHealth : emaxHealth) * 0.05 * crit)}`)
 				status.length = status.length -= 1
 				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
 				return {
@@ -31,13 +31,13 @@ module.exports = {
 			description: `Gain 5% Max HP over 6 rounds.`,
 			positive: true,
 			length: 6,
-			use: async function(EorP, statuses, currentHealth, chatLog, name) {
+			use: async function(EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
-				var heal = Math.round(EorP.maxHealth * 0.05 * crit)
-				if (currentHealth + heal > EorP.maxHealth) heal = EorP.maxHealth - currentHealth
-				currentHealth -= heal
+				var heal = Math.round((EorP.armor ? EorP.maxHealth : emaxHealth) * 0.05 * crit)
+				if (currentHealth + heal > (EorP.armor ? EorP.maxHealth : emaxHealth)) heal = (EorP.armor ? EorP.maxHealth : emaxHealth) - currentHealth
+				currentHealth += heal
 				chatLog.push(`${name} has regeneration - ${crit == 2 ? 'CRITICAL ' : ''}💗${heal}`)
 				status.length = status.length -= 1
 				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
@@ -56,7 +56,7 @@ module.exports = {
 			description: `Inflict 15% of damage dealt over 3 rounds.`,
 			positive: false,
 			length: 3,
-			use: async function(EorP, statuses, currentHealth, chatLog, name) {
+			use: async function(EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
@@ -79,7 +79,7 @@ module.exports = {
 			description: `Inflict 5% of damage dealt over 10 rounds.`,
 			positive: false,
 			length: 3,
-			use: async function(EorP, statuses, currentHealth, chatLog, name) {
+			use: async function(EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
@@ -151,7 +151,7 @@ module.exports = {
 			description: `Inflict 15% of  initial damage over 8 rounds.`,
 			positive: false,
 			length: 8,
-			use: async function(EorP, statuses, currentHealth, chatLog, name) {
+			use: async function(EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
@@ -211,10 +211,6 @@ module.exports = {
 			length: 5,
 		},
 
-	],
-
-	presets: [
-		
 	],
 
 	enemies: [
@@ -1660,7 +1656,7 @@ module.exports = {
 			]
 		},
 		{
-			name: "Silver Knife",
+			name: "Silver Dagger",
 			level: Math.floor(Math.random() * (32 - 19) + 19),
 			description: `A knife colored silver. Great for murder!`,
 			attack: 15,
@@ -2159,8 +2155,8 @@ module.exports = {
 			name: "Demonic Nunchucks",
 			level: Math.floor(Math.random() * (50 - 40) + 40),
 			description: `A weapon once used by highly talented demons that practiced martial arts. It has the ability to call forth the cursed flames.`,
-			attack: 28,
-			plvlmult: 2,
+			attack: 40,
+			plvlmult: 2.5,
 			crit: 0.3,
 			drop: 0.01,
 			chest: 5,
@@ -2394,7 +2390,19 @@ module.exports = {
 			level: Math.random() * (10 - 1) + 1,
 			alvlmult: 1,
 			evasion: 0.06,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Twig",
+					name: "Light",
+					evasion: 0.025,
+				},
+				{
+					weapon: "Branch",
+					name: "Thick",
+					armor: 5,
+				},
+			]
 		},
 		{
 			name: "Damaged Cloak",
@@ -2404,7 +2412,19 @@ module.exports = {
 			level: Math.random() * (10 - 1) + 1,
 			alvlmult: 2,
 			evasion: 0.05,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Broken Dagger",
+					name: "Jagged Edge",
+					critical: 0.025,
+				},
+				{
+					weapon: "Rusty Dagger",
+					name: "Thick",
+					armor: 5,
+				},
+			]
 		},
 		{
 			name: "Rogues Cloak",
@@ -2414,17 +2434,31 @@ module.exports = {
 			level: Math.random() * (12 - 4) + 4,
 			alvlmult: 2,
 			evasion: 0.09,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Trusty Dagger",
+					name: "Light",
+					evasion: 0.025,
+				},
+			]
 		},
 		{
-			name: "Perfect Leaf",
+			name: "The Perfect Leaf",
 			description: "A leaf with a vibrant hue of green, no missing leaves, damage, and a impressive shape that seems completely symmetrical it must be special.",
 			armor: 47,
 			plvlmult: 5,
 			level: Math.random() * (12 - 4) + 4,
 			alvlmult: 1,
 			evasion: 0.13,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "The Perfect Stick",
+					name: "Light",
+					evasion: 0.025,
+				},
+			]
 		},
 		{
 			name: "Padded Clothing",
@@ -2434,7 +2468,14 @@ module.exports = {
 			level: Math.random() * (14 - 6) + 6,
 			alvlmult: 2,
 			evasion: 0.07,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Iron Short Sword",
+					name: "Hide",
+					armor: 10,
+				},
+			]
 		},
 		{
 			name: "Confidence",
@@ -2444,7 +2485,14 @@ module.exports = {
 			level: Math.random() * (45 - 25) + 25,
 			alvlmult: 10,
 			evasion: 0.30,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Golden Stick",
+					name: "Powerful",
+					attack: 35
+				},
+			]
 		},
 		{
 			name: "Leather Armor",
@@ -2454,7 +2502,19 @@ module.exports = {
 			level: Math.random() * (24 - 13) + 13,
 			alvlmult: 4,
 			evasion: 0.12,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Dual Daggers",
+					name: "Light",
+					evasion: 0.05,
+				},
+				{
+					weapon: "Dual Hatchets",
+					name: "Brute",
+					attack: 15
+				},
+			]
 		},
 		{
 			name: "Light Armor",
@@ -2464,7 +2524,14 @@ module.exports = {
 			level: Math.random() * (28 - 15) + 15,
 			alvlmult: 7,
 			evasion: 0.09,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Iron Sword",
+					name: "Tough",
+					armor: 15,
+				},
+			]
 		},
 		{
 			name: "Hunter Cloak",
@@ -2474,7 +2541,14 @@ module.exports = {
 			level: Math.random() * (32 - 19) + 19,
 			alvlmult: 6,
 			evasion: 0.25,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Wooden Bow",
+					name: "Targeted",
+					critical: 0.05,
+				},
+			]
 		},
 		{
 			name: "Assassin's Cloak",
@@ -2484,7 +2558,14 @@ module.exports = {
 			level: Math.random() * (32 - 19) + 19,
 			alvlmult: 7,
 			evasion: 0.10,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Silver Dagger",
+					name: "Swift",
+					evasion: 0.05,
+				},
+			]
 		},
 		{
 			name: "Lumberjack Atire",
@@ -2494,7 +2575,14 @@ module.exports = {
 			level: Math.random() * (38 - 26) + 26,
 			alvlmult: 14,
 			evasion: 0.08,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Lumberjack Axe",
+					name: "Strong",
+					armor: 20,
+				},
+			]
 		},
 		{
 			name: "Thick Sleeveless Hoodie",
@@ -2504,7 +2592,14 @@ module.exports = {
 			level: Math.random() * (40 - 25) + 25,
 			alvlmult: 9,
 			evasion: 0.20,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Martial Arts",
+					name: "Targeted",
+					critical: 0.05,
+				},
+			]
 		},
 		{
 			name: "Leather Apron & Mask",
@@ -2514,7 +2609,14 @@ module.exports = {
 			level: Math.random() * (50 - 26) + 26,
 			alvlmult: 19,
 			evasion: 0.14,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Chainsaw",
+					name: "Relentless",
+					critical: 0.1,
+				},
+			]
 		},
 		{
 			name: "Iron Armor",
@@ -2524,8 +2626,19 @@ module.exports = {
 			level: Math.random() * (38 - 26) + 26,
 			alvlmult: 15,
 			evasion: 0.0,
-			encounter: 0.05
-
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Great Sword",
+					name: "Heavy",
+					armor: 25,
+				},
+				{
+					weapon: "Skull Crusher",
+					name: "Strong",
+					attack: 20
+				},
+			]
 		},
 		{
 			name: "Dragon Cloak",
@@ -2535,7 +2648,14 @@ module.exports = {
 			level: Math.random() * (40 - 30) + 30,
 			alvlmult: 12,
 			evasion: 0.15,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Twin Swords",
+					name: "Sharp",
+					critical: 0.075,
+				},
+			]
 		},
 		{
 			name: "Spiked Leather Armor",
@@ -2545,7 +2665,14 @@ module.exports = {
 			level: Math.random() * (40 - 30) + 30,
 			alvlmult: 17,
 			evasion: 0.13,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Spiked Gauntlents",
+					name: "Strength",
+					attack: 20
+				},
+			]
 		},
 		{
 			name: "Shinobi Garments",
@@ -2555,7 +2682,14 @@ module.exports = {
 			level: Math.random() * (50 - 30) + 30,
 			alvlmult: 16,
 			evasion: 0.15,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Ninja Arts",
+					name: "Illusive",
+					evasion: 0.015,
+				},
+			]
 		},
 		{
 			name: "Holy Knight's Armor",
@@ -2565,7 +2699,19 @@ module.exports = {
 			level: Math.random() * (50 - 30) + 30,
 			alvlmult: 24,
 			evasion: 0.07,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Holy Spear",
+					name: "Unbreakable",
+					armor: 50,
+				},
+				{
+					weapon: "Evil Pulverizer",
+					name: "Powerful",
+					attack: 35
+				},
+			]
 		},
 		{
 			name: "Coat of Darkness",
@@ -2575,27 +2721,53 @@ module.exports = {
 			level: Math.random() * (50 - 30) + 30,
 			alvlmult: 16,
 			evasion: 0.15,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Cursed Bone Bow",
+					name: "Relentless",
+					critical: 0.1,
+				},
+				{
+					weapon: "Cursed Fangs",
+					name: "Relentless",
+					critical: 0.1,
+				},
+			]
 		},
 		{
-			name: "Blessed GI",
-			description: "A martial artist GI that has been extensively blessed by the church till it's been imbued holy energy.",
+			name: "Blessed Gi",
+			description: "A martial artist Gi that has been extensively blessed by the church till it's been imbued holy energy.",
 			armor: 247,
 			plvlmult: 5,
 			level: Math.random() * (50 - 40) + 40,
 			alvlmult: 28,
 			evasion: 0.14,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Holy Arts",
+					name: "Reinforced",
+					armor: 35,
+				},
+			]
 		},
 		{
 			name: "Sinner Jacket",
-			description: "WORK IN PROGRESS",
+			description: "EXAMPLE",
 			armor: 261,
 			plvlmult: 5,
 			level: Math.random() * (50 - 40) + 40,
 			alvlmult: 19,
 			evasion: 0.23,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Demonic Nunchucks",
+					name: "Relentless",
+					critical: 0.1,
+				},
+			]
 		},
 		{
 			name: "Walking Church",
@@ -2605,7 +2777,14 @@ module.exports = {
 			level: Math.random() * (50 - 45) + 45,
 			alvlmult: 37,
 			evasion: 0.0,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Iris & Hermes",
+					name: "Dead Eye",
+					critical: 0.15,
+				},
+			]
 		},
 		{
 			name: "Black Mourning",
@@ -2615,17 +2794,32 @@ module.exports = {
 			level: Math.random() * (50 - 45) + 45,
 			alvlmult: 20,
 			evasion: 0.25,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Orcus",
+					name: "Illusive",
+					evasion: 0.015,
+				},
+			]
 		},
 		{
 			name: "Equinox",
-			description: "WORK IN PROGRESS",
+			description: "EXAMPLE",
 			armor: 247,
 			plvlmult: 5,
 			level: Math.random() * (50 - 45) + 45,
 			alvlmult: 24,
 			evasion: 0.15,
-			encounter: 0.05
+			encounter: 0.05,
+			synergies: [
+				{
+					weapon: "Alectrona & Melanie",
+					name: "Unstoppable",
+					evasion: 0.015,
+					attack: 50
+				},
+			]
 		},
 	],
 
@@ -2690,5 +2884,9 @@ module.exports = {
 			maxlvl: 50,
 			enemies: ["Cursed Goblin", "Demon", "Werewolf", "Witch", "Demon Queen"]
 		},
+	],
+
+	items: [
+
 	]
 }
