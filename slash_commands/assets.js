@@ -8,7 +8,7 @@ module.exports = {
 			description: `Inflict 5% of Max HP damage over 3 rounds.`,
 			positive: false,
 			length: 3,
-			use: async function(EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
+			use: async function (EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
@@ -31,7 +31,7 @@ module.exports = {
 			description: `Gain 5% Max HP over 6 rounds.`,
 			positive: true,
 			length: 6,
-			use: async function(EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
+			use: async function (EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
@@ -56,7 +56,7 @@ module.exports = {
 			description: `Inflict 15% of damage dealt over 3 rounds.`,
 			positive: false,
 			length: 3,
-			use: async function(EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
+			use: async function (EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
@@ -79,7 +79,7 @@ module.exports = {
 			description: `Inflict 5% of damage dealt over 10 rounds.`,
 			positive: false,
 			length: 3,
-			use: async function(EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
+			use: async function (EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
@@ -151,7 +151,7 @@ module.exports = {
 			description: `Inflict 15% of  initial damage over 8 rounds.`,
 			positive: false,
 			length: 8,
-			use: async function(EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
+			use: async function (EorP, statuses, currentHealth, chatLog, name, emaxHealth) {
 				let status = statuses.find(({ id }) => id == this.id)
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
@@ -218,7 +218,7 @@ module.exports = {
 			name: `Lazy Goblin`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1117502969370382366/New_Piskel_4_2.gif',
 			weapon: "Rusted Dagger",
-			maxHealth: 50*Math.round(mult/2),
+			maxHealth: 50 * Math.round(mult / 2),
 			attack: 10,
 			accuracy: 0.75,
 			critical: 0.05,
@@ -243,7 +243,7 @@ module.exports = {
 			name: `Blacksmith Goblin`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1121514870832124034/image_2.gif',
 			weapon: "Blacksmith's Hammer",
-			maxHealth: 75*mult,
+			maxHealth: 75 * mult,
 			attack: 30,
 			accuracy: 0.8,
 			critical: 0.05,
@@ -276,7 +276,7 @@ module.exports = {
 			name: `Armorer Goblin`,
 			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
 			weapon: "Spear & Shield",
-			maxHealth: 100*mult,
+			maxHealth: 100 * mult,
 			attack: 20,
 			accuracy: 0.75,
 			critical: 0.08,
@@ -309,7 +309,7 @@ module.exports = {
 			weapon: "Cursed Rusted Dagger",
 			accuracy: 0.75,
 			critical: 0.08,
-			maxHealth: 75*mult,
+			maxHealth: 75 * mult,
 			defense: Math.floor(Math.random() * (4 - 1) + 1),
 			attack: 45,
 			skills: [
@@ -340,7 +340,7 @@ module.exports = {
 			weapon: "Orc Club",
 			accuracy: 0.8,
 			critical: 0.1,
-			maxHealth: 150*mult,
+			maxHealth: 150 * mult,
 			attack: 50,
 			defense: Math.floor(Math.random() * (4 - 2) + 2),
 			skills: [
@@ -380,7 +380,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 1,
 			critical: 0.1,
-			maxHealth: 150*Math.round(mult/2),
+			maxHealth: 50 * Math.round(mult / 2),
 			attack: 10,
 			defense: 0,
 			skills: [
@@ -418,7 +418,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.75,
 			critical: 0.07,
-			maxHealth: 50*Math.round(mult/1.25),
+			maxHealth: 50 * Math.round(mult / 1.25),
 			attack: 80,
 			defense: 0,
 			skills: [
@@ -454,7 +454,7 @@ module.exports = {
 			name: `Defense Slime`,
 			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1116446666917158932/New_Piskel_2_1.gif',
 			weapon: null,
-			maxHealth: 50*mult,
+			maxHealth: 50 * mult,
 			attack: 20,
 			accuracy: 0.85,
 			critical: 0.05,
@@ -494,7 +494,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.8,
 			critical: 0.05,
-			maxHealth: 50*mult,
+			maxHealth: 50 * mult,
 			attack: 25,
 			defense: Math.floor(Math.random() * (2 - 1) + 1),
 			skills: [
@@ -531,7 +531,7 @@ module.exports = {
 			weapon: "Steel Dagger",
 			accuracy: 0.85,
 			critical: 0.1,
-			maxHealth: 175*mult,
+			maxHealth: 175 * mult,
 			attack: 35,
 			defense: Math.floor(Math.random() * (3 - 1) + 1),
 			skills: [
@@ -568,7 +568,7 @@ module.exports = {
 			weapon: "Steel Dagger",
 			accuracy: 0.8,
 			critical: 0.1,
-			maxHealth: 150*mult,
+			maxHealth: 150 * mult,
 			attack: 45,
 			defense: Math.floor(Math.random() * (3 - 2) + 2),
 			skills: [
@@ -607,7 +607,7 @@ module.exports = {
 			weapon: "Steel Dagger",
 			accuracy: 0.8,
 			critical: 0.1,
-			maxHealth: 175*mult,
+			maxHealth: 175 * mult,
 			attack: 55,
 			defense: Math.floor(Math.random() * (3 - 2) + 2),
 			skills: [
@@ -652,7 +652,7 @@ module.exports = {
 			weapon: "Fangs",
 			accuracy: 0.95,
 			critical: 0.2,
-			maxHealth: 90*mult,
+			maxHealth: 90 * mult,
 			attack: 40,
 			defense: Math.floor(Math.random() * 6),
 			skills: [
@@ -691,7 +691,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.85,
 			critical: 0.15,
-			maxHealth: 100*mult,
+			maxHealth: 100 * mult,
 			attack: 50,
 			defense: Math.floor(Math.random() * (6 - 2) + 2),
 			skills: [
@@ -744,7 +744,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.8,
 			critical: 0.25,
-			maxHealth: 115*mult,
+			maxHealth: 115 * mult,
 			attack: 40,
 			defense: Math.floor(Math.random() * 4),
 			skills: [
@@ -782,7 +782,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.9,
 			critical: 0.05,
-			maxHealth: 75*mult,
+			maxHealth: 75 * mult,
 			attack: 45,
 			defense: Math.floor(Math.random() * 3),
 			skills: [
@@ -834,7 +834,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.5,
 			critical: 0.1,
-			maxHealth: 10*mult,
+			maxHealth: 10 * mult,
 			attack: 15,
 			defense: Math.floor(Math.random() * 1),
 			skills: [
@@ -856,7 +856,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.5,
 			critical: 0.1,
-			maxHealth: 20*mult,
+			maxHealth: 20 * mult,
 			attack: 0,
 			defense: Math.floor(Math.random() * 2),
 			skills: [
@@ -878,7 +878,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.5,
 			critical: 0.1,
-			maxHealth: 5*mult,
+			maxHealth: 5 * mult,
 			attack: 10,
 			defense: 0,
 			skills: [
@@ -900,7 +900,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.78,
 			critical: 0.15,
-			maxHealth: 250*Math.round(mult/1.5),
+			maxHealth: 250 * Math.round(mult / 1.5),
 			attack: 80,
 			defense: Math.floor(Math.random() * (7 - 5) + 5),
 			skills: [
@@ -946,7 +946,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 1,
 			critical: 0.15,
-			maxHealth: 225*mult,
+			maxHealth: 225 * mult,
 			attack: 150,
 			defense: Math.floor(Math.random() * (7 - 4) + 4),
 			skills: [
@@ -992,7 +992,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.9,
 			critical: 0.15,
-			maxHealth: 300*mult,
+			maxHealth: 300 * mult,
 			attack: 175,
 			defense: Math.floor(Math.random() * (7 - 5) + 5),
 			skills: [
@@ -1047,7 +1047,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.99,
 			critical: 0.15,
-			maxHealth: 550*mult,
+			maxHealth: 550 * mult,
 			attack: 125,
 			defense: Math.floor(Math.random() * (10 - 9) + 9),
 			skills: [
@@ -2293,7 +2293,7 @@ module.exports = {
 				{
 					name: "Quick Shot",
 					damage: 1,
-					estatus: ["🎯"],
+					pstatus: ["🎯"],
 					attack: true,
 				},
 				{
@@ -2830,7 +2830,7 @@ module.exports = {
 			maxlvl: 5,
 			enemies: ["Lazy Goblin", "Health Slime", "Attack Slime"]
 		},
-    		{
+		{
 			name: "Warham Castle",
 			minlvl: 5,
 			maxlvl: 10,
@@ -2887,6 +2887,333 @@ module.exports = {
 	],
 
 	items: [
+		// Stamina
+		{
+			name: "Light Stamina Potion",
+			stamina: 0.15,
+			battle: true
+		},
+		{
+			name: "Medium Stamina Potion",
+			stamina: 0.3,
+			battle: true,
+			craft: ["Yellow Goop", "Water Flask"]
+		},
+		{
+			name: "Heavy Stamina Potion",
+			stamina: 0.5,
+			battle: true,
+			craft: ["Yellow Goop", "Milk", "Empty Flask"]
+		},
+		{
+			name: "Great Stamina Potion",
+			stamina: 0.7,
+			battle: true,
+			craft: ["Yellow Goop", "Witch Crystal", "Milk", "Empty Flask"]
+		},
+		{
+			name: "Grand Stamina Potion",
+			stamina: 0.9,
+			battle: true
+		},
+		// Health
+		{
+			name: "Light Health Potion",
+			health: 0.15,
+			battle: true
+		},
+		{
+			name: "Medium Health Potion",
+			health: 0.3,
+			battle: true,
+			craft: ["Green Goop", "Water Flask"]
+		},
+		{
+			name: "Heavy Health Potion",
+			health: 0.5,
+			battle: true,
+			craft: ["Green Goop", "Eggs", "Empty Flask"]
+		},
+		{
+			name: "Great Health Potion",
+			health: 0.7,
+			battle: true,
+			craft: ["Green Goop", "Vampire Fang", "Eggs", "Empty Flash"]
+		},
+		{
+			name: "Grand Health Potion",
+			health: 0.9,
+			battle: true
+		},
+		// Defense
+		{
+			name: "Light Defense Potion",
+			health: 0.15,
+			battle: true
+		},
+		{
+			name: "Medium Defense Potion",
+			health: 0.3,
+			battle: true,
+			craft: ["Grey Goop", "Water Flask"]
+		},
+		{
+			name: "Heavy Defense Potion",
+			health: 0.5,
+			battle: true,
+			craft: ["Grey Goop", "Eggs", "Empty Flask"]
+		},
+		{
+			name: "Great Defense Potion",
+			health: 0.7,
+			battle: true,
+			craft: ["Gret Goop", "Demon Horn", "Eggs", "Empty Flash"]
+		},
+		{
+			name: "Grand Defense Potion",
+			health: 0.9,
+			battle: true
+		},
+		// Attack
+		{
+			name: "Light Attack Potion",
+			attack: 0.15,
+			battle: true
+		},
+		{
+			name: "Medium Attack Potion",
+			attack: 0.3,
+			battle: true,
+			craft: ["Red Goop", "Water Flask"]
+		},
+		{
+			name: "Heavy Attack Potion",
+			attack: 0.5,
+			battle: true,
+			craft: ["Red Goop", "Milk", "Empty Flask"]
+		},
+		{
+			name: "Great Attack Potion",
+			attack: 0.7,
+			battle: true,
+			craft: ["Red Goop", "Werewolf Claw", "Milk", "Empty Flash"]
+		},
+		{
+			name: "Grand Attack Potion",
+			attack: 0.9,
+			battle: true
+		},
+		// Energy
+		{
+			name: "Light Energy Potion",
+			health: 0.15,
+			stamina: 0.15,
+			battle: true
+		},
+		{
+			name: "Medium Energy Potion",
+			health: 0.15,
+			stamina: 0.3,
+			battle: true
+		},
+		{
+			name: "Heavy Energy Potion",
+			health: 0.15,
+			stamina: 0.5,
+			battle: true
+		},
+		{
+			name: "Great Energy Potion",
+			health: 0.15,
+			stamina: 0.7,
+			battle: true
+		},
+		{
+			name: "Grand Energy Potion",
+			health: 0.15,
+			stamina: 0.9,
+			battle: true
+		},
+		// XP
+		{
+			name: "Light XP Potion",
+			xp: 638
+		},
+		{
+			name: "Medium XP Potion",
+			xp: 5740
+		},
+		{
+			name: "Heavy XP Potion",
+			xp: 15943
+		},
+		{
+			name: "Great XP Potion",
+			xp: 31250
+		},
+		{
+			name: "Grand XP Potion",
+			xp: 51658
+		},
+		// Chest Keys
+		{
+			name: "T1 Key"
+		},
+		{
+			name: "T2 Key"
+		},
+		{
+			name: "T3 Key"
+		},
+		{
+			name: "T4 Key"
+		},
+		{
+			name: "T5 Key"
+		},
+		/*
+		{
+			name: "Poison Potion",
+			craft: ["Venom", "Booze Flask"],
 
+			battle: true
+		},
+		*/
+		// Craftables
+		{
+			name: "Molotov",
+			craft: ["Cloth", "Booze Flask"],
+			damage: 350,
+			estatus: ["🔥"],
+			battle: true
+		},
+		{
+			name: "Ordinary Bomb",
+			craft: ["Gunpowder", "Sticky Solution", "Empty Flask"],
+			damage: 420,
+			battle: true
+		},
+		{
+			name: "Pepper Bomb",
+			craft: ["Gunpowder", "Sticky Solution", "Empty Flask", "Pepper"],
+			damage: 400,
+			estatus: ["👁️"],
+			battle: true
+		},
+		{
+			name: "Shrapnel Bomb",
+			craft: ["Gunpowder", "Sticky Solution", "Empty Flask", "Whetstone"],
+			damage: 450,
+			estatus: ["🩸"],
+			battle: true
+		},
+		{
+			name: "Purifying Flask",
+			craft: ["Purified Salt", "Sticky Solution", "Water Flask"],
+			battle: true
+		},
+		{
+			name: "Purifying Water",
+			craft: ["Purified Salt", "Water Flask"],
+			battle: true
+		},
+		{
+			name: "Poison Flask",
+			estatus: ["💀"],
+			damage: 260,
+			battle: true
+		},
+		{
+			name: "Cloth",
+			craft: ["Wool", "Wool"]
+		},
+		{
+			name: "Purple Gem",
+			craft: ["Red Gem", "Blue Gem"]
+		},
+		{
+			name: "Sticky Solution",
+			craft: ["Yellow Goop", "Green Goop", "Grey Goop", "Red Goop", "Empty Flask"]
+		},
+		{
+			name: "Mana Infused Crystal",
+			craft: ["Witch Crystal", "Werewolf Claw", "Demon Horn", "Vampire Fang"]
+		},
+		{
+			name: "Enchanting Crystal",
+			craft: ["Mana Infused Crystal", "Sticky Solution", "Water"]
+		},
+		{
+			name: "Purification Gem",
+			craft: ["Purple Gem", "Sticky Solution", "Purifying Water"]
+		},
+		{
+			name: "Whetstone & Polish",
+			craft: ["Whetstone", "Sticky Solution", "Water Flask", "Cloth"]
+		},
+		// Drops
+		{
+			name: "Yellow Goop"
+		},
+		{
+			name: "Green Goop"
+		},
+		{
+			name: "Grey Goop"
+		},
+		{
+			name: "Red Goop"
+		},
+		{
+			name: "Pepper"
+		},
+		{
+			name: "Wool"
+		},
+		{
+			name: "Milk"
+		},
+		{
+			name: "Eggs"
+		},
+		{
+			name: "Vampire Fang"
+		},
+		{
+			name: "Demon Horn"
+		},
+		{
+			name: "Werewolf Claw"
+		},
+		{
+			name: "Witch Crystal"
+		},
+		{
+			name: "Red Gem"
+		},
+		{
+			name: "Blue Gem"
+		},
+		{
+			name: "Water Flask"
+		},
+		{
+			name: "Booze Flask"
+		},
+		{
+			name: "Empty Flask"
+		},
+		{
+			name: "Venom"
+		},
+		{
+			name: "Purified Salt"
+		},
+		{
+			name: "Gunpowder"
+		},
+		{
+			name: "Whetstone"
+		}
 	]
 }
