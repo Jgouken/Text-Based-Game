@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
 const assets = require('./assets.js');
 const fs = require('fs')
 
@@ -6,38 +6,32 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('encounter')
 		.setDescription(`Data is now saved, so you can no longer select stuffs. If your data gets corrupted, sorry buddy.`)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('area')
-				.setDescription('Go to an area and encounter certain enemies')
-				.addStringOption(option =>
-					option.setName('area')
-						.setDescription('The area to go to')
-						.addChoices(
-							{ name: '1-5 Warhamshire', value: '0' },
-							{ name: '5-10 Warham Castle', value: '1' },
-							{ name: '8-14 Hinterland', value: '2' },
-							{ name: '12-18 Uralan Mountains', value: '3' },
-							{ name: '16-22 Vulpeston', value: '4' },
-							{ name: '21-29 Vulpes Tower', value: '5' },
-							{ name: '30-35 Vexadel', value: '6' },
-							{ name: '35-40 Vexadel Gaillard', value: '7' },
-							{ name: '40-45 Sanguisuge', value: '8' },
-							{ name: '45-50 Sangston Mansion', value: '9' },
-							{ name: '50+ Eternal Damnation', value: '10' },
-						)
-						.setRequired(true)
+		.addStringOption(option =>
+			option.setName('area')
+				.setDescription('The area to go to')
+				.addChoices(
+					{ name: '1-5 Warhamshire', value: '0' },
+					{ name: '5-10 Warham Castle', value: '1' },
+					{ name: '8-14 Hinterland', value: '2' },
+					{ name: '12-18 Uralan Mountains', value: '3' },
+					{ name: '16-22 Vulpeston', value: '4' },
+					{ name: '21-29 Vulpes Tower', value: '5' },
+					{ name: '30-35 Vexadel', value: '6' },
+					{ name: '35-40 Vexadel Gaillard', value: '7' },
+					{ name: '40-45 Sanguisuge', value: '8' },
+					{ name: '45-50 Sangston Mansion', value: '9' },
+					{ name: '50+ Eternal Damnation', value: '10' },
 				)
+				.setRequired(true)
 		),
 
 	async execute(bot, interaction, db) {
 		if (Number(interaction.options.getString('area') == 10)) return interaction.reply({ content: "For Eternal Damnation isn't quite ready yet, so come back soon!", ephemeral: true })
-		const { ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
 
 		await db.delete(`gamer_${interaction.user.id}`)
-		//await db.delete(`player_${interaction.user.id}`)
+		await db.delete(`player_${interaction.user.id}`)
 		if (!(await db.get(`player_${interaction.user.id}`))) {
-			await db.set(`player_${interaction.user.id}`, `1|500|500|30|10|50|50|0.95|0|0|0|0`)
+			await db.set(`player_${interaction.user.id}`, `1|500|500|30|10|50|50|0.95|0|0|31|0`)
 		}
 
 		/*
@@ -46,10 +40,12 @@ module.exports = {
 		*/
 
 		let player = (await db.get(`player_${interaction.user.id}`)).split('|')
-		let weapon = assets.weapons[Number(player[9])]
+		let weapon = assets.items[Number(player[9])]
 		let level = Number(player[0])
-		let armor = assets.armor[Number(player[10])]
+		let armor = assets.items[Number(player[10])]
 		let area = Number(interaction.options.getString('area'))
+		let weaponlvl = Math.floor(Math.random() * (weapon.maxlvl - weapon.minlvl) - weapon.minlvl)
+		let armorlvl = armor.maxlvl ? Math.floor(Math.random() * (armor.maxlvl - armor.minlvl) - armor.minlvl) : armor.minlvl
 
 		var p = {
 			name: interaction.member.nickname || interaction.member.displayName || interaction.user.username,
@@ -61,8 +57,8 @@ module.exports = {
 			maxStamina: Math.round(Number(player[5])),
 			stamina: Math.round(Number(player[6])),
 
-			attack: Math.round(Number(player[3]) + Number(6 * (level - 1)) + Number(weapon.attack) + Number(weapon.level) + Number(level * Number(weapon.plvlmult))),
-			armor: Math.round(Number(Number(player[4]) + Number(armor.armor) + Number(level * Number(armor.plvlmult)) + Number(Number(armor.level) * Number(armor.alvlmult)))),
+			attack: Math.round(Number(player[3]) + Number(6 * (level - 1)) + Number(weapon.attack) + Number(weaponlvl) + Number(level * Number(weapon.plvlmult))),
+			armor: Math.round(Number(Number(player[4]) + Number(armor.armor) + Number(level * Number(armor.plvlmult)) + Number(Number(armorlvl) * Number(armor.alvlmult)))),
 
 			accuracy: Number(player[7]),
 			xp: Number(player[8]),
@@ -87,18 +83,27 @@ module.exports = {
 		})
 
 		var e;
-		var elevel = 1;
 		var choiceArea = assets.areas[area]
+		var random = Math.random()
+		var randomTrack = 0;
 
-		while (!e) e = assets.enemies.find(({ name }) => name.toLowerCase().trim() == choiceArea.enemies[Math.floor(Math.random() * choiceArea.enemies.length)].toLowerCase().trim())
-		elevel = Math.floor(Math.random() * (choiceArea.maxlvl - choiceArea.minlvl) + choiceArea.minlvl)
+		for (let i = 0; i < choiceArea.enemies.length; i++) {
+			randomTrack += choiceArea.enemies[i].chance;
+			if (random <= randomTrack) {
+				e = assets.enemies.find(({ name }) => name.toLowerCase().trim() == choiceArea.enemies[i].name.toLowerCase().trim())
+				break;
+			}
+		}
+		while (!e) e = assets.enemies.find(({ name }) => name.toLowerCase().trim() == choiceArea.enemies[Math.floor(Math.random() * choiceArea.enemies.length)].name.toLowerCase().trim())
 
+		var elevel = Math.floor(Math.random() * (choiceArea.maxlvl - choiceArea.minlvl) + choiceArea.minlvl);
 		var emaxHealth = Math.round(e.maxHealth + ((elevel / 2) ** 1.72424))
 		var eattack = Math.round(e.attack + (elevel ** 1.62424))
 		var eaccuracy = e.accuracy - p.evasion + (.0025 * (elevel - 1))
 		var ecritical = e.critical + (.000125 * (elevel - 1))
 		var exp = Math.round((p.level * (emaxHealth / eattack)) ** 1.2)
 		var ehealth = emaxHealth
+		var edefense = e.maxdef ? Math.floor(Math.random() * (e.maxdef - e.mindef) + e.mindef) : 0
 
 		if (eaccuracy > 1) eaccuracy = 1
 		var pstatus = []
@@ -138,7 +143,7 @@ module.exports = {
 			buttons.push(skill)
 			y++
 		})
-		
+
 		interaction.reply(await embed(0x00ff00, null)).then(async (m) => {
 			async function battle() {
 				await disableButtons(false);
@@ -158,7 +163,7 @@ module.exports = {
 					for (i = 0; i < skill.times; i++) {
 						setTimeout(async () => {
 							let draft = p.attack + await debuffs(pstatus, p.attack, estatus, logging)
-							let finalHit = Math.round((draft + (draft * Math.random() * 0.05)) * (1 - e.defense / 10) * hit * (skill.damage || 1))
+							let finalHit = Math.round((draft + (draft * Math.random() * 0.05)) * (1 - edefense / 10) * hit * (skill.damage || 1))
 							var chatIndex = chatLog.length - 1
 							for (q = chatLog.length; q > -1; q--) { if (chatLog[q] ? String(chatLog[q]).startsWith(`- ${e.name} used ${skill.name}`) : false) chatIndex = q }
 							if (hit == 1) logging.push(`⚔️${finalHit}`)
@@ -185,7 +190,7 @@ module.exports = {
 
 					if (skill.attack || skill.damage) {
 						let draft = p.attack + await debuffs(pstatus, p.attack, estatus, false)
-						let finalHit = Math.round((draft + (draft * Math.random() * 0.05)) * (1 - e.defense / 10) * hit * (skill.damage || 1))
+						let finalHit = Math.round((draft + (draft * Math.random() * 0.05)) * (1 - edefense / 10) * hit * (skill.damage || 1))
 						if (hit == 1) logging.push(`hit ${e.name} for ⚔️${finalHit}`)
 						else if (hit == 1.6) logging.push(`hit ${e.name} for a CRITICAL ⚔️${finalHit}!`)
 						else logging[0] = logging[0].replace('+ ', '') + ' and missed'
@@ -440,7 +445,7 @@ module.exports = {
 						p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
 						p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
 
-						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${assets.weapons.indexOf(p.weapon)}|${assets.armor.indexOf(p.armorer)}|${p.inventory}`)
+						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${assets.items.indexOf(p.weapon)}|${assets.items.indexOf(p.armorer)}|${p.inventory}`)
 					}
 
 					m.edit(await embed(0x000000, null))
@@ -540,7 +545,7 @@ module.exports = {
 						},
 						fields: [
 							{
-								name: `❤️ ${ehealth}/${emaxHealth}${estatusList.includes("🩸") || estatusList.includes("🔥") || estatusList.includes("💀") || estatusList.includes("💗") || estatusList.includes("🖤") ? '*' : ''}`,
+								name: `${ehealth == emaxHealth ? '💖' : (ehealth < emaxHealth / 2 && ehealth > 0 ? (p.weapon.name == "Wooden Bow" ? '💘' : '❤️‍🩹') : (ehealth <= 0 ? '💔' : (p.weapon.name == "Wooden Bow" ? '💘' : '❤️')))} ${ehealth}/${emaxHealth}${estatusList.includes("🩸") || estatusList.includes("🔥") || estatusList.includes("💀") || estatusList.includes("💗") || estatusList.includes("🖤") ? '*' : ''}`,
 								value: `Level ${elevel}\n${estatusList || ''}`,
 								inline: true
 							},
@@ -550,7 +555,7 @@ module.exports = {
 								inline: true
 							},
 							{
-								name: `🛡️ ${e.defense * 10}%${estatusList.includes("🛡️") ? '*' : ''}`,
+								name: `🛡️ ${edefense * 10}%${estatusList.includes("🛡️") ? '*' : ''}`,
 								value: 'Defense',
 								inline: true
 							},
@@ -560,7 +565,7 @@ module.exports = {
 								inline: false
 							},
 							{
-								name: `❤️ ${p.health}/${p.maxHealth}${pstatusList.includes("🩸") || pstatusList.includes("🔥") || pstatusList.includes("💀") || pstatusList.includes("💗") || pstatusList.includes("🖤") ? '*' : ''}`,
+								name: `${p.health == p.maxHealth ? '💖' : (p.health < p.maxHealth / 2 ? '❤️‍🩹' : '❤️')} ${p.health}/${p.maxHealth}${pstatusList.includes("🩸") || pstatusList.includes("🔥") || pstatusList.includes("💀") || pstatusList.includes("💗") || pstatusList.includes("🖤") ? '*' : ''}`,
 								value: `Level ${p.level}\n${pstatusList || ''}`,
 								inline: true
 							},
@@ -597,12 +602,12 @@ module.exports = {
 						inline: false
 					},
 					{
-						name: `❤️ ${p.health}/${p.maxHealth}`,
+						name: `${p.health == p.maxHealth ? '💖' : (p.health < p.maxHealth / 2 && p.health > 0 ? '❤️‍🩹' : (p.health > 0 ? '❤️' : '💔'))} ${p.health}/${p.maxHealth}`,
 						value: `${p.name}\nLevel ${p.level}`,
 						inline: true
 					},
 					{
-						name: `❤️ ${ehealth}/${emaxHealth}`,
+						name: `${ehealth == emaxHealth ? '💖' : (ehealth < emaxHealth / 2 && ehealth > 0 ? (p.weapon.name == "Wooden Bow" ? '💘' : '❤️‍🩹') : (ehealth <= 0 ? '💔' : (p.weapon.name == "Wooden Bow" ? '💘' : '❤️')))} ${ehealth}/${emaxHealth}`,
 						value: `${e.name}\nLevel ${elevel}`,
 						inline: true
 					},
