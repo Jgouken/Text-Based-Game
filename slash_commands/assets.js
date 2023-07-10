@@ -238,6 +238,52 @@ module.exports = {
 					damage: 2,
 					attack: true
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.22
+				},
+				{
+					name: "Copper Key",
+					chance: 0.03
+				},
+				{
+					name: "Silver Key",
+					chance: 0.01
+				},
+				{
+					name: "Twig",
+					chance: 0.045
+				},
+				{
+					name: "Branch",
+					chance: 0.045
+				},
+				{
+					name: "Broken Dagger",
+					chance: 0.025
+				},
+				{
+					name: "Tattered Rags",
+					chance: 0.025
+				},
+				{
+					name: "Cloth",
+					chance: 0.25
+				},
+				{
+					name: "Empty Flask",
+					chance: 0.15
+				},
+				{
+					name: "Water Flask",
+					chance: 0.14
+				},
+				{
+					name: "Booze",
+					chance: 0.15
+				},
 			]
 		},
 		{
@@ -272,6 +318,52 @@ module.exports = {
 					damage: 1.5,
 					attack: true
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.4
+				},
+				{
+					name: "Copper Key",
+					chance: 0.04
+				},
+				{
+					name: "Silver Key",
+					chance: 0.02
+				},
+				{
+					name: "Broken Dagger",
+					chance: 0.04
+				},
+				{
+					name: "Rusty Dagger",
+					chance: 0.02
+				},
+				{
+					name: "Damaged Cloak",
+					chance: 0.03
+				},
+				{
+					name: "Whetstone",
+					chance: 0.05
+				},
+				{
+					name: "Gunpowder",
+					chance: 0.1
+				},
+				{
+					name: "Empty Flask",
+					chance: 0.1
+				},
+				{
+					name: "Water Flask",
+					chance: 0.1
+				},
+				{
+					name: "Booze",
+					chance: 0.1
+				},
 			]
 		},
 		{
@@ -304,6 +396,32 @@ module.exports = {
 					damage: 1.5,
 					attack: true
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.85
+				},
+				{
+					name: "Gold Key",
+					chance: 0.02
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.01
+				},
+				{
+					name: "Great Sword",
+					chance: 0.035
+				},
+				{
+					name: "Skull Crusher",
+					chance: 0.035
+				},
+				{
+					name: "Iron Armor",
+					chance: 0.05
+				},
 			]
 		},
 		{
@@ -335,6 +453,44 @@ module.exports = {
 					pstatus: ["🖤"],
 					chance: 0.15,
 					attack: true
+				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.6
+				},
+				{
+					name: "Gold Key",
+					chance: 0.045
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.025
+				},
+				{
+					name: "Adamantine Key",
+					chance: 0.01
+				},
+				{
+					name: "Red Gem",
+					chance: 0.075
+				},
+				{
+					name: "Blue Gem",
+					chance: 0.075
+				},
+				{
+					name: "Purple Gem",
+					chance: 0.035
+				},
+				{
+					name: "Whetstone",
+					chance: 0.025
+				},
+				{
+					name: "Cloth",
+					chance: 0.09
 				},
 			]
 		},
@@ -377,6 +533,44 @@ module.exports = {
 					wait: 3,
 					attack: false
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.55
+				},
+				{
+					name: "Silver Key",
+					chance: 0.01
+				},
+				{
+					name: "Gold Key",
+					chance: 0.04
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.01
+				},
+				{
+					name: "Cloth",
+					chance: 0.015
+				},
+				{
+					name: "Red Gem",
+					chance: 0.045
+				},
+				{
+					name: "Blue Gem",
+					chance: 0.045
+				},
+				{
+					name: "Purple Gem",
+					chance: 0.01
+				},
+				{
+					name: "Whetstone",
+					chance: 0.05
+				},
 			]
 		},
 		{
@@ -414,11 +608,33 @@ module.exports = {
 					wait: 1,
 					attack: false
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.45
+				},
+				{
+					name: "Green Goo",
+					chance: 0.45
+				},
+				{
+					name: "Sticky Solution",
+					chance: 0.01
+				},
+				{
+					name: "Light Health Potion",
+					chance: 0.08
+				},
+				{
+					name: "Medium Health Potion",
+					chance: 0.45
+				},
 			]
 		},
 		{
 			name: `Attack Slime`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1127663131330617445/image.gif',
 			weapon: null,
 			accuracy: 0.75,
 			critical: 0.07,
@@ -447,10 +663,33 @@ module.exports = {
 				},
 				{
 					name: "Slime Secretion",
-					pstatus: ["💀", "💪"],
+					pstatus: ["💀"],
+					estatus: ["💪"],
 					chance: 0.08,
 					wait: 3,
 					attack: false
+				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.45
+				},
+				{
+					name: "Red Goo",
+					chance: 0.45
+				},
+				{
+					name: "Sticky Solution",
+					chance: 0.01
+				},
+				{
+					name: "Light Attack Potion",
+					chance: 0.08
+				},
+				{
+					name: "Medium Attack Potion",
+					chance: 0.01
 				},
 			]
 		},
@@ -491,6 +730,28 @@ module.exports = {
 					wait: 3,
 					attack: false
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.45
+				},
+				{
+					name: "Blue Goo",
+					chance: 0.45
+				},
+				{
+					name: "Sticky Solution",
+					chance: 0.01
+				},
+				{
+					name: "Light Defense Potion",
+					chance: 0.08
+				},
+				{
+					name: "Medium Defense Potion",
+					chance: 0.45
+				},
 			]
 		},
 		{
@@ -529,6 +790,28 @@ module.exports = {
 					attack: false,
 					wait: 3
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.45
+				},
+				{
+					name: "Yellow Goo",
+					chance: 0.45
+				},
+				{
+					name: "Sticky Solution",
+					chance: 0.01
+				},
+				{
+					name: "Light Stamina Potion",
+					chance: 0.08
+				},
+				{
+					name: "Medium Stamina Potion",
+					chance: 0.45
+				},
 			]
 		},
 		{
@@ -566,6 +849,56 @@ module.exports = {
 					times: 2,
 					chance: 0.15,
 					attack: true
+				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.2
+				},
+				{
+					name: "Silver Key",
+					chance: 0.04
+				},
+				{
+					name: "Gold Key",
+					chance: 0.02
+				},
+				{
+					name: "Dual Hatchets",
+					chance: 0.09
+				},
+				{
+					name: "Leather Armor",
+					chance: 0.05
+				},
+				{
+					name: "Purified Salt",
+					chance: 0.05
+				},
+				{
+					name: "Gunpowder",
+					chance: 0.1
+				},
+				{
+					name: "Empty Flask",
+					chance: 0.1
+				},
+				{
+					name: "Water Flask",
+					chance: 0.1
+				},
+				{
+					name: "Booze",
+					chance: 0.10
+				},
+				{
+					name: "Pepper",
+					chance: 0.1
+				},
+				{
+					name: "Pepper Bomb",
+					chance: 0.05
 				},
 			]
 		},
@@ -606,6 +939,56 @@ module.exports = {
 					damage: 0.8,
 					chance: 0.15,
 					attack: true,
+				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.2
+				},
+				{
+					name: "Silver Key",
+					chance: 0.03
+				},
+				{
+					name: "Gold Key",
+					chance: 0.03
+				},
+				{
+					name: "Dual Daggers",
+					chance: 0.09
+				},
+				{
+					name: "Leather Armor",
+					chance: 0.05
+				},
+				{
+					name: "Purified Salt",
+					chance: 0.05
+				},
+				{
+					name: "Gunpowder",
+					chance: 0.1
+				},
+				{
+					name: "Empty Flask",
+					chance: 0.1
+				},
+				{
+					name: "Water Flask",
+					chance: 0.1
+				},
+				{
+					name: "Booze",
+					chance: 0.1
+				},
+				{
+					name: "Pepper",
+					chance: 0.1
+				},
+				{
+					name: "Pepper Bomb",
+					chance: 0.05
 				},
 			]
 		},
@@ -653,6 +1036,60 @@ module.exports = {
 					chance: 0.1,
 					attack: true
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.2
+				},
+				{
+					name: "Silver Key",
+					chance: 0.02
+				},
+				{
+					name: "Gold Key",
+					chance: 0.04
+				},
+				{
+					name: "Dual Daggers",
+					chance: 0.045
+				},
+				{
+					name: "Dual Hatchets",
+					chance: 0.045
+				},
+				{
+					name: "Leather Armor",
+					chance: 0.05
+				},
+				{
+					name: "Purified Salt",
+					chance: 0.05
+				},
+				{
+					name: "Gunpowder",
+					chance: 0.1
+				},
+				{
+					name: "Empty Flask",
+					chance: 0.1
+				},
+				{
+					name: "Water Flask",
+					chance: 0.1
+				},
+				{
+					name: "Booze",
+					chance: 0.1
+				},
+				{
+					name: "Pepper",
+					chance: 0.1
+				},
+				{
+					name: "Pepper Bomb",
+					chance: 0.05
+				},
 			]
 		},
 		{
@@ -692,6 +1129,40 @@ module.exports = {
 					estatus: ["🍀"],
 					chance: 0.1,
 					attack: true
+				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.5
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.03
+				},
+				{
+					name: "Adamantine Key",
+					chance: 0.01
+				},
+				{
+					name: "Vampire Fangs",
+					chance: 0.16
+				},
+				{
+					name: "Red Gem",
+					chance: 0.05
+				},
+				{
+					name: "Blue Gem",
+					chance: 0.05
+				},
+				{
+					name: "Purple Gem",
+					chance: 0.025
+				},
+				{
+					name: "Venom",
+					chance: 0.175
 				},
 			]
 		},
@@ -748,6 +1219,40 @@ module.exports = {
 					attack: true,
 					wait: 3
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.5
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.03
+				},
+				{
+					name: "Adamantine Key",
+					chance: 0.01
+				},
+				{
+					name: "Demon Horn",
+					chance: 0.16
+				},
+				{
+					name: "Red Gem",
+					chance: 0.06
+				},
+				{
+					name: "Blue Gem",
+					chance: 0.06
+				},
+				{
+					name: "Purple Gem",
+					chance: 0.035
+				},
+				{
+					name: "Mana Infused Crystal",
+					chance: 0.045
+				},
 			]
 		},
 		{
@@ -786,6 +1291,40 @@ module.exports = {
 					chance: 0.1,
 					attack: false,
 					wait: 3
+				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.5
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.03
+				},
+				{
+					name: "Adamantine Key",
+					chance: 0.01
+				},
+				{
+					name: "Werewolf Claw",
+					chance: 0.16
+				},
+				{
+					name: "Red Gem",
+					chance: 0.05
+				},
+				{
+					name: "Blue Gem",
+					chance: 0.05
+				},
+				{
+					name: "Purple Gem",
+					chance: 0.025
+				},
+				{
+					name: "Cloth",
+					chance: 0.175
 				},
 			]
 		},
@@ -840,6 +1379,40 @@ module.exports = {
 					attack: false,
 					wait: 5
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.5
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.03
+				},
+				{
+					name: "Adamantine Key",
+					chance: 0.01
+				},
+				{
+					name: "Mana Infused Crystal",
+					chance: 0.2
+				},
+				{
+					name: "Red Gem",
+					chance: 0.05
+				},
+				{
+					name: "Blue Gem",
+					chance: 0.05
+				},
+				{
+					name: "Purple Gem",
+					chance: 0.025
+				},
+				{
+					name: "Venom",
+					chance: 0.175
+				},
 			]
 		},
 		{
@@ -863,11 +1436,21 @@ module.exports = {
 					chance: 0.1,
 					attack: true
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.3
+				},
+				{
+					name: "Milk",
+					chance: 0.7
+				}
 			]
 		},
 		{
 			name: `Sheep`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1127670108970561648/New_Piskel_3.gif',
 			weapon: null,
 			accuracy: 0.5,
 			critical: 0.1,
@@ -886,6 +1469,16 @@ module.exports = {
 					chance: 0.1,
 					attack: true
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.3
+				},
+				{
+					name: "Wool",
+					chance: 0.7
+				}
 			]
 		},
 		{
@@ -907,11 +1500,21 @@ module.exports = {
 					chance: 0.1,
 					attack: true
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 0.3
+				},
+				{
+					name: "Egg",
+					chance: 0.7
+				}
 			]
 		},
 		{
 			name: `Cyclops Overlord`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1127658659657298050/New_Piskel_2_1.gif',
 			weapon: null,
 			accuracy: 0.78,
 			critical: 0.15,
@@ -954,6 +1557,12 @@ module.exports = {
 					attack: false,
 					wait: 3
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 1
+				}
 			]
 		},
 		{
@@ -969,7 +1578,7 @@ module.exports = {
 			skills: [
 				{
 					name: "Stab",
-					chance: 0.6,
+					chance: 0.7,
 					attack: true
 				},
 				{
@@ -1001,6 +1610,12 @@ module.exports = {
 					attack: true,
 					wait: 3
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 1
+				}
 			]
 		},
 		{
@@ -1057,6 +1672,12 @@ module.exports = {
 					attack: false,
 					wait: 3
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 1
+				}
 			]
 		},
 		{
@@ -1132,6 +1753,12 @@ module.exports = {
 					attack: true,
 					wait: 3
 				},
+			],
+			drops: [
+				{
+					name: null,
+					chance: 1
+				}
 			]
 		},
 	],
@@ -1711,13 +2338,6 @@ module.exports = {
 			skills: [
 				{
 					name: "Punch",
-					attack: true
-				},
-				{
-					name: "Knuckle Sandwich",
-					cost: 2,
-					description: "A complementary can of whoop-ass.",
-					damage: 1.1,
 					attack: true
 				},
 				{
@@ -3467,19 +4087,19 @@ module.exports = {
 			name: "Medium Stamina Potion",
 			stamina: 0.3,
 			battle: true,
-			craft: ["Yellow Goop", "Water Flask"]
+			craft: ["Yellow Goo", "Water Flask"]
 		},
 		{
 			name: "Heavy Stamina Potion",
 			stamina: 0.5,
 			battle: true,
-			craft: ["Yellow Goop", "Milk", "Empty Flask"]
+			craft: ["Yellow Goo", "Milk", "Empty Flask"]
 		},
 		{
 			name: "Great Stamina Potion",
 			stamina: 0.7,
 			battle: true,
-			craft: ["Yellow Goop", "Witch Crystal", "Milk", "Empty Flask"]
+			craft: ["Yellow Goo", "Witch Crystal", "Milk", "Empty Flask"]
 		},
 		{
 			name: "Grand Stamina Potion",
@@ -3496,19 +4116,19 @@ module.exports = {
 			name: "Medium Health Potion",
 			health: 0.3,
 			battle: true,
-			craft: ["Green Goop", "Water Flask"]
+			craft: ["Green Goo", "Water Flask"]
 		},
 		{
 			name: "Heavy Health Potion",
 			health: 0.5,
 			battle: true,
-			craft: ["Green Goop", "Eggs", "Empty Flask"]
+			craft: ["Green Goo", "Egg", "Empty Flask"]
 		},
 		{
 			name: "Great Health Potion",
 			health: 0.7,
 			battle: true,
-			craft: ["Green Goop", "Vampire Fang", "Eggs", "Empty Flash"]
+			craft: ["Green Goo", "Vampire Fang", "Egg", "Empty Flash"]
 		},
 		{
 			name: "Grand Health Potion",
@@ -3525,19 +4145,19 @@ module.exports = {
 			name: "Medium Defense Potion",
 			defense: 0.3,
 			battle: true,
-			craft: ["Grey Goop", "Water Flask"]
+			craft: ["Blue Goo", "Water Flask"]
 		},
 		{
 			name: "Heavy Defense Potion",
 			defense: 0.5,
 			battle: true,
-			craft: ["Grey Goop", "Eggs", "Empty Flask"]
+			craft: ["Blue Goo", "Egg", "Empty Flask"]
 		},
 		{
 			name: "Great Defense Potion",
 			defense: 0.7,
 			battle: true,
-			craft: ["Gret Goop", "Demon Horn", "Eggs", "Empty Flash"]
+			craft: ["Gret Goo", "Demon Horn", "Egg", "Empty Flash"]
 		},
 		{
 			name: "Grand Defense Potion",
@@ -3554,19 +4174,19 @@ module.exports = {
 			name: "Medium Attack Potion",
 			attack: 0.3,
 			battle: true,
-			craft: ["Red Goop", "Water Flask"]
+			craft: ["Red Goo", "Water Flask"]
 		},
 		{
 			name: "Heavy Attack Potion",
 			attack: 0.5,
 			battle: true,
-			craft: ["Red Goop", "Milk", "Empty Flask"]
+			craft: ["Red Goo", "Milk", "Empty Flask"]
 		},
 		{
 			name: "Great Attack Potion",
 			attack: 0.7,
 			battle: true,
-			craft: ["Red Goop", "Werewolf Claw", "Milk", "Empty Flash"]
+			craft: ["Red Goo", "Werewolf Claw", "Milk", "Empty Flash"]
 		},
 		{
 			name: "Grand Attack Potion",
@@ -3709,7 +4329,7 @@ module.exports = {
 		},
 		{
 			name: "Sticky Solution",
-			craft: ["Yellow Goop", "Green Goop", "Grey Goop", "Red Goop", "Empty Flask"]
+			craft: ["Yellow Goo", "Green Goo", "Blue Goo", "Red Goo", "Empty Flask"]
 		},
 		{
 			name: "Mana Infused Crystal",
@@ -3730,19 +4350,19 @@ module.exports = {
 		},
 		// Drops
 		{
-			name: "Yellow Goop",
+			name: "Yellow Goo",
 			uses: ["Stamina Potion", "Sticky Solution"]
 		},
 		{
-			name: "Green Goop",
+			name: "Green Goo",
 			uses: ["Health Potion", "Sticky Solution"]
 		},
 		{
-			name: "Grey Goop",
+			name: "Blue Goo",
 			uses: ["Defense Potion", "Sticky Solution"]
 		},
 		{
-			name: "Red Goop",
+			name: "Red Goo",
 			uses: ["Attack Potion", "Sticky Solution"]
 		},
 		{
@@ -3758,7 +4378,7 @@ module.exports = {
 			uses: ["Heavy Stamina Potion", "Heavy Attack Potion", "Great Stamina Potion", "Great Attack Potion"]
 		},
 		{
-			name: "Eggs",
+			name: "Egg",
 			uses: ["Heavy Health Potion", "Heavy Defense Potion", "Great Health Potion", "Great Defense Potion"]
 		},
 		{

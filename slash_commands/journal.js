@@ -13,17 +13,17 @@ module.exports = {
                     option.setName('area')
                         .setDescription('Type out the name of an area.')
                         .addChoices(
-                            { name: '1-5 Warhamshire', value: '0' },
-                            { name: '5-10 Warham Castle', value: '1' },
-                            { name: '8-14 Hinterland', value: '2' },
-                            { name: '12-18 Uralan Mountains', value: '3' },
-                            { name: '16-22 Vulpeston', value: '4' },
-                            { name: '21-29 Vulpes Tower', value: '5' },
-                            { name: '30-35 Vexadel', value: '6' },
-                            { name: '35-40 Vexadel Gaillard', value: '7' },
-                            { name: '40-45 Sanguisuge', value: '8' },
-                            { name: '45-50 Sangston Mansion', value: '9' },
-                            { name: '50+ Eternal Damnation', value: '10' },
+                            { name: '[1-5] Warhamshire', value: 'Warhamshire' },
+                            { name: '[5-10] Warham Castle', value: 'Warham Castle' },
+                            { name: '[8-14] Hinterland', value: 'Hinterland' },
+                            { name: '[12-18] Uralan Mountains', value: 'Uralan Mountains' },
+                            { name: '[16-22] Vulpeston', value: 'Vulpeston' },
+                            { name: '[21-29] Vulpes Tower', value: 'Vulpes Tower' },
+                            { name: '[30-35] Vexadel', value: 'Vexadel' },
+                            { name: '[35-40] Vexadel Gaillard', value: 'Vexadel Gaillard' },
+                            { name: '[40-45] Sanguisuge', value: 'Sanguisuge' },
+                            { name: '[45-50] Sangston Mansion', value: 'Sangston Mansion' },
+                            { name: '[50+] Eternal Damnation', value: 'Eternal Damnation' },
                         )
                         .setRequired(true)
                 )
@@ -60,22 +60,44 @@ module.exports = {
                         .setRequired(true)
                 )
         )
-    /*
-    .addSubcommand(subcommand =>
-        subcommand
-            .setName('player')
-            .setDescription('View your stats')
-    )
-    */
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('player')
+                .setDescription('View your stats')
+                .addUserOption(option =>
+                    option.setName('user')
+                        .setDescription('If you want to see the stats of a specific user.')
+                        .setRequired(false)
+                )
+        )
     ,
 
     async execute(bot, interaction, db) {
         switch (interaction.options.getSubcommand()) {
             case 'area': {
-                const area = assets.areas.find(a => a.name.toLocaleLowerCase() == interaction.options.getString('area').toLowerCase())
+                const area = assets.areas.find(a => a.name.toLocaleLowerCase() == interaction.options.getString('area').toLowerCase().trim())
 
-                if (!area) return interaction.reply({ content: `Hm, I can't seem to find an area titled "${interaction.options.getString('area')}." Make sure you spelled it correctly!`, ephemeral: true })
+                if (interaction.options.getString('area') == "Eternal Damnation") return interaction.reply({
+                        embeds: [
+                            {
+                                title: "Eternal Damnation",
+                                description: `Level 50+\n\nEternal Damnation features enemies always at your current level (minimum 50) and acts as an Endless Mode to the game. Each and every enemy has an equal oppurtunity to appear, including bosses. Good luck.`,
+                                fields: [
+                                    {
+                                        name: "Enemies",
+                                        value: `All`
+                                    }
+                                ]
+                            }
+                        ]
+                    })
+                
 
+                else if (!area) return interaction.reply({ content: `Hm, I can't seem to find an area titled "${interaction.options.getString('area')}." Make sure you spelled it correctly!`, ephemeral: true })
+                let enemies = []
+                area.enemies.forEach(e => {
+                    enemies.push(e.name)
+                })
                 interaction.reply({
                     embeds: [
                         {
@@ -84,7 +106,7 @@ module.exports = {
                             fields: [
                                 {
                                     name: "Enemies",
-                                    value: area.enemies.join(', ')
+                                    value: enemies.join(', ')
                                 }
                             ]
                         }
@@ -94,7 +116,7 @@ module.exports = {
             }
 
             case 'enemy': {
-                const enemy = assets.enemies.find(a => a.name.toLocaleLowerCase() == interaction.options.getString('enemy').toLowerCase())
+                const enemy = assets.enemies.find(a => a.name.toLocaleLowerCase() == interaction.options.getString('enemy').toLowerCase().trim())
                 const enemylvl = interaction.options.getInteger('enemylvl')
 
                 if (!enemy) return interaction.reply({ content: `Hm, I can't seem to find an enemy by the name of "${interaction.options.getString('enemy')}." Make sure you spelled it correctly!`, ephemeral: true })
@@ -111,7 +133,7 @@ module.exports = {
                         inline: true
                     },
                     {
-                        name: `🛡️ ${enemy.maxdef ? `${Math.round(enemy.mindef * 10)}% - ${Math.round(enemy.maxdef * 10)}%` : 0}`,
+                        name: `🛡️ ${enemy.maxdef ? `${Math.round(enemy.mindef * 10)}% - ${Math.round(enemy.maxdef * 10)}` : 0}%`,
                         value: `Defense`,
                         inline: true
                     },
@@ -126,24 +148,31 @@ module.exports = {
                         inline: true
                     },
                     {
-                        name: "Weapon",
+                        name: "🗡️ Weapon",
                         value: enemy.weapon || 'None',
                         inline: true
                     }
                 ]
 
                 enemy.skills.forEach((skill) => {
-                    let final = [`Chance: __${Math.round(skill.chance * 100)}%__\n`]
+                    let final = [`Chance: __${Math.round(skill.chance * 100)}%__`]
 
                     if (skill.times) {
                         if (skill.damage) final.push(`Deals ${Math.round(skill.damage * 100)}% base damage ${skill.times} times`)
                         else final.push(`Hits ${skill.times} times`)
                     } else if (skill.damage) final.push(`Deals ${Math.round(skill.damage * 100)}% base damage`)
                     if (skill.health) final.push(`Heals ${Math.round(skill.health * 100)}% health`)
+                    if (!skill.damage && skill.attack) final.push(`Deals basic damage`)
                     if (skill.pstatus) final.push(`Inflicts: \`${skill.pstatus.join('')}\``)
                     if (skill.estatus) final.push(`Gains: \`${skill.estatus.join('')}\``)
-                    fields.push({ name: skill.name, value: final.join('\n'), inline: true })
+                    fields.push({ name: `⚡${skill.name}`, value: final.join('\n'), inline: true })
                 })
+
+                let fin = []
+                enemy.drops.forEach(d => {
+                    fin.push(`${d.name ? d.name : "Nothing"} - ${String(d.chance * 100).slice(0, 4)}%`)
+                })
+                fields.push({ name: `🎊 Drops`, value: fin.join('\n'), inline: true })
 
                 interaction.reply({
                     embeds: [
@@ -183,9 +212,9 @@ module.exports = {
             }
 
             case 'items': {
-                const item = assets.items.find(a => a.name.toLocaleLowerCase() == interaction.options.getString('item').toLowerCase())
+                const item = assets.items.find(a => a.name.toLocaleLowerCase() == interaction.options.getString('item').toLowerCase().trim())
 
-                if (!item) return interaction.reply({ content: `Hm, I can't seem to find an item by the name of "${interaction.options.getString('enemy')}." Make sure you spelled it correctly!`, ephemeral: true })
+                if (!item) return interaction.reply({ content: `Hm, I can't seem to find an item by the name of "${interaction.options.getString('item')}." Make sure you spelled it correctly!`, ephemeral: true })
 
                 var embed = {
                     title: item.name
@@ -203,7 +232,7 @@ module.exports = {
                     })
 
                     fields.push({
-                        name: `💨 ${item.evasion}*`,
+                        name: `💨 ${item.evasion * 100}%`,
                         value: `Evasion`,
                         inline: true
                     })
@@ -216,8 +245,8 @@ module.exports = {
                             if (sng.armor) syn.push(`🪖 +${sng.armor}`)
                             if (sng.attack) syn.push(`⚔️ +${sng.attack}`)
                             fields.push({
-                                name: `Synergy: ${sng.name}`,
-                                value: `Weapon: ${sng.weapon}\n${syn.join('\n')}`,
+                                name: `Synergy: ${sng.weapon}`,
+                                value: `${sng.name}\n${syn.join('\n')}`,
                                 inline: true
                             })
                         })
@@ -245,9 +274,10 @@ module.exports = {
                             else final.push(`Hits ${skill.times} times`)
                         } else if (skill.damage) final.push(`Deal ${Math.round(skill.damage * 100)}% base damage`)
                         if (skill.health) final.push(`Heals ${Math.round(skill.health * 100)}% health`)
+                        if (!skill.damage && skill.attack) final.push(`Deals basic damage`)
                         if (skill.estatus) final.push(`Inflicts: \`${skill.estatus.join('')}\``)
                         if (skill.pstatus) final.push(`Gains: \`${skill.pstatus.join('')}\``)
-                        if (final.length > 0) fields.push({ name: `${skill.name}${skill.cost ? ` - ⚡${skill.cost}` : ''}`, value: final.join('\n'), inline: true })
+                        if (final.length > 0) fields.push({ name: `${skill.cost ? `` : `⚡`}${skill.name}${skill.cost ? ` - ⚡${skill.cost}` : ''}`, value: final.join('\n'), inline: true })
                     })
                 } else {
                     // It is an other item
@@ -269,7 +299,7 @@ module.exports = {
                     })
 
                     if (item.uses) fields.push({
-                        name: "Used To Craft:",
+                        name: "Used In:",
                         value: item.uses.join(', '),
                         inline: true
                     })
@@ -284,7 +314,126 @@ module.exports = {
             }
 
             case 'player': {
-                interaction.reply("Yeah, I'm just gonna do this later...")
+                const user = interaction.options.getUser('user') || interaction.user
+                if (user.bot) return interaction.reply({ content: "That's a robot, my friend! They can't play this game.", ephemeral: true })
+                var player = await db.get(`player_${user.id}`) || `1|500|500|30|10|50|50|0.95|0|0|31`
+                player = player.split('|')
+
+                /*
+                      0		     1				2			3	     4		 	5		    	6	    	  7	  	  8	 	  9			10				  11
+                    Level | Max Health | Current Health | Attack | Armor | Max Stamina | Current Stamina | Accuracy | XP | Weapon | Armor Type | Items (itemid_amount)
+                */
+
+                let weapon = assets.items[Number(player[9])]
+                let level = Number(player[0])
+                let armor = assets.items[Number(player[10])]
+                let weaponlvl = Math.floor(Math.random() * (weapon.maxlvl - weapon.minlvl) - weapon.minlvl)
+                let armorlvl = armor.maxlvl ? Math.floor(Math.random() * (armor.maxlvl - armor.minlvl) - armor.minlvl) : armor.minlvl
+
+                var p = {
+                    name: user.username,
+                    level: level,
+
+                    maxHealth: Math.round(Number(player[1])),
+                    health: Math.round(Number(player[2])),
+
+                    maxStamina: Math.round(Number(player[5])),
+                    stamina: Math.round(Number(player[6])),
+
+                    attack: Math.round(Number(player[3]) + Number(6 * (level - 1)) + Number(weapon.attack) + Number(weaponlvl) + Number(level * Number(weapon.plvlmult))),
+                    armor: Math.round(Number(Number(player[4]) + Number(armor.armor) + Number(level * Number(armor.plvlmult)) + Number(Number(armorlvl) * Number(armor.alvlmult)))),
+
+                    accuracy: Number(player[7]),
+                    xp: Number(player[8]),
+                    critical: weapon.crit,
+                    evasion: armor.evasion,
+
+                    weapon: weapon,
+                    armorer: armor,
+                    inventory: Number(player[11]),
+
+                    synergized: false
+                }
+
+                if (p.armorer.synergies) p.armorer.synergies.forEach((syn) => {
+                    if (syn.weapon == p.weapon.name) {
+                        p.synergized = true
+                        if (syn.evasion) p.evasion += p.evasion * syn.evasion
+                        if (syn.critical) p.critical += syn.critical
+                        if (syn.armor) p.armor += syn.armor
+                        if (syn.attack) p.attack += syn.attack
+                    }
+                })
+
+                var embed = {
+                    embeds: [
+                        {
+                            title: p.name,
+                            color: 0xffffff,
+                            thumbnail: {
+                                url: user.avatarURL()
+                            },
+                            fields: [
+                                {
+                                    name: `${p.health == p.maxHealth ? '💖' : (p.health < p.maxHealth / 2 ? '❤️‍🩹' : '❤️')} ${p.health}/${p.maxHealth}`,
+                                    value: `Health`,
+                                    inline: true
+                                },
+                                {
+                                    name: `⚔️ ${p.attack}`,
+                                    value: `- ${p.synergized ? '__' : ''}${p.weapon.name}${p.synergized ? '__' : ''}\n- ${p.synergized ? '__' : ''}${p.armorer.name}${p.synergized ? '__' : ''}`,
+                                    inline: true
+                                },
+                                {
+                                    name: `⚡ ${p.stamina}/${p.maxStamina}`,
+                                    value: 'Stamina',
+                                    inline: true
+                                },
+                                {
+                                    name: `💥 ${String(p.critical * 100).slice(0, 4)}%`,
+                                    value: 'Crit Chance',
+                                    inline: true
+                                },
+                                {
+                                    name: `🎯 ${String(p.accuracy * 100).slice(0, 4)}%`,
+                                    value: 'Accuracy',
+                                    inline: true
+                                },
+                                {
+                                    name: `💨 ${String(p.evasion * 100).slice(0, 4)}%`,
+                                    value: 'Evasion',
+                                    inline: true
+                                },
+                                {
+                                    name: `🪖 ${p.armor}`,
+                                    value: 'Armor',
+                                    inline: true
+                                }
+                            ],
+                            footer: {
+                                text: `${p.name} - Level ${p.level}\n🪷 ${p.xp}/${Math.round((p.level / 0.07) ** 2)}\nTo view your inventory, use /inventory`,
+                                icon_url: user.avatarURL()
+                            }
+                        }
+                    ],
+                }
+
+                weapon.skills.forEach((skill) => {
+                    var final = []
+                    if (skill.description) final.push(`${skill.description}\n`)
+                    if (skill.times) {
+                        if (skill.damage) final.push(`Deal ⚔️${Math.round(skill.damage * 100)}% base damage ${skill.times} times`)
+                        else final.push(`Hits ${skill.times} times`)
+                    } else if (skill.damage) final.push(`Deal ⚔️${Math.round(skill.damage * 100)}% base damage`)
+                    if (skill.health) final.push(`Heals ❤️${Math.round(skill.health * 100)}% health`)
+                    if (!skill.damage && skill.attack) final.push(`Deals basic damage`)
+                    if (skill.estatus) final.push(`Inflicts: \`${skill.estatus.join('')}\``)
+                    if (skill.pstatus) final.push(`Gains: \`${skill.pstatus.join('')}\``)
+                    if (final.length > 0) embed.embeds[0].fields.push({ name: `${skill.cost ? `` : `⚡`}${skill.name}${skill.cost ? ` - ⚡${skill.cost}` : ''}`, value: final.join('\n'), inline: false })
+                })
+
+                interaction.reply(embed)
+
                 break;
             }
         }
