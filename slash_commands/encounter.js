@@ -444,20 +444,21 @@ module.exports = {
 									break;
 								}
 							}
+
 							if (item.name) {
 								var itemlvl = 0
 								item = assets.items.find(({ name }) => name == item.name)
 								if (item) {
-									if (item.attack || item.armor) itemlvl = item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl
-									if (p.inventory) {
+									if (item.attack || item.armor) itemlvl == item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl
+									if (player[11]) {
 										var final = []
 										// itemIndex_itemAmount_itemLevel-itemIndex_itemAmount_itemLevel-...
-										let inventoryItemIndexes = p.inventory.split('-')
+										let inventoryItemIndexes = player[11].split('-')
 										// [itemIndex_itemAmount_itemLevel, ...]
 										await inventoryItemIndexes.forEach((i) => {
 											var invitem = i.split('_')
 											// [itemIndex, itemAmount, itemLevel]
-											if (item.name == assets.items[invitem[0]].name) {
+											if (assets.items[invitem[0]].name == item.name) {
 												if (itemlvl == invitem[2]) {
 													invitem[1] = Number(invitem[1]) + 1
 												} else {
@@ -496,9 +497,7 @@ module.exports = {
 							}
 						}
 
-						if (!p.inventory) p.inventory = ''
-
-						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}${p.inventory}`)
+						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}${p.inventory || ''}`)
 					}
 
 					m.edit(await embed(0x000000, null)).catch(() => { return })

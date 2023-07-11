@@ -33,7 +33,7 @@ module.exports = {
                 var player = await db.get(`player_${user.id}`) || `1|500|500|30|10|50|50|0.95|0|0|31`
                 var embed = {
                     thumbnail: {
-                        url: interaction.user.avatarURL()
+                        url: user.avatarURL()
                     },
                     title: `${user.username}'s Inventory`,
                     fields: [],

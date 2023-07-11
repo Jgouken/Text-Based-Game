@@ -16,9 +16,8 @@ module.exports = {
 			await member.roles.add(await member.guild.roles.cache.find(role => role.id === "1021592761952129065"));
 		});
 		bot.on("error", async function(error) {
-
 			console.warn({ error })
-			await bot.guilds.cache.get('929575731497951312').channels.cache.get('1053755651114942494').send({
+			await bot.guilds.cache.get('1021592148736487467').channels.cache.get('1116875114118664213').send({
 				content: `<@491422360273158165>`,
 				embeds: [
 					{
@@ -30,7 +29,7 @@ module.exports = {
 						},
 						timestamp: new Date().toISOString(),
 						footer: {
-							text: bot.guilds.cache.get('929575731497951312').name,
+							text: bot.guilds.cache.get('1021592148736487467').name,
 						},
 					},
 				],
@@ -39,7 +38,7 @@ module.exports = {
 		bot.on("rateLimit", async function(rateLimitData) {
 
 			console.warn({ rateLimitData })
-			await bot.guilds.cache.get('929575731497951312').channels.cache.get('1053755651114942494').send({
+			await bot.guilds.cache.get('1021592148736487467').channels.cache.get('1116875114118664213').send({
 				content: `<@491422360273158165>`,
 				embeds: [
 					{
@@ -51,7 +50,7 @@ module.exports = {
 						},
 						timestamp: new Date().toISOString(),
 						footer: {
-							text: bot.guilds.cache.get('929575731497951312').name,
+							text: bot.guilds.cache.get('1021592148736487467').name,
 						},
 					},
 				],
@@ -61,7 +60,7 @@ module.exports = {
 		bot.on("invalidRequestWarning", async function(invalidRequestWarningData) {
 
 			console.warn({ invalidRequestWarningData })
-			await bot.guilds.cache.get('929575731497951312').channels.cache.get('1053755651114942494').send({
+			await bot.guilds.cache.get('1021592148736487467').channels.cache.get('1116875114118664213').send({
 				content: `<@491422360273158165>`,
 				embeds: [
 					{
@@ -73,7 +72,7 @@ module.exports = {
 						},
 						timestamp: new Date().toISOString(),
 						footer: {
-							text: bot.guilds.cache.get('929575731497951312').name,
+							text: bot.guilds.cache.get('1021592148736487467').name,
 						},
 					},
 				],
@@ -82,7 +81,7 @@ module.exports = {
 		bot.on("warn", async function(info) {
 
 			console.warn({ info });
-			await bot.guilds.cache.get('929575731497951312').channels.cache.get('1053755651114942494').send({
+			await bot.guilds.cache.get('1021592148736487467').channels.cache.get('1116875114118664213').send({
 				content: `<@491422360273158165>`,
 				embeds: [
 					{
@@ -94,7 +93,7 @@ module.exports = {
 						},
 						timestamp: new Date().toISOString(),
 						footer: {
-							text: bot.guilds.cache.get('929575731497951312').name,
+							text: bot.guilds.cache.get('1021592148736487467').name,
 						},
 					},
 				],
