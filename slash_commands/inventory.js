@@ -45,12 +45,11 @@ module.exports = {
 
                 if (!player[11]) embed.description = "Wow, such empty :3"
                 else {
-                    console.log(player[11])
                     // itemIndex_itemAmount_itemLevel-itemIndex_itemAmount_itemLevel-...
-                    let inventoryItemIndexes = player[11].split('-')
+                    let inv = p.inventory.split('-')
                     // [itemIndex_itemAmount_itemLevel, ...]
-                    inventoryItemIndexes.forEach((i) => {
-                        let item = i.split('_')
+                    inv.forEach(x => {
+                        let item = x.split('_')
                         // [itemIndex, itemAmount, itemLevel]
                         embed.fields.push({name: `**${assets.items[Number(item[0])].name}** - ${item[1]}`, value: Number(item[2]) > 0 ? `Level ${item[2]}` : '', inline: true})
                     })

@@ -435,43 +435,50 @@ module.exports = {
 					} else {
 						chatLog.push(`🎉 ${p.name} won the battle! 🎉\n${p.name} gained 🪷${exp}!`)
 						if (e.drops) {
-							var item = undefined;
-							var randomTrack = 0;
-							for (let i = 0; i < e.drops.length; i++) {
-								randomTrack += e.drops[i].chance;
-								if (random <= randomTrack) {
-									item = e.drops[i]
-									break;
+							async function drop() {
+								var item = undefined;
+								var randomTrack = 0;
+								for (let i = 0; i < e.drops.length; i++) {
+									randomTrack += e.drops[i].chance;
+									if (random <= randomTrack) {
+										item = e.drops[i]
+										break;
+									}
 								}
+								if (item) return item;
+								else return await drop();
+							}
+
+							var item;
+							while (!item) {
+								item = await drop()
+								if (item ? item.name : false) item = assets.items.find(({ name }) => name == item.name)
 							}
 
 							if (item.name) {
 								var itemlvl = 0
 								item = assets.items.find(({ name }) => name == item.name)
+								
 								if (item) {
-									if (item.attack || item.armor) itemlvl == item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl
-									if (player[11]) {
-										var final = []
-										// itemIndex_itemAmount_itemLevel-itemIndex_itemAmount_itemLevel-...
-										let inventoryItemIndexes = player[11].split('-')
-										// [itemIndex_itemAmount_itemLevel, ...]
-										await inventoryItemIndexes.forEach((i) => {
-											var invitem = i.split('_')
-											// [itemIndex, itemAmount, itemLevel]
-											if (assets.items[invitem[0]].name == item.name) {
-												if (itemlvl == invitem[2]) {
-													invitem[1] = Number(invitem[1]) + 1
-												} else {
-													final.push([invitem[0], 1, itemlvl].join('_'))
-												}
-											}
-											final.push(invitem.join('_'))
-										})
+									if (item.attack || item.armor) itemlvl = (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl) || 0
 
-										p.inventory = `|${final.join('-')}`
-										console.log(final)
-									} else p.inventory = `|${assets.items.indexOf(item)}_1_${itemlvl}`
-									// (itemIndex_itemAmount_itemLevel)
+									if (p.inventory) {
+										var inv = await p.inventory.split('-')
+										var updated = false;
+										for (a = 0; a < inv.length; a++) {
+											let iter = inv[a].split('_')
+											if (Number(iter[0]) == assets.items.indexOf(item) && Number(iter[2]) == itemlvl) {
+												iter[1] = Number(iter[1]) + 1
+												inv[a] = iter.join('_')
+												updated = true;
+												break;
+											}
+										}
+
+										if (!updated) inv.push(`${assets.items.indexOf(item)}_1_${itemlvl}`)
+										p.inventory = inv.join('-')
+									} else p.inventory = `${assets.items.indexOf(item)}_1_${itemlvl}`
+
 									chatLog.push(`${p.name} collected ${item.name.match(/\A[^aeiouAEIOU]/) && !(item.attack || item.armor) ? 'an' : 'a'} ${(item.attack || item.armor) && itemlvl > 0 ? `Level ${itemlvl} ` : ''}${item.name}!`)
 								} else {
 									chatLog.push(`Something went wrong trying to collect an item.`)
@@ -489,7 +496,7 @@ module.exports = {
 								p.stamina = p.stamina + (5 * (p.level - 1))
 								p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
 								p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
-								exp -= Math.round((p.level / 0.07) ** 2) - p.xp
+								exp -= (Math.round((p.level / 0.07) ** 2) - p.xp)
 								p.xp = 0
 							} else {
 								p.xp += exp
@@ -497,7 +504,7 @@ module.exports = {
 							}
 						}
 
-						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}${p.inventory || ''}`)
+						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}${p.inventory ? `|${p.inventory}` : ''}`)
 					}
 
 					m.edit(await embed(0x000000, null)).catch(() => { return })

@@ -579,12 +579,12 @@ module.exports = {
 			weapon: null,
 			accuracy: 1,
 			critical: 0.1,
-			maxHealth: 50 * Math.round(mult / 2),
+			maxHealth: 50 * Math.round(mult / 3),
 			attack: 10,
 			skills: [
 				{
 					name: "Jump",
-					chance: 0.65,
+					chance: 0.75,
 					attack: true
 				},
 				{
@@ -595,8 +595,8 @@ module.exports = {
 				},
 				{
 					name: "Major Heal",
-					health: 0.75,
-					chance: 0.025,
+					health: 0.5,
+					chance: 0.015,
 					wait: 2,
 					attack: false
 				},
@@ -628,7 +628,7 @@ module.exports = {
 				},
 				{
 					name: "Medium Health Potion",
-					chance: 0.45
+					chance: 0.01
 				},
 			]
 		},
@@ -638,7 +638,7 @@ module.exports = {
 			weapon: null,
 			accuracy: 0.75,
 			critical: 0.07,
-			maxHealth: 50 * Math.round(mult / 1.25),
+			maxHealth: 50 * Math.round(mult / 4),
 			attack: 40,
 			skills: [
 				{
@@ -750,7 +750,7 @@ module.exports = {
 				},
 				{
 					name: "Medium Defense Potion",
-					chance: 0.45
+					chance: 0.01
 				},
 			]
 		},
@@ -810,7 +810,7 @@ module.exports = {
 				},
 				{
 					name: "Medium Stamina Potion",
-					chance: 0.45
+					chance: 0.01
 				},
 			]
 		},
@@ -1168,7 +1168,7 @@ module.exports = {
 		},
 		{
 			name: `Demon`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1128734411375005777/New_Piskel_4.gif',
 			weapon: null,
 			accuracy: 0.85,
 			critical: 0.15,
