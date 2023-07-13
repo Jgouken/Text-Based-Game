@@ -26,15 +26,10 @@ module.exports = {
 		),
 
 	async execute(bot, interaction, db) {
-		if (Number(interaction.options.getString('area') == 10)) return interaction.reply({ content: "Eternal Damnation isn't quite ready yet, so come back soon!", ephemeral: true })
-
-		if (!(await db.get(`player_${interaction.user.id}`))) {
-			await db.set(`player_${interaction.user.id}`, `1|500|500|30|10|50|50|0.95|0|0_1_0|31_1_0`)
-		}
-
+		if (Number(interaction.options.getString('area')) == 10) return interaction.reply({ content: "Eternal Damnation isn't quite ready yet, so come back soon!", ephemeral: true })
 		/*
 			  0		     1				2			3	     4		 	5		    	6	    	  7	  	  8	 	  9			10				  11
-			Level | Max Health | Current Health | Attack | Armor | Max Stamina | Current Stamina | Accuracy | XP | Weapon (itemIndex_itemAmount_itemLevel) | Armor Type (itemIndex_itemAmount_itemLevel) | Items (itemIndex_itemAmount_itemLevel-itemIndex_itemAmount_itemLevel-...)
+			Level | Max Health | Current Health | Attack | Armor | Max Stamina | Current Stamina | Accuracy | XP | Weapon (itemIndex_itemAmount_itemLevel) | Armor Type (itemIndex_itemAmount_itemLevel) | Time since last played (milli) | Items (itemIndex_itemAmount_itemLevel-itemIndex_itemAmount_itemLevel-...)
 		*/
 
 		let player = (await db.get(`player_${interaction.user.id}`)).split('|')
@@ -70,7 +65,7 @@ module.exports = {
 
 			weapon: weapon,
 			armorer: armor,
-			inventory: player[11],
+			inventory: player[12],
 
 			synergized: false
 		}
@@ -428,10 +423,13 @@ module.exports = {
 				if (ended) return;
 				if (p.health <= 0 || ehealth <= 0) {
 					ended = true
+					player[11] = Date.now()
 					if (p.health <= 0 && ehealth <= 0) {
 						chatLog.push(`❔ An error has occurred and resulted in a tie ❔`)
+						await db.set(`player_${interaction.user.id}`, player.join('|'))
 					} else if (p.health <= 0) {
 						chatLog.push(`🌀 ${p.name} lost the battle 🌀`)
+						await db.set(`player_${interaction.user.id}`, player.join('|'))
 					} else {
 						chatLog.push(`🎉 ${p.name} won the battle! 🎉\n${p.name} gained 🪷${exp}!`)
 						if (e.drops) {
@@ -504,7 +502,7 @@ module.exports = {
 							}
 						}
 
-						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}${p.inventory ? `|${p.inventory}` : ''}`)
+						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
 					}
 
 					m.edit(await embed(0x000000, null)).catch(() => { return })

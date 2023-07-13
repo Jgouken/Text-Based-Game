@@ -78,20 +78,20 @@ module.exports = {
                 const area = assets.areas.find(a => a.name.toLocaleLowerCase() == interaction.options.getString('area').toLowerCase().trim())
 
                 if (interaction.options.getString('area') == "Eternal Damnation") return interaction.reply({
-                        embeds: [
-                            {
-                                title: "Eternal Damnation",
-                                description: `Level 50+\n\nEternal Damnation features enemies always at your current level (minimum 50) and acts as an Endless Mode to the game. Each and every enemy has an equal oppurtunity to appear, including bosses. Good luck.`,
-                                fields: [
-                                    {
-                                        name: "Enemies",
-                                        value: `All`
-                                    }
-                                ]
-                            }
-                        ]
-                    })
-                
+                    embeds: [
+                        {
+                            title: "Eternal Damnation",
+                            description: `Level 50+\n\nEternal Damnation features enemies always at your current level (minimum 50) and acts as an Endless Mode to the game. Each and every enemy has an equal oppurtunity to appear, including bosses. Good luck.`,
+                            fields: [
+                                {
+                                    name: "Enemies",
+                                    value: `All`
+                                }
+                            ]
+                        }
+                    ]
+                })
+
 
                 else if (!area) return interaction.reply({ content: `Hm, I can't seem to find an area titled "${interaction.options.getString('area')}." Make sure you spelled it correctly!`, ephemeral: true })
                 let enemies = []
@@ -116,7 +116,7 @@ module.exports = {
             }
 
             case 'enemy': {
-                const enemy = assets.enemies.find(a => a.name.toLocaleLowerCase() == interaction.options.getString('enemy').toLowerCase().trim())
+                const enemy = assets.enemies.find(a => a.name.toLocaleLowerCase().replace(' ', '') == interaction.options.getString('enemy').toLowerCase().trim().replace(' ', ''))
                 const enemylvl = interaction.options.getInteger('enemylvl')
 
                 if (!enemy) return interaction.reply({ content: `Hm, I can't seem to find an enemy by the name of "${interaction.options.getString('enemy')}." Make sure you spelled it correctly!`, ephemeral: true })
@@ -212,7 +212,7 @@ module.exports = {
             }
 
             case 'items': {
-                const item = assets.items.find(a => a.name.toLocaleLowerCase() == interaction.options.getString('item').toLowerCase().trim())
+                const item = assets.items.find(a => a.name.toLocaleLowerCase().replace(' ', '') == interaction.options.getString('item').toLowerCase().trim().replace(' ', ''))
 
                 if (!item) return interaction.reply({ content: `Hm, I can't seem to find an item by the name of "${interaction.options.getString('item')}." Make sure you spelled it correctly!`, ephemeral: true })
 
@@ -316,19 +316,21 @@ module.exports = {
             case 'player': {
                 const user = interaction.options.getUser('user') || interaction.user
                 if (user.bot) return interaction.reply({ content: "That's a robot, my friend! They can't play this game.", ephemeral: true })
-                var player = await db.get(`player_${user.id}`) || `1|500|500|30|10|50|50|0.95|0|0|31`
+                var player = await db.get(`player_${user.id}`) || `1|500|500|30|10|50|50|0.95|0|0_1_0|31_1_0|${Date.now()}`
                 player = player.split('|')
 
                 /*
                       0		     1				2			3	     4		 	5		    	6	    	  7	  	  8	 	  9			10				  11
                     Level | Max Health | Current Health | Attack | Armor | Max Stamina | Current Stamina | Accuracy | XP | Weapon | Armor Type | Items (itemid_amount)
                 */
-
-                let weapon = assets.items[Number(player[9])]
+               
+                let rawWeapon = player[9].split('_')
+                let rawArmor = player[10].split('_')
+                let weapon = assets.items[Number(rawWeapon[0])]
+                let armor = assets.items[Number(rawArmor[0])]
                 let level = Number(player[0])
-                let armor = assets.items[Number(player[10])]
-                let weaponlvl = Math.floor(Math.random() * (weapon.maxlvl - weapon.minlvl) - weapon.minlvl)
-                let armorlvl = armor.maxlvl ? Math.floor(Math.random() * (armor.maxlvl - armor.minlvl) - armor.minlvl) : armor.minlvl
+                let weaponlvl = Number(rawWeapon[1])
+                let armorlvl = Number(rawArmor[1])
 
                 var p = {
                     name: user.username,
@@ -350,7 +352,7 @@ module.exports = {
 
                     weapon: weapon,
                     armorer: armor,
-                    inventory: Number(player[11]),
+                    inventory: Number(player[12]),
 
                     synergized: false
                 }
