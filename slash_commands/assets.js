@@ -2327,7 +2327,7 @@ module.exports = {
 	items: [
 		// WEAPONS
 		{
-			name: "Hands & Feet",
+			name: "Fists",
 			maxlvl: 1,
 			minlvl: 1,
 			description: `The enemies can catch these hands.`,
@@ -3605,7 +3605,7 @@ module.exports = {
 		// ARMOR
 
 		{
-			name: "None",
+			name: "T-Shirt",
 			description: "Go commando.",
 			armor: 0,
 			plvlmult: 0,
@@ -4167,30 +4167,30 @@ module.exports = {
 		// Attack
 		{
 			name: "Light Attack Potion",
-			attack: 0.15,
+			buff: 0.15,
 			battle: true
 		},
 		{
 			name: "Medium Attack Potion",
-			attack: 0.3,
+			buff: 0.3,
 			battle: true,
 			craft: ["Red Goo", "Water Flask"]
 		},
 		{
 			name: "Heavy Attack Potion",
-			attack: 0.5,
+			buff: 0.5,
 			battle: true,
 			craft: ["Red Goo", "Milk", "Empty Flask"]
 		},
 		{
 			name: "Great Attack Potion",
-			attack: 0.7,
+			buff: 0.7,
 			battle: true,
 			craft: ["Red Goo", "Werewolf Claw", "Milk", "Empty Flash"]
 		},
 		{
 			name: "Grand Attack Potion",
-			attack: 0.9,
+			buff: 0.9,
 			battle: true
 		},
 		// Energy
