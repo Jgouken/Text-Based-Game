@@ -28,7 +28,7 @@ module.exports = {
 	async execute(bot, interaction, db) {
 		if (Number(interaction.options.getString('area')) == 10) return interaction.reply({ content: "Eternal Damnation isn't quite ready yet, so come back soon!", ephemeral: true })
 		/*
-			  0		     1				2			3	     4		 	5		    	6	    	  7	  	  8	 	  9			10				  11
+			  0		     1				2			3	     4		 	5		    	6	    	  7	  	  8	 	 				 9											10										  11													12
 			Level | Max Health | Current Health | Attack | Armor | Max Stamina | Current Stamina | Accuracy | XP | Weapon (itemIndex_itemAmount_itemLevel) | Armor Type (itemIndex_itemAmount_itemLevel) | Time since last played (milli) | Items (itemIndex_itemAmount_itemLevel-itemIndex_itemAmount_itemLevel-...)
 		*/
 

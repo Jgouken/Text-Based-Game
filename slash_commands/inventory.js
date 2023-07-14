@@ -44,6 +44,7 @@ module.exports = {
                         text: `Use /journal player to view your equipped items.`
                     }
                 }
+                
                 player = player.split('|')
 
                 if (!player[12]) embed.description = "Wow, such empty :3"
@@ -57,7 +58,7 @@ module.exports = {
                         // [itemIndex, itemAmount, itemLevel]
                         embed.fields.push({
                             name: `**${assetItem.name}** - ${item[1]}`,
-                            value: `${Number(item[2]) > 0 ? `Level ${item[2]}\n` : ''}${assetItem.attack ? 'Weapon' : (assetItem.armor ? 'Armor' : '')}${assetItem.name.includes('Potion') ? 'Consumable' : ''}${(assetItem.battle ? 'Battle Item' : (!assetItem.name.includes('Potion') && !assetItem.attack && !assetItem.armor ? 'Crafting Regeant' : ''))}`,
+                            value: `${Number(item[2]) > 0 ? `Level ${item[2]}\n` : ''}${assetItem.attack ? 'Weapon' : (assetItem.armor ? 'Armor' : '')}${assetItem.name.includes('Potion') ? 'Consumable' : ''}${(assetItem.battle ? 'Battle Item' : (!assetItem.name.includes('Potion') && !assetItem.attack && !assetItem.armor ? 'Crafting Reagent' : ''))}`,
                             inline: true
                         })
                     })
@@ -106,14 +107,16 @@ module.exports = {
                     if (getitem.name == item.name) {
                         if (item.attack) {
                             let currentWeapon = rawWeapon.join('_')
-                            rawWeapon = inv[i]
+                            rawWeapon = invitem
                             inv[i] = currentWeapon
                             chatLog.push(`equipped the ${item.name} weapon`)
+                            used = true;
                         } else if (item.armor) {
                             let currentArmor = rawArmor.join('_')
-                            rawArmor = inv[i]
+                            rawArmor = invitem
                             inv[i] = currentArmor
                             chatLog.push(`equipped the ${item.name} armor`)
+                            used = true;
                         } else {
                             if (getitem.stamina) {
                                 let add = Math.round(p.maxStamina * getitem.stamina)

@@ -3576,7 +3576,7 @@ module.exports = {
 				{
 					name: "Yin or Yang",
 					cost: 55,
-					description: "Point Melanie or Alectrona upwards then unleashes its power which creates a massive blade of light OR darkness before slamming it down on to the enemy and strengthening its wielder. Deal 300% damage. Inflict Cursed, Bad Omen, and Weakness OR inflict Burn, Blindness, and Bleed. Gain Berserk OR gain Blessed and Empowerment",
+					description: "Point Melanie or Alectrona upwards then unleashes its power which creates a massive blade of lightor darkness before slamming it down on to the enemy and strengthening its wielder.\n\nRandomized for each turn:, inflict Cursed, Bad Omen, and Weakness\nOR\ninflict Burn, Blindness, and Bleed.\n\nThen, Gain Berserk\nOR\nGain Blessed and Empowerment",
 					damage: 3,
 					estatus: [["🖤", "🏴", "🌀"], ["🔥", "🩸", "👁️"]][Math.floor(Math.random() * 2)],
 					pstatus: [["💢", "🏳️"], ["✨", "🍀", "🛡️"]][Math.floor(Math.random() * 2)],
@@ -3609,7 +3609,7 @@ module.exports = {
 			description: "Go commando.",
 			armor: 0,
 			plvlmult: 0,
-			minlvl: 0,
+			minlvl: 1,
 			alvlmult: 0,
 			evasion: 0,
 			encounter: 0
@@ -4128,7 +4128,7 @@ module.exports = {
 			name: "Great Health Potion",
 			health: 0.7,
 			battle: true,
-			craft: ["Green Goo", "Vampire Fang", "Egg", "Empty Flash"]
+			craft: ["Green Goo", "Vampire Fang", "Egg", "Empty Flask"]
 		},
 		{
 			name: "Grand Health Potion",
@@ -4338,7 +4338,7 @@ module.exports = {
 		},
 		{
 			name: "Enchanting Crystal",
-			craft: ["Mana Infused Crystal", "Sticky Solution", "Water"]
+			craft: ["Mana Infused Crystal", "Sticky Solution", "Water Flask"]
 		},
 		{
 			name: "Purification Gem",
