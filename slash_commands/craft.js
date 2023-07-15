@@ -57,7 +57,7 @@ module.exports = {
                 embeds: [
                     {
                         title: "Craftable Material",
-                        color: 0xffffff,
+                        color: 0x2B2D31,
                         description: 'This list features all of the materials able to be crafted in the game.',
                         fields: []
                     }

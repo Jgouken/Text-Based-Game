@@ -81,6 +81,7 @@ module.exports = {
                     embeds: [
                         {
                             title: "Eternal Damnation",
+                            color: 0x2B2D31,
                             description: `Level 50+\n\nEternal Damnation features enemies always at your current level (minimum 50) and acts as an Endless Mode to the game. Each and every enemy has an equal oppurtunity to appear, including bosses. Good luck.`,
                             fields: [
                                 {
@@ -98,10 +99,12 @@ module.exports = {
                 area.enemies.forEach(e => {
                     enemies.push(e.name)
                 })
+
                 interaction.reply({
                     embeds: [
                         {
                             title: area.name,
+                            color: 0x2B2D31,
                             description: `Level ${area.minlvl} - ${area.maxlvl}`,
                             fields: [
                                 {
@@ -151,6 +154,11 @@ module.exports = {
                         name: "🗡️ Weapon",
                         value: enemy.weapon || 'None',
                         inline: true
+                    },
+                    {
+                        name: `\u200b`,
+                        value: `\u200b`,
+                        inline: false
                     }
                 ]
 
@@ -178,6 +186,7 @@ module.exports = {
                     embeds: [
                         {
                             title: enemy.name,
+                            color: 0x2B2D31,
                             description: `Level ${enemylvl || 1}`,
                             thumbnail: {
                                 url: enemy.sprite
@@ -204,6 +213,7 @@ module.exports = {
                     embeds: [
                         {
                             title: "Status Effects",
+                            color: 0x2B2D31,
                             fields: effects
                         }
                     ]
@@ -217,7 +227,8 @@ module.exports = {
                 if (!item) return interaction.reply({ content: `Hm, I can't seem to find an item by the name of "${interaction.options.getString('item')}." Make sure you spelled it correctly!`, ephemeral: true })
 
                 var embed = {
-                    title: item.name
+                    title: item.name,
+                    color: 0x2B2D31,
                 }
 
                 if (item.description) embed.description = item.description
@@ -310,11 +321,13 @@ module.exports = {
                 interaction.reply({
                     embeds: [embed]
                 })
+
                 break;
             }
 
             case 'player': {
-                const user = interaction.options.getUser('user') || interaction.user
+                const fetchedUser = await interaction.options.getUser("user") ? await interaction.options.getUser("user").fetch(true) : interaction.user.fetch(true)
+                const user = await interaction.options.getUser("user") || interaction.user
                 if (user.bot) return interaction.reply({ content: "That's a robot, my friend! They can't play this game.", ephemeral: true })
                 var player = await db.get(`player_${user.id}`) || `1|500|500|30|10|50|50|0.95|0|0_1_0|31_1_0|${Date.now()}`
                 player = player.split('|')
@@ -323,7 +336,7 @@ module.exports = {
                       0		     1				2			3	     4		 	5		    	6	    	  7	  	  8	 	  9			10				  11
                     Level | Max Health | Current Health | Attack | Armor | Max Stamina | Current Stamina | Accuracy | XP | Weapon | Armor Type | Items (itemid_amount)
                 */
-               
+
                 let rawWeapon = player[9].split('_')
                 let rawArmor = player[10].split('_')
                 let weapon = assets.items[Number(rawWeapon[0])]
@@ -371,11 +384,17 @@ module.exports = {
                     embeds: [
                         {
                             title: p.name,
-                            color: 0xffffff,
+                            description: `To view your inventory, use \`/inventory view\``,
+                            color: fetchedUser.hexAccentColor ? parseInt(fetchedUser.hexAccentColor.replace('#', '0x')) : 0x2B2D31,
                             thumbnail: {
                                 url: user.avatarURL()
                             },
                             fields: [
+                                {
+                                    name: `\u200b`,
+                                    value: `__**Stats**__`,
+                                    inline: false
+                                },
                                 {
                                     name: `${p.health == p.maxHealth ? '💖' : (p.health < p.maxHealth / 2 ? '❤️‍🩹' : '❤️')} ${p.health}/${p.maxHealth}`,
                                     value: `Health`,
@@ -383,12 +402,12 @@ module.exports = {
                                 },
                                 {
                                     name: `⚔️ ${p.attack}`,
-                                    value: `- ${p.synergized ? '__' : ''}${p.weapon.name}${p.synergized ? '__' : ''}\n- ${p.synergized ? '__' : ''}${p.armorer.name}${p.synergized ? '__' : ''}`,
+                                    value: `- ${p.synergized ? '__' : ''}${p.weapon.name}${p.synergized ? '__' : ''}`,
                                     inline: true
                                 },
                                 {
-                                    name: `⚡ ${p.stamina}/${p.maxStamina}`,
-                                    value: 'Stamina',
+                                    name: `🪖 ${p.armor}`,
+                                    value: `- ${p.synergized ? '__' : ''}${p.armorer.name}${p.synergized ? '__' : ''}`,
                                     inline: true
                                 },
                                 {
@@ -407,13 +426,18 @@ module.exports = {
                                     inline: true
                                 },
                                 {
-                                    name: `🪖 ${p.armor}`,
-                                    value: 'Armor',
+                                    name: `⚡ ${p.stamina}/${p.maxStamina}`,
+                                    value: 'Stamina',
                                     inline: true
+                                },
+                                {
+                                    name: `\u200b`,
+                                    value: `__**Skills**__`,
+                                    inline: false
                                 }
                             ],
                             footer: {
-                                text: `${p.name} - Level ${p.level}\n🪷 ${p.xp}/${Math.round((p.level / 0.07) ** 2)}\nTo view your inventory, use /inventory`,
+                                text: `${p.name} - Level ${p.level}\n🪷 ${p.xp}/${Math.round((p.level / 0.07) ** 2)}`,
                                 icon_url: user.avatarURL()
                             }
                         }
@@ -431,7 +455,7 @@ module.exports = {
                     if (!skill.damage && skill.attack) final.push(`Deals basic damage`)
                     if (skill.estatus) final.push(`Inflicts: \`${skill.estatus.join('')}\``)
                     if (skill.pstatus) final.push(`Gains: \`${skill.pstatus.join('')}\``)
-                    if (final.length > 0) embed.embeds[0].fields.push({ name: `${skill.cost ? `` : `⚡`}${skill.name}${skill.cost ? ` - ⚡${skill.cost}` : ''}`, value: final.join('\n'), inline: false })
+                    if (final.length > 0) embed.embeds[0].fields.push({ name: `${skill.cost ? `` : `⚡`}${skill.name}${skill.cost ? ` - ⚡${skill.cost}` : ''}`, value: final.join('\n'), inline: true })
                 })
 
                 interaction.reply(embed)

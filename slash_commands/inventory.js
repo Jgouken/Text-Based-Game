@@ -38,6 +38,7 @@ module.exports = {
                         url: user.avatarURL()
                     },
                     title: `${user.username}'s Inventory`,
+                    color: 0x2B2D31,
                     description: "Use `/inventory use <item>` to use an item from your inventory.",
                     fields: [],
                     footer: {
@@ -187,6 +188,7 @@ module.exports = {
                     embeds: [
                         {
                             title: "Item used!",
+                            color: 0x2B2D31,
                             thumbnail: {
                                 url: interaction.user.avatarURL()
                             },

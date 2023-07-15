@@ -11,7 +11,7 @@ module.exports = {
             embeds: [
                 {
                     title: `How to Play`,
-                    color: 0xffffff,
+                    color: 0x2B2D31,
                     description: `Welcome to the unnamed game Text-Based-Game created by <@491422360273158165>! The following illustrates the instructions and nitty gritty on how to play around with the robot. If you have any questoins, feel free to let Jgouken know!`,
                     fields: [
                         {
@@ -31,7 +31,7 @@ module.exports = {
                         },
                         {
                             name: "🛠️ __Crafting__",
-                            value: "`/craft (item)`\n\nUsing Craft Reagents from your inventory, craft other items that can be useful in battle including bombs, crystals, and flasks that can aid during battle!\n\nIf you don't specify an item to craft, it will instead show you all craftable items, what they do, and what they require. Weapons and Armor cannot be crafted (yet?).",
+                            value: "`/craft (item)`\n\nUsing Craft Reagents from your inventory, craft other items that can be useful in battle including bombs, crystals, and flasks that can aid during battle!\n\nIf you don't specify an item to craft, it will instead show you all craftable items, and what they require. Weapons and Armor cannot be crafted (yet?).",
                             inline: true
                         },
                         {

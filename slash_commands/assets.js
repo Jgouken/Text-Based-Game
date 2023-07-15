@@ -3576,7 +3576,7 @@ module.exports = {
 				{
 					name: "Yin or Yang",
 					cost: 55,
-					description: "Point Melanie or Alectrona upwards then unleashes its power which creates a massive blade of lightor darkness before slamming it down on to the enemy and strengthening its wielder.\n\nRandomized for each turn:, inflict Cursed, Bad Omen, and Weakness\nOR\ninflict Burn, Blindness, and Bleed.\n\nThen, Gain Berserk\nOR\nGain Blessed and Empowerment",
+					description: "Point Melanie or Alectrona upwards then unleashes its power which creates a massive blade of light or darkness before slamming it down on to the enemy and strengthening its wielder.\n\nRandomized for each turn:\nInflict Cursed, Bad Omen, and Weakness\nOR\ninflict Burn, Blindness, and Bleed.\n\nThen, Gain Berserk\nOR\nGain Blessed and Empowerment",
 					damage: 3,
 					estatus: [["🖤", "🏴", "🌀"], ["🔥", "🩸", "👁️"]][Math.floor(Math.random() * 2)],
 					pstatus: [["💢", "🏳️"], ["✨", "🍀", "🛡️"]][Math.floor(Math.random() * 2)],
