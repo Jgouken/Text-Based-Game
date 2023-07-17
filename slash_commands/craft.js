@@ -20,7 +20,7 @@ module.exports = {
             var player = await db.get(`player_${interaction.user.id}`)
             player = player.split('|')
 
-            if (!item.craft) return interaction.reply({ content: `That item (${item.name}) is not even craftable!` })
+            if (!item.craft) return interaction.reply({ content: `That item (${item.name}) is not craftable!`, ephemeral: true })
             if (!player[12]) return interaction.reply({ content: `How are you even going to craft ${item.name} if you don't even have an inventory?`, ephemeral: true })
 
             player[12] = player[12].split('-')
@@ -39,13 +39,8 @@ module.exports = {
 
             if (!areEqual) return interaction.reply({ content: `You do not have all of the materials required to craft the item "${item.name}." You are missing ${item.craft.length - haved.length} items.`, ephemeral: true })
             
-            for (a = 0; a < haved.length; a++) {
-                for (x = 0; x < player[12].length; x++) {
-                    let inv = player[12][x].split('_')
-                    if (haved[a] == assets.items[inv[0]].name) player[12].splice(x, 1)
-                    break;
-                }
-            }
+            var final = []
+            // Remove items
 
             player[12].push(`${assets.items.indexOf(item)}_1_0`)
             player[12] = player[12].join('-')

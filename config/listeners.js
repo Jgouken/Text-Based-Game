@@ -12,10 +12,6 @@ module.exports = {
 			console.log(`"/${commandName}" command by ${interaction.user.username}`)
 			if (!(await db.get(`player_${interaction.user.id}`))) await db.set(`player_${interaction.user.id}`, `1|500|500|30|10|50|50|0.95|0|0_1_0|31_1_0|${Date.now()}`)
 			let player = (await db.get(`player_${interaction.user.id}`)).split('|')
-			if (Date.now() - Number(player[11]) > 3600000 * 3) player[6] += Math.round(Number(player[5]) / 2)
-			if (Date.now() - Number(player[11]) > 3600000 * 12) player[2] += Math.round(Number(player[1]) / 2)
-			if (player[6] > player[5]) player[6] = player[5]
-			if (player[2] > player[1]) player[2] = player[1]
 			db.set(`player_${interaction.user.id}`, player.join('|'))
 			if (called) called.execute(bot, interaction, db, config)
 			//setTimeout(async () => { await interaction.deferReply({ ephemeral: true }).catch(() => { return }) }, 2000);

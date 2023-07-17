@@ -245,11 +245,11 @@ module.exports = {
 					chance: 0.22
 				},
 				{
-					name: "Copper Key",
+					name: "Wooden Key",
 					chance: 0.03
 				},
 				{
-					name: "Silver Key",
+					name: "Iron Key",
 					chance: 0.01
 				},
 				{
@@ -325,11 +325,11 @@ module.exports = {
 					chance: 0.4
 				},
 				{
-					name: "Copper Key",
+					name: "Wooden Key",
 					chance: 0.04
 				},
 				{
-					name: "Silver Key",
+					name: "Iron Key",
 					chance: 0.02
 				},
 				{
@@ -403,7 +403,7 @@ module.exports = {
 					chance: 0.85
 				},
 				{
-					name: "Gold Key",
+					name: "Golden Key",
 					chance: 0.02
 				},
 				{
@@ -461,7 +461,7 @@ module.exports = {
 					chance: 0.6
 				},
 				{
-					name: "Gold Key",
+					name: "Golden Key",
 					chance: 0.045
 				},
 				{
@@ -540,11 +540,11 @@ module.exports = {
 					chance: 0.55
 				},
 				{
-					name: "Silver Key",
+					name: "Iron Key",
 					chance: 0.01
 				},
 				{
-					name: "Gold Key",
+					name: "Golden Key",
 					chance: 0.04
 				},
 				{
@@ -857,11 +857,11 @@ module.exports = {
 					chance: 0.2
 				},
 				{
-					name: "Silver Key",
+					name: "Iron Key",
 					chance: 0.04
 				},
 				{
-					name: "Gold Key",
+					name: "Golden Key",
 					chance: 0.02
 				},
 				{
@@ -947,11 +947,11 @@ module.exports = {
 					chance: 0.2
 				},
 				{
-					name: "Silver Key",
+					name: "Iron Key",
 					chance: 0.03
 				},
 				{
-					name: "Gold Key",
+					name: "Golden Key",
 					chance: 0.03
 				},
 				{
@@ -1043,11 +1043,11 @@ module.exports = {
 					chance: 0.2
 				},
 				{
-					name: "Silver Key",
+					name: "Iron Key",
 					chance: 0.02
 				},
 				{
-					name: "Gold Key",
+					name: "Golden Key",
 					chance: 0.04
 				},
 				{
@@ -2334,7 +2334,6 @@ module.exports = {
 			attack: 0,
 			plvlmult: 0,
 			crit: 0,
-			drop: 0,
 			skills: [
 				{
 					name: "Punch",
@@ -2364,7 +2363,6 @@ module.exports = {
 			attack: 5,
 			plvlmult: 0.2,
 			crit: 0.005,
-			drop: 0.025,
 			skills: [
 				{
 					name: "Whack",
@@ -2402,7 +2400,6 @@ module.exports = {
 			attack: 8,
 			plvlmult: 0.5,
 			crit: 0.01,
-			drop: 0.025,
 			skills: [
 				{
 					name: "Whack",
@@ -2439,7 +2436,6 @@ module.exports = {
 			attack: 9,
 			plvlmult: 0.5,
 			crit: 0.025,
-			drop: 0.2,
 			skills: [
 				{
 					name: "Stab",
@@ -2477,7 +2473,6 @@ module.exports = {
 			attack: 12,
 			plvlmult: 0.7,
 			crit: 0.0125,
-			drop: 0.1,
 			skills: [
 				{
 					name: "Stab",
@@ -2515,8 +2510,6 @@ module.exports = {
 			attack: 14,
 			plvlmult: 0.7,
 			crit: 0.03,
-			drop: 0.05,
-			chest: 1,
 			skills: [
 				{
 					name: "Stab",
@@ -2556,8 +2549,6 @@ module.exports = {
 			attack: 15,
 			plvlmult: 0.7,
 			crit: 0.05,
-			drop: 0.025,
-			chest: 1,
 			skills: [
 				{
 					name: "Perfect Whack",
@@ -2596,8 +2587,6 @@ module.exports = {
 			attack: 12,
 			plvlmult: 1,
 			crit: 0.065,
-			drop: 0.025,
-			chest: 2,
 			skills: [
 				{
 					name: "Strike",
@@ -2636,8 +2625,6 @@ module.exports = {
 			attack: 25,
 			plvlmult: 1.5,
 			crit: 0.2,
-			drop: 0.01,
-			chest: 3,
 			skills: [
 				{
 					name: "Golden Whack",
@@ -2677,7 +2664,6 @@ module.exports = {
 			attack: 16,
 			plvlmult: 1.2,
 			crit: 0.1,
-			drop: 0.15,
 			skills: [
 				{
 					name: "Dual Strike",
@@ -2717,7 +2703,6 @@ module.exports = {
 			attack: 20,
 			plvlmult: 1.2,
 			crit: 0.15,
-			drop: 0.15,
 			skills: [
 				{
 					name: "Dual Strike",
@@ -2758,8 +2743,6 @@ module.exports = {
 			attack: 20,
 			plvlmult: 1.1,
 			crit: 0.095,
-			drop: 0.025,
-			chest: 3,
 			skills: [
 				{
 					name: "Strike",
@@ -2798,8 +2781,6 @@ module.exports = {
 			attack: 15,
 			plvlmult: 1,
 			crit: 0.15,
-			drop: 0.05,
-			chest: 3,
 			skills: [
 				{
 					name: "Quick Shot",
@@ -2840,8 +2821,6 @@ module.exports = {
 			attack: 26,
 			plvlmult: 0.8,
 			crit: 0.3,
-			drop: 0.05,
-			chest: 3,
 			skills: [
 				{
 					name: "Chop",
@@ -2878,8 +2857,6 @@ module.exports = {
 			attack: 15,
 			plvlmult: 1.25,
 			crit: 0.15,
-			drop: 0.05,
-			chest: 3,
 			skills: [
 				{
 					name: "Stab",
@@ -2920,8 +2897,6 @@ module.exports = {
 			attack: 10,
 			plvlmult: 1.75,
 			crit: 0.2,
-			drop: 0.05,
-			chest: 3,
 			skills: [
 				{
 					name: ["Back Fist", "Elbow Strike", "Hammer Fist", "Haymaker Punch", "Hook Punch", "Jab Punch", "Knife Hand Strike", "Palm Strike", "Slap", "Straight Punch", "Uppercut Punch"][Math.floor(Math.random() * 11)],
@@ -2961,8 +2936,6 @@ module.exports = {
 			attack: 10,
 			plvlmult: 1,
 			crit: 0.1,
-			drop: 0.05,
-			chest: 4,
 			skills: [
 				{
 					name: "Saw",
@@ -3005,7 +2978,6 @@ module.exports = {
 			attack: 18,
 			plvlmult: 1.2,
 			crit: 0.15,
-			drop: 0.15,
 			skills: [
 				{
 					name: "Swing",
@@ -3045,7 +3017,6 @@ module.exports = {
 			attack: 30,
 			plvlmult: 1,
 			crit: 0.08,
-			drop: 0.15,
 			skills: [
 				{
 					name: "Bash",
@@ -3083,8 +3054,6 @@ module.exports = {
 			attack: 10,
 			plvlmult: 1.75,
 			crit: 0.2,
-			drop: 0.05,
-			chest: 4,
 			skills: [
 				{
 					name: "Dual Strike",
@@ -3126,8 +3095,6 @@ module.exports = {
 			attack: 15,
 			plvlmult: 1.6,
 			crit: 0.25,
-			drop: 0.05,
-			chest: 4,
 			skills: [
 				{
 					name: "Knuckle Sandwich",
@@ -3171,8 +3138,6 @@ module.exports = {
 			attack: 20,
 			plvlmult: 1.75,
 			crit: 0.3,
-			drop: 0.05,
-			chest: 4,
 			skills: [
 				{
 					name: "Kunai",
@@ -3214,8 +3179,6 @@ module.exports = {
 			attack: 20,
 			plvlmult: 2,
 			crit: 0.15,
-			drop: 0.01,
-			chest: 4,
 			skills: [
 				{
 					name: "Holy Jab",
@@ -3256,8 +3219,6 @@ module.exports = {
 			attack: 10,
 			plvlmult: 2,
 			crit: 0.25,
-			drop: 0.01,
-			chest: 4,
 			skills: [
 				{
 					name: "Quick Shot",
@@ -3299,8 +3260,6 @@ module.exports = {
 			attack: 30,
 			plvlmult: 2.15,
 			crit: 0.2,
-			drop: 0.01,
-			chest: 5,
 			skills: [
 				{
 					name: "Dual Stab",
@@ -3345,8 +3304,6 @@ module.exports = {
 			attack: 50,
 			plvlmult: 1.5,
 			crit: 0.2,
-			drop: 0.01,
-			chest: 5,
 			skills: [
 				{
 					name: "Bash",
@@ -3386,8 +3343,6 @@ module.exports = {
 			attack: 40,
 			plvlmult: 2.5,
 			crit: 0.3,
-			drop: 0.01,
-			chest: 5,
 			skills: [
 				{
 					name: "Strike",
@@ -3429,8 +3384,6 @@ module.exports = {
 			attack: 40,
 			plvlmult: 2,
 			crit: 0.4,
-			drop: 0.05,
-			chest: 5,
 			skills: [
 				{
 					name: "Holy Kick",
@@ -3472,8 +3425,6 @@ module.exports = {
 			attack: 85,
 			plvlmult: 2.3,
 			crit: 0.5,
-			drop: 0.01,
-			chest: 5,
 			skills: [
 				{
 					name: "Scythe",
@@ -3518,8 +3469,6 @@ module.exports = {
 			attack: 45,
 			plvlmult: 2.3,
 			crit: 0.3,
-			drop: 0.01,
-			chest: 5,
 			skills: [
 				{
 					name: "Quick Shot",
@@ -3564,8 +3513,6 @@ module.exports = {
 			attack: 55,
 			plvlmult: 2.5,
 			crit: 0.35,
-			drop: 0.01,
-			chest: 5,
 			skills: [
 				{
 					name: "Dual Strike",
@@ -4247,33 +4194,36 @@ module.exports = {
 		},
 		// Chest Keys
 		{
-			name: "Copper Key",
+			name: "Wooden Key",
+			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1130288425271046226/Wooden_Key.gif",
+			emoji: '<a:wooden_key:1130297739087986738>',
 			chest: 1
 		},
 		{
-			name: "Silver Key",
+			name: "Iron Key",
+			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1130290916410798081/Iron_Key.gif",
+			emoji: '<a:iron_key:1130297737250881606>',
 			chest: 2
 		},
 		{
-			name: "Gold Key",
+			name: "Golden Key",
+			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1130297628266082395/Golden_Key.gif",
+			emoji: '<a:golden_key:1130297740367249440>',
 			chest: 3
 		},
 		{
 			name: "Platinum Key",
+			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1130306154476617768/Platinum_Key.gif",
+			emoji: '<a:platinum_key:1130306302355185695>',
 			chest: 4
 		},
 		{
 			name: "Adamantine Key",
+			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1130319559363154030/Adamantine_Key.gif",
+			emoji: '<a:adamantine_key:1130319612790198373>',
 			chest: 5
 		},
-		/*
-		{
-			name: "Poison Potion",
-			craft: ["Venom", "Booze Flask"],
 
-			battle: true
-		},
-		*/
 		// Craftables
 		{
 			name: "Molotov",
@@ -4315,6 +4265,7 @@ module.exports = {
 		{
 			name: "Poison Flask",
 			estatus: ["💀"],
+			craft: ["Venom", "Booze Flask"],
 			damage: 260,
 			battle: true
 		},
@@ -4433,5 +4384,762 @@ module.exports = {
 			name: "Whetstone",
 			uses: ["Whetstone & Polish"]
 		}
+	],
+	
+	chests: [
+		{
+			name: "Wooden Chest",
+			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1129864897514176603/Copper_Chest.gif",
+			tier: 1,
+			key: "Wooden Key",
+			drops: [
+				{
+					name: "Trusty Dagger",
+					chance: 0.05
+				},
+				{
+					name: "Perfect Stick",
+					chance: 0.05
+				},
+				{
+					name: "Rogues Cloak",
+					chance: 0.05
+				},
+				{
+					name: "Perfect Leaf",
+					chance: 0.05
+				},
+				{
+					name: "Light Stamina Potion",
+					chance: 0.03
+				},
+				{
+					name: "Light Health Potion",
+					chance: 0.03
+				},
+				{
+					name: "Light Attack Potion",
+					chance: 0.03
+				},
+				{
+					name: "Light Energy Potion",
+					chance: 0.03
+				},
+				{
+					name: "Light XP Potion",
+					chance: 0.03
+				},
+				{
+					name: "Medium Stamina Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium Health Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium Attack Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium Energy Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium XP Potion",
+					chance: 0.02
+				},
+				{
+					name: "Empty Flask",
+					chance: 0.1
+				},
+				{
+					name: "Water Flask",
+					chance: 0.1
+				},
+				{
+					name: "Ordinary Bomb",
+					chance: 0.1
+				},
+				{
+					name: "Wooden Key",
+					chance: 0.01
+				},
+				{
+					name: "Silver Key",
+					chance: 0.04
+				},
+				{
+					name: "Molotov",
+					chance: 0.05
+				},
+			]
+		},
+		{
+			name: "Iron Chest",
+			sprite: "https://cdn.discordapp.com/attachments/1116445708279615641/1129867273725808670/Silver_Chest.gif",
+			tier: 2,
+			key: "Iron Key",
+			drops: [
+				{
+					name: "Iron Short Sowrd",
+					chance: 0.07
+				},
+				{
+					name: "Padded Clothing",
+					chance: 0.07
+				},
+				{
+					name: "Light Stamina Potion",
+					chance: 0.03
+				},
+				{
+					name: "Light Health Potion",
+					chance: 0.03
+				},
+				{
+					name: "Light Attack Potion",
+					chance: 0.03
+				},
+				{
+					name: "Light Energy Potion",
+					chance: 0.03
+				},
+				{
+					name: "Light XP Potion",
+					chance: 0.03
+				},
+				{
+					name: "Medium Stamina Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium Health Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium Attack Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium Energy Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium XP Potion",
+					chance: 0.02
+				},
+				{
+					name: "Heavy Stamina Potion",
+					chance: 0.01
+				},
+				{
+					name: "Heavy Health Potion",
+					chance: 0.01
+				},
+				{
+					name: "Heavy Attack Potion",
+					chance: 0.01
+				},
+				{
+					name: "Heavy Energy Potion",
+					chance: 0.01
+				},
+				{
+					name: "Heavy XP Potion",
+					chance: 0.01
+				},
+				{
+					name: "Empty Flask",
+					chance: 0.02
+				},
+				{
+					name: "Water Flask",
+					chance: 0.02
+				},
+				{
+					name: "Booze",
+					chance: 0.02
+				},
+				{
+					name: "Gunpowder",
+					chance: 0.02
+				},
+				{
+					name: "Red Gem",
+					chance: 0.03
+				},
+				{
+					name: "Blue Gem",
+					chance: 0.03
+				},
+				{
+					name: "Purple Gem",
+					chance: 0.01
+				},
+				{
+					name: "Whetstone",
+					chance: 0.01
+				},
+				{
+					name: "Whetstone & Polish",
+					chance: 0.04
+				},
+				{
+					name: "Ordinary Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Poison Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Shrapnel Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Molotov",
+					chance: 0.05
+				},
+				{
+					name: "Wooden Key",
+					chance: 0.01
+				},
+				{
+					name: "Iron Key",
+					chance: 0.02
+				},
+				{
+					name: "Golden Key",
+					chance: 0.04
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.03
+				},
+			]
+			
+		},
+		{
+			name: "Golden Chest",
+			sprite: "https://cdn.discordapp.com/attachments/1116445708279615641/1129897856048828426/New_Piskel.gif",
+			tier: 3,
+			key: "Golden Key",
+			drops: [
+				{
+					name: "Iron Sowrd",
+					chance: 0.05
+				},
+				{
+					name: "Wooden Bow",
+					chance: 0.03
+				},
+				{
+					name: "Lumberjack Axe",
+					chance: 0.03
+				},
+				{
+					name: "Silver Knife",
+					chance: 0.03
+				},
+				{
+					name: "Golden Stick",
+					chance: 0.03
+				},
+				{
+					name: "Light Armor",
+					chance: 0.08
+				},
+				{
+					name: "Medium Stamina Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium Health Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium Attack Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium Energy Potion",
+					chance: 0.02
+				},
+				{
+					name: "Medium XP Potion",
+					chance: 0.02
+				},
+				{
+					name: "Heavy Stamina Potion",
+					chance: 0.02
+				},
+				{
+					name: "Heavy Health Potion",
+					chance: 0.02
+				},
+				{
+					name: "Heavy Attack Potion",
+					chance: 0.02
+				},
+				{
+					name: "Heavy Energy Potion",
+					chance: 0.02
+				},
+				{
+					name: "Heavy XP Potion",
+					chance: 0.02
+				},
+				{
+					name: "Great Stamina Potion",
+					chance: 0.01
+				},
+				{
+					name: "Great Health Potion",
+					chance: 0.01
+				},
+				{
+					name: "Great Attack Potion",
+					chance: 0.01
+				},
+				{
+					name: "Great Energy Potion",
+					chance: 0.01
+				},
+				{
+					name: "Great XP Potion",
+					chance: 0.01
+				},
+				{
+					name: "Gunpowder",
+					chance: 0.02
+				},
+				{
+					name: "Red Gem",
+					chance: 0.03
+				},
+				{
+					name: "Blue Gem",
+					chance: 0.03
+				},
+				{
+					name: "Purple Gem",
+					chance: 0.01
+				},
+				{
+					name: "Whetstone",
+					chance: 0.01
+				},
+				{
+					name: "Whetstone & Polish",
+					chance: 0.025
+				},
+				{
+					name: "Ordinary Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Poison Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Shrapnel Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Pepper Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Purified Salt",
+					chance: 0.025
+				},
+				{
+					name: "Purifying Flask",
+					chance: 0.025
+				},
+				{
+					name: "Purifying Water",
+					chance: 0.025
+				},
+				{
+					name: "Iron Key",
+					chance: 0.01
+				},
+				{
+					name: "Golden Key",
+					chance: 0.01
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.02
+				},
+				{
+					name: "Adamantine Key",
+					chance: 0.01
+				},
+			]
+			
+		},
+		{
+			name: "Platinum Chest",
+			sprite: "https://cdn.discordapp.com/attachments/1116445708279615641/1129902606442057739/Platinum_Chest.gif",
+			tier: 4,
+			key: "Platinum Key",
+			drops: [
+				{
+					name: "Martial Arts",
+					chance: 0.03
+				},
+				{
+					name: "Chainsaw",
+					chance: 0.03
+				},
+				{
+					name: "Twin Swords",
+					chance: 0.03
+				},
+				{
+					name: "Spiked Gauntlets",
+					chance: 0.03
+				},
+				{
+					name: "Ninja Arts",
+					chance: 0.01
+				},
+				{
+					name: "Holy Spear",
+					chance: 0.01
+				},
+				{
+					name: "Cursed Bone Bow",
+					chance: 0.01
+				},
+				{
+					name: "Thick Sleeveless Hoodie",
+					chance: 0.03
+				},
+				{
+					name: "Leather Apron & Mask",
+					chance: 0.03
+				},
+				{
+					name: "Dragon Cloak",
+					chance: 0.03
+				},
+				{
+					name: "Spiked Leather Armor",
+					chance: 0.03
+				},
+				{
+					name: "Shinobi Garments",
+					chance: 0.01
+				},
+				{
+					name: "Holy Knight Armor",
+					chance: 0.01
+				},
+				{
+					name: "Shadow Cloak",
+					chance: 0.01
+				},
+				{
+					name: "Heavy Stamina Potion",
+					chance: 0.02
+				},
+				{
+					name: "Heavy Health Potion",
+					chance: 0.02
+				},
+				{
+					name: "Heavy Attack Potion",
+					chance: 0.02
+				},
+				{
+					name: "Heavy Energy Potion",
+					chance: 0.02
+				},
+				{
+					name: "Heavy XP Potion",
+					chance: 0.02
+				},
+				{
+					name: "Great Stamina Potion",
+					chance: 0.02
+				},
+				{
+					name: "Great Health Potion",
+					chance: 0.02
+				},
+				{
+					name: "Great Attack Potion",
+					chance: 0.02
+				},
+				{
+					name: "Great Energy Potion",
+					chance: 0.02
+				},
+				{
+					name: "Great XP Potion",
+					chance: 0.02
+				},
+				{
+					name: "Grand Stamina Potion",
+					chance: 0.01
+				},
+				{
+					name: "Grand Health Potion",
+					chance: 0.01
+				},
+				{
+					name: "Grand Attack Potion",
+					chance: 0.01
+				},
+				{
+					name: "Grand Energy Potion",
+					chance: 0.01
+				},
+				{
+					name: "Grand XP Potion",
+					chance: 0.01
+				},
+				{
+					name: "Gunpowder",
+					chance: 0.01
+				},
+				{
+					name: "Red Gem",
+					chance: 0.02
+				},
+				{
+					name: "Blue Gem",
+					chance: 0.02
+				},
+				{
+					name: "Purple Gem",
+					chance: 0.01
+				},
+				{
+					name: "Whetstone",
+					chance: 0.01
+				},
+				{
+					name: "Whetstone & Polish",
+					chance: 0.01
+				},
+				{
+					name: "Ordinary Bomb",
+					chance: 0.02
+				},
+				{
+					name: "Poison Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Shrapnel Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Pepper Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Purified Salt",
+					chance: 0.03
+				},
+				{
+					name: "Purifying Flask",
+					chance: 0.03
+				},
+				{
+					name: "Purifying Water",
+					chance: 0.03
+				},
+				{
+					name: "Golden Key",
+					chance: 0.01
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.02
+				},
+				{
+					name: "Adamantine Key",
+					chance: 0.02
+				},
+			]
+		},
+		{
+			name: "Adamantine Chest",
+			sprite: "https://cdn.discordapp.com/attachments/1116445708279615641/1129906645259006092/Adamantite_Chest.gif",
+			tier: 5,
+			key: "Adamantine Key",
+			drops: [
+				{
+					name: "Cursed Fangs",
+					chance: 0.03
+				},
+				{
+					name: "Evil Pulverizer",
+					chance: 0.03
+				},
+				{
+					name: "Demonic Nunchucks",
+					chance: 0.03
+				},
+				{
+					name: "Holy Arts",
+					chance: 0.03
+				},
+				{
+					name: "Iris & Hermes",
+					chance: 0.01
+				},
+				{
+					name: "Orcus",
+					chance: 0.01
+				},
+				{
+					name: "Alectrona & Melanie",
+					chance: 0.01
+				},
+				{
+					name: "Holy Knight Armor",
+					chance: 0.03
+				},
+				{
+					name: "Shadow Cloak",
+					chance: 0.03
+				},
+				{
+					name: "Sinner Jacket",
+					chance: 0.03
+				},
+				{
+					name: "Blessed Gi",
+					chance: 0.03
+				},
+				{
+					name: "Walking Church",
+					chance: 0.01
+				},
+				{
+					name: "Black Mourning",
+					chance: 0.01
+				},
+				{
+					name: "Equinox",
+					chance: 0.01
+				},
+				{
+					name: "Heavy Stamina Potion",
+					chance: 0.01
+				},
+				{
+					name: "Heavy Health Potion",
+					chance: 0.01
+				},
+				{
+					name: "Heavy Attack Potion",
+					chance: 0.01
+				},
+				{
+					name: "Heavy Energy Potion",
+					chance: 0.01
+				},
+				{
+					name: "Heavy XP Potion",
+					chance: 0.01
+				},
+				{
+					name: "Great Stamina Potion",
+					chance: 0.02
+				},
+				{
+					name: "Great Health Potion",
+					chance: 0.02
+				},
+				{
+					name: "Great Attack Potion",
+					chance: 0.02
+				},
+				{
+					name: "Great Energy Potion",
+					chance: 0.02
+				},
+				{
+					name: "Great XP Potion",
+					chance: 0.02
+				},
+				{
+					name: "Grand Stamina Potion",
+					chance: 0.02
+				},
+				{
+					name: "Grand Health Potion",
+					chance: 0.02
+				},
+				{
+					name: "Grand Attack Potion",
+					chance: 0.02
+				},
+				{
+					name: "Grand Energy Potion",
+					chance: 0.02
+				},
+				{
+					name: "Grand XP Potion",
+					chance: 0.02
+				},
+				{
+					name: "Red Gem",
+					chance: 0.02
+				},
+				{
+					name: "Blue Gem",
+					chance: 0.02
+				},
+				{
+					name: "Purple Gem",
+					chance: 0.01
+				},
+				{
+					name: "Whetstone & Polish",
+					chance: 0.01
+				},
+				{
+					name: "Poison Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Shrapnel Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Pepper Bomb",
+					chance: 0.05
+				},
+				{
+					name: "Purified Salt",
+					chance: 0.04
+				},
+				{
+					name: "Purifying Flask",
+					chance: 0.05
+				},
+				{
+					name: "Purifying Water",
+					chance: 0.05
+				},
+				{
+					name: "Platinum Key",
+					chance: 0.01
+				},
+				{
+					name: "Adamentite Key",
+					chance: 0.04
+				},
+			]
+		},
 	]
 }

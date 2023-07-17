@@ -82,6 +82,7 @@ module.exports = {
 
 		var e;
 		var choiceArea = assets.areas[area]
+
 		var random = Math.random()
 		var randomTrack = 0;
 
@@ -99,7 +100,7 @@ module.exports = {
 		var eattack = Math.round(e.attack + (elevel ** 1.62424))
 		var eaccuracy = e.accuracy - p.evasion + (.0025 * (elevel - 1))
 		var ecritical = e.critical + (.000125 * (elevel - 1))
-		var exp = Math.round((p.level * (emaxHealth / eattack)) ** 1.2) * 2
+		var exp = Math.round((elevel * (emaxHealth / eattack)) ** 1.2) * 2
 		var ehealth = emaxHealth
 		var edefense = e.maxdef ? Math.floor(Math.random() * (e.maxdef - e.mindef) + e.mindef) : 0
 
@@ -169,20 +170,17 @@ module.exports = {
 					const confirmation = await m.awaitMessageComponent({ filter: collectorFilter });
 					await disableButtons(true);
 					if (confirmation.customId == 'pass') {
-						i++
-						p.stamina += Math.round(3 + ((p.level - 1) / 5))
+						p.stamina += Math.round(5 + ((p.level - 1) / 5)) > p.maxStamina ? p.maxStamina - p.stamina : Math.round(5 + ((p.level - 1) / 5))
 						if (p.stamina > p.maxStamina) p.stamina = p.maxStamina
-						chatLog.push(`${interaction.user.username} passed\nGained +${Math.round(3 + ((p.level - 1) / 5))}⚡`)
+						chatLog.push(`${interaction.user.username} passed\nGained +${Math.round(5 + ((p.level - 1) / 5)) > p.maxStamina ? p.maxStamina - p.stamina : Math.round(5 + ((p.level - 1) / 5))}⚡`)
 						await confirmation.update(await embed(0xff0000, null)).catch(async () => { m.edit(await embed(0xff0000, null)).catch(() => { return }) })
 						setTimeout(async () => {
-							
 							contin(e)
 						}, 500)
 					} else if (confirmation.customId == 'useitem') {
-						i++
-						chatLog.push(`${interaction.user.username} passed because this system will be done later\nGained +${Math.round(3 + ((p.level - 1) / 5))}⚡`)
-						p.stamina += Math.round(3 + ((p.level - 1) / 5))
+						p.stamina += Math.round(5 + ((p.level - 1) / 5)) > p.maxStamina ? p.maxStamina - p.stamina : Math.round(5 + ((p.level - 1) / 5))
 						if (p.stamina > p.maxStamina) p.stamina = p.maxStamina
+						chatLog.push(`${interaction.user.username} passed\nUsing items during battles is not available yet.\nGained +${Math.round(5 + ((p.level - 1) / 5)) > p.maxStamina ? p.maxStamina - p.stamina : Math.round(5 + ((p.level - 1) / 5))}⚡`)
 						await confirmation.update(await embed(0xff0000, null)).catch(async () => { m.edit(await embed(0xff0000, null)).catch(() => { return }) })
 						setTimeout(async () => {
 							contin(e)
@@ -525,7 +523,7 @@ module.exports = {
 							}
 						}
 
-						while (exp > 0) {
+						for (o = 0; o < exp; o) {
 							if (exp >= (Math.round((p.level / 0.07) ** 2) - p.xp)) {
 								p.level += 1
 								chatLog.push(`⬆️ ${p.name} leveled up to level ${p.level}! ⬆️`)
@@ -710,7 +708,7 @@ module.exports = {
 						inline: true
 					},
 				]
-				file ? false : embed.embeds[0].color = color
+				file ? false : embed.embeds[0].color = 0x000000
 				file ? false : embed.embeds[0].footer.text = `${p.name}\n🪷 ${p.xp}/${Math.round((p.level / 0.07) ** 2)}`
 				embed.components = file ? [] : [row3]
 				embed.files = file ? [file] : []
