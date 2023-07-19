@@ -13,8 +13,7 @@ module.exports = {
 
     async execute(bot, interaction, db) {
         if (interaction.options.getString('username').toLowerCase() == interaction.user.username.toLowerCase() || interaction.options.getString('username').toLowerCase() == interaction.user.tag.toLowerCase()) {
-            await db.delete(`player_${interaction.user.id}`)
-            await db.delete(`gamer_${interaction.user.id}`)
+            while (await db.get(`player_${interaction.user.id}`)) await db.delete(`player_${interaction.user.id}`)
             interaction.reply({ content: "Your data has been reset!", ephemeral: true })
         } else {
             interaction.reply({ content: "You did not spell your username correctly! Your data has not been reset.", ephemeral: true })

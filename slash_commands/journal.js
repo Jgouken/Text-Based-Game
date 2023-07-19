@@ -20,10 +20,14 @@ module.exports = {
     ,
 
     async execute(bot, interaction, db) {
-        var user = await interaction.options.getString("thing") ? await bot.users.cache.get(interaction.options.getString("thing").replace(/[<@!>]/gm, '')) : interaction.user
-        if (!user) var item = assets.items.find(a => a.name.toLocaleLowerCase().replace(' ', '') == interaction.options.getString('thing').toLowerCase().trim().replace(' ', '')) || assets.chests.find(a => a.name.toLocaleLowerCase().replace(' ', '') == interaction.options.getString('thing').toLowerCase().trim().replace(' ', ''))
-        if (!user) var area = assets.areas.find(a => a.name.toLocaleLowerCase() == interaction.options.getString('thing').toLowerCase().trim())
-        if (!user) var enemy = assets.enemies.find(a => a.name.toLocaleLowerCase().replace(' ', '') == interaction.options.getString('thing').toLowerCase().trim().replace(' ', ''))
+        var level = Number(interaction.options.getInteger("level"))
+        var user = interaction.options.getString("thing") ? await bot.users.cache.get(interaction.options.getString("thing").replace(/[<@!>]/gm, '')) : interaction.user
+
+        if (!user) {
+            var item = assets.items.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('thing').toLowerCase().trim().replace(/[ ]/g, '')) || assets.chests.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('thing').toLowerCase().trim().replace(/[ ]/g, ''))
+            var area = assets.areas.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('thing').toLowerCase().trim().replace(/[ ]/g, ''))
+            var enemy = assets.enemies.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('thing').toLowerCase().trim().replace(/[ ]/g, ''))
+        }
 
         if (user) {
             const fetchedUser = await user.fetch(true)
@@ -83,7 +87,7 @@ module.exports = {
                 embeds: [
                     {
                         title: p.name,
-                        description: `To view your inventory, use \`/inventory view\``,
+                        description: `To view your inventory, use \`/inventory\``,
                         color: fetchedUser.hexAccentColor ? parseInt(fetchedUser.hexAccentColor.replace('#', '0x')) : 0x2B2D31,
                         thumbnail: {
                             url: user.avatarURL()
@@ -141,6 +145,7 @@ module.exports = {
                         }
                     }
                 ],
+                ephemeral: true 
             }
 
             weapon.skills.forEach((skill) => {
@@ -161,7 +166,7 @@ module.exports = {
 
         } else if (item) {
             var embed = {
-                title: item.name,
+                title: `${item.name}`,
                 color: 0x2B2D31,
             }
 
@@ -171,10 +176,14 @@ module.exports = {
             var fields = []
 
             if (item.armor) {
+                if (!level) level = item.maxlvl || item.minlvl
+                if (item.minlvl) if (level < item.minlvl) level = item.minlvl
+                if (item.maxlvl) if (level > item.maxlvl) level = item.maxlvl
+                embed.description = `Level ${level}\n${embed.description}`,
                 // It is an armor
-                embed.footer = { text: "* Varies based on player and item level" }
+                embed.footer = { text: `* Varies based on player and item level` }
                 fields.push({
-                    name: `🪖 ${item.armor}*`,
+                    name: `🪖 +${Math.round(Number(Number((await db.get(`player_${interaction.user.id}`)).split('|')[0]) * Number(item.plvlmult)) + Number(Number(level) * Number(item.alvlmult)))}*`,
                     value: `Armor`,
                     inline: true
                 })
@@ -200,12 +209,17 @@ module.exports = {
                     })
                 }
             } else if (item.skills) {
+                if (!level) level = item.maxlvl || item.minlvl
+                if (item.minlvl) if (level < item.minlvl) level = item.minlvl
+                if (item.maxlvl) if (level > item.maxlvl) level = item.maxlvl
+                embed.description = `Level ${level}\n${embed.description}`
                 // It is a weapon
-                embed.footer = { text: "* Varies based on player and item level" }
+                embed.footer = { text: `Can be levels ${item.minlvl == item.maxlvl ? item.minlvl : `${item.minlvl} - ${item.maxlvl}`}\n* Varies based on player and item level` }
+                // Player Level Number((await db.get(`player_${interaction.user.id}`)).split('|')[0])
                 fields = [
                     {
-                        name: `⚔️ +${item.attack}*`,
-                        value: `Level ${item.minlvl == item.maxlvl ? item.minlvl : `${item.minlvl} - ${item.maxlvl}`}`,
+                        name: `⚔️ +${Math.round(Number(6 * (Number((await db.get(`player_${interaction.user.id}`)).split('|')[0]) - 1)) + Number(item.attack) + Number(level) + Number(Number((await db.get(`player_${interaction.user.id}`)).split('|')[0]) * Number(item.plvlmult)))}*`,
+                        value: `Attack`,
                         inline: true
                     },
                     {
@@ -282,10 +296,11 @@ module.exports = {
             if (fields.length != 0) embed.fields = fields
 
             interaction.reply({
-                embeds: [embed]
+                embeds: [embed],
+                ephemeral: true 
             })
         } else if (area) {
-            if (interaction.options.getString('area').toLocaleLowerCase().replace(' ', '') == "eternaldamnation") return interaction.reply({
+            if (interaction.options.getString('area').toLocaleLowerCase().replace(/[ ]/g, '') == "eternaldamnation") return interaction.reply({
                 embeds: [
                     {
                         title: "Eternal Damnation",
@@ -298,7 +313,8 @@ module.exports = {
                             }
                         ]
                     }
-                ]
+                ],
+                ephemeral: true 
             })
 
             let enemies = []
@@ -319,7 +335,8 @@ module.exports = {
                             }
                         ]
                     }
-                ]
+                ],
+                ephemeral: true 
             })
 
         } else if (enemy) {
@@ -396,7 +413,8 @@ module.exports = {
                         },
                         fields: fields
                     }
-                ]
+                ],
+                ephemeral: true 
             })
 
         } else return interaction.reply({ content: `Sorry, I can't find anything, or anyone, by the name of "${interaction.options.getString("thing")}." ${interaction.options.getString("thing").includes('@') ? 'If you\'re looking for a player, you did not mention them correctly' : 'Please make sure you\'ve spelled everything correctly. If you\'re looking for a user, mention them using @user'}.`, ephemeral: true })

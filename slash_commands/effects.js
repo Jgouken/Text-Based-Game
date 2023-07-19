@@ -24,7 +24,8 @@ module.exports = {
                     color: 0x2B2D31,
                     fields: effects
                 }
-            ]
+            ],
+            ephemeral: true
         })
     }
 }

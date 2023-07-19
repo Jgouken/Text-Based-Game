@@ -82,10 +82,10 @@ module.exports = {
 
 		var e;
 		var choiceArea = assets.areas[area]
-
 		var random = Math.random()
 		var randomTrack = 0;
 
+		if (p.level < choiceArea.minlvl - 1) return interaction.reply({ content: `You are too low leveled for that area! You must be at least level ${choiceArea.minlvl - 1} to use this area.`, ephemeral: true })
 		for (let i = 0; i < choiceArea.enemies.length; i++) {
 			randomTrack += choiceArea.enemies[i].chance;
 			if (random <= randomTrack) {
@@ -100,7 +100,7 @@ module.exports = {
 		var eattack = Math.round(e.attack + (elevel ** 1.62424))
 		var eaccuracy = e.accuracy - p.evasion + (.0025 * (elevel - 1))
 		var ecritical = e.critical + (.000125 * (elevel - 1))
-		var exp = Math.round((elevel * (emaxHealth / eattack)) ** 1.2) * 2
+		var exp = Math.round(((elevel ** 1.2) * (emaxHealth / eattack)) ** 1.2) * 2
 		var ehealth = emaxHealth
 		var edefense = e.maxdef ? Math.floor(Math.random() * (e.maxdef - e.mindef) + e.mindef) : 0
 
@@ -110,8 +110,9 @@ module.exports = {
 		var buttons = []
 		var chatLog = [`⚔️ ${p.name} vs. ${e.name} ⚔️`]
 		var eLog = []
-		let timer = 750
+		var timer = 750
 		var ended = false
+		var chest = -1
 
 		const row = new ActionRowBuilder()
 		const row2 = new ActionRowBuilder()
@@ -199,7 +200,7 @@ module.exports = {
 							for (i = 0; i < skill.times; i++) {
 								setTimeout(async () => {
 									let draft = p.attack + await debuffs(pstatus, p.attack, estatus, logging)
-									let finalHit = Math.round((draft + (draft * Math.random() * 0.05)) * (1 - edefense / 10) * hit * (skill.damage || 1))
+									let finalHit = Math.round(draft * (1 - edefense / 10) * hit * (skill.damage || 1))
 									var chatIndex = chatLog.length - 1
 									for (q = chatLog.length; q > -1; q--) { if (chatLog[q] ? String(chatLog[q]).startsWith(`- ${e.name} used ${skill.name}`) : false) chatIndex = q }
 									if (hit == 1) logging.push(`⚔️${finalHit}`)
@@ -226,7 +227,7 @@ module.exports = {
 
 							if (skill.attack || skill.damage) {
 								let draft = p.attack + await debuffs(pstatus, p.attack, estatus, false)
-								let finalHit = Math.round((draft + (draft * Math.random() * 0.05)) * (1 - edefense / 10) * hit * (skill.damage || 1))
+								let finalHit = Math.round(draft * (1 - edefense / 10) * hit * (skill.damage || 1))
 								if (hit == 1) logging.push(`hit ${e.name} for ⚔️${finalHit}`)
 								else if (hit == 1.6) logging.push(`hit ${e.name} for a CRITICAL ⚔️${finalHit}!`)
 								else logging[0] = logging[0].replace('+ ', '') + ' and missed'
@@ -267,7 +268,7 @@ module.exports = {
 							setTimeout(async () => {
 								let hit = await hitMissCrit(eaccuracy, ecritical, estatus)
 								let draft = eattack + await debuffs(estatus, eattack, pstatus, logging)
-								let finalHit = Math.round((draft + (draft * Math.random() * 0.05)) * hit * (skill.damage || 1))
+								let finalHit = Math.round(draft * hit * (skill.damage || 1))
 								finalHit -= Math.round(finalHit / (1.5 ** p.armor))
 								var chatIndex = chatLog.length - 1
 
@@ -296,7 +297,7 @@ module.exports = {
 
 						if (skill.attack || skill.damage) {
 							let draft = eattack + await debuffs(estatus, eattack, pstatus, false)
-							let finalHit = Math.round((draft + (draft * Math.random() * 0.05)) * hit * (skill.damage || 1))
+							let finalHit = Math.round(draft * hit * (skill.damage || 1))
 							finalHit -= Math.round(finalHit / (1.5 ** p.armor))
 							p.armor >= finalHit / 1.5 ? finalHit -= Math.round(finalHit / 1.5) : finalHit -= p.armor
 							if (hit == 1) logging.push(`hit ${p.name} for ⚔️${finalHit}`)
@@ -516,7 +517,7 @@ module.exports = {
 										p.inventory = inv.join('-')
 									} else p.inventory = `${assets.items.indexOf(item)}_1_${itemlvl}`
 
-									chatLog.push(`${p.name} collected ${item.name.match(/\A[^aeiouAEIOU]/) && !(item.attack || item.armor) ? 'an' : 'a'} ${(item.attack || item.armor) && itemlvl > 0 ? `Level ${itemlvl} ` : ''}${item.name}!`)
+									chatLog.push(`${e.name} dropped ${item.name.match(/\A[^aeiouAEIOU]/) && !(item.attack || item.armor) ? 'an' : 'a'} ${(item.attack || item.armor) && itemlvl > 0 ? `Level ${itemlvl} ` : ''}${item.name}!`)
 								} else {
 									chatLog.push(`Something went wrong trying to collect an item.`)
 								}
@@ -549,10 +550,163 @@ module.exports = {
 					const collectorFilter = i => i.user.id === interaction.user.id;
 					const confirmation = await m.awaitMessageComponent({ filter: collectorFilter });
 					if (confirmation.customId == "log") {
-						await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}Enemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
+						await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
 						let file = await new AttachmentBuilder('../logs.txt');
 						m.edit(await embed(0x2B2D31, file)).catch(() => { return })
+					} else if (confirmation.customId == "chest") {
+						let chestChoice = assets.chests[chest]
+						let keyRequired = assets.items.find(({ name }) => name == chestChoice.key)
+						let row4 = new ActionRowBuilder()
+							.addComponents(new ButtonBuilder()
+								.setCustomId(`Crack it Open!`)
+								.setLabel(`yes`)
+								.setStyle(ButtonStyle.Success))
+							.addComponents(new ButtonBuilder()
+								.setCustomId(`No Thanks`)
+								.setLabel(`no`)
+								.setStyle(ButtonStyle.Danger))
+
+						m.edit({
+							embeds: [
+								{
+									title: chestChoice.name,
+									thumbnail: keyRequired,
+									description: `You've found ${chestChoice.name.match(/\A[^aeiouAEIOU]/) ? 'an' : 'a'} ${chestChoice.name}! If you have its corresponding key, you can unlock it!`,
+									image: {
+										url: chestChoice.sprite
+									},
+									footer: {
+										text: `Note: The key required is the ${keyRequired.name}.`
+									}
+								}
+							],
+							components: [row4]
+						})
+
+						const chestComf = await m.awaitMessageComponent({ filter: collectorFilter });
+						if (chestComf.customId == 'yes') {
+							var hasKey = false
+							var finale = []
+							if (p.inventory) {
+								var inv = p.inventory.split('-')
+								// EACH ITEM FULL
+								for (i = 0; i < inv.length; i++) {
+									var invitem = inv[i].split('_')
+									// INDIVIDUAL ATTRIBUTES
+									var getitem = assets.items[invitem[0]]
+									if (getitem.name == item.name) {
+										invitem[1] = Number(invitem[1]) - 1
+										hasKey = true
+									}
+
+									if (Number(invitem[1]) > 0) finale.push(invitem.join('_'))
+								}
+
+								if (hasKey) {
+									await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${finale ? `|${finale.join('-')}` : ''}`)
+									async function drop() {
+										var item = undefined;
+										var droplvl = undefined
+										var randomTrack = 0;
+										for (let i = 0; i < chestChoice.drops.length; i++) {
+											randomTrack += chestChoice.drops[i].chance;
+											if (random <= randomTrack) {
+												item = chestChoice.drops[i]
+												break;
+											}
+										}
+										if (item) return item;
+										else return await drop();
+									}
+
+									var item;
+									while (!item) {
+										item = await drop()
+										if (item) item = assets.items.find(({ name }) => name == item.name)
+										if (item) droplvl = (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl) || 0
+									}
+
+									var inv = await p.inventory.split('-')
+									var updated = false;
+									for (a = 0; a < inv.length; a++) {
+										let iter = inv[a].split('_')
+										if (Number(iter[0]) == assets.items.indexOf(item) && Number(iter[0]) == droplvl) {
+											iter[1] = Number(iter[1]) + 1
+											inv[a] = iter.join('_')
+											updated = true;
+											break;
+										}
+									}
+
+									if (!updated) inv.push(`${assets.items.indexOf(item)}_1_${droplvl}`)
+									p.inventory = inv.join('-')
+									await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
+									chatLog.push(`${p.name} opened the ${chestChoice.name}\nCollected: ${droplvl > 0 ? `Level ${droplvl} ` : ''}${item.name}`)
+									m.edit({
+										title: `${chestChoice.name} Opened!`,
+										description: `The chest has been opened and you have collected...`,
+										fields: [
+											{
+												name: `${item.emoji ? `${item.emoji} `: ''}**${item.name}** - ${itemm[1]}`,
+												value: (`${Number(item[2]) > 0 ? `Level ${droplvl}\n` : ''}${item.attack ? 'Weapon' : (item.armor ? 'Armor' : '')}${item.name.includes('Potion') ? 'Consumable' : ''}${item.chest ? 'Chest Key' : ''}${(item.battle ? '\nBattle Item' : (!item.name.includes('Potion') && !item.attack && !item.armor && !item.chest ? 'Reagent' : ''))}`).trim()
+											}
+										],
+										footer: {
+											text: `Changing back to battle view...`
+										}
+									}).catch(() => {return})
+
+									setTimeout(async () => {
+										m.edit(await embed(0x2B2D31, null)).catch(() => { return })
+
+										const collectorFilter = i => i.user.id === interaction.user.id;
+										const confirmation = await m.awaitMessageComponent({ filter: collectorFilter }).catch(() => {return});
+										if (confirmation.customId == "log") {
+											await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
+											let file = await new AttachmentBuilder('../logs.txt');
+											m.edit(await embed(0x2B2D31, file)).catch(() => { return })
+										}
+									}, 10000)
+									
+								} else {
+									m.edit({
+										embeds: [
+											{
+												title: `You don't own that key...`,
+												description: `Sorry, but you don't own the key required to unlock the chest.`,
+												footer: {
+													text: `Changing back to battle view...`
+												}
+											}
+										]
+									})
+									
+									setTimeout(async () => {
+										m.edit(await embed(0x2B2D31, null)).catch(() => { return })
+
+										const collectorFilter = i => i.user.id === interaction.user.id;
+										const confirmation = await m.awaitMessageComponent({ filter: collectorFilter }).catch(() => {return});
+										if (confirmation.customId == "log") {
+											await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
+											let file = await new AttachmentBuilder('../logs.txt');
+											m.edit(await embed(0x2B2D31, file)).catch(() => { return })
+										}
+									}, 5000)
+								}
+							}
+						} else {
+							m.edit(await embed(0x2B2D31, null)).catch(() => { return })
+
+							const collectorFilter = i => i.user.id === interaction.user.id;
+							const confirmation = await m.awaitMessageComponent({ filter: collectorFilter });
+							if (confirmation.customId == "log") {
+								await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
+								let file = await new AttachmentBuilder('../logs.txt');
+								m.edit(await embed(0x2B2D31, file)).catch(() => { return })
+							}
+						}
 					}
+
 					return;
 				}
 
@@ -708,11 +862,51 @@ module.exports = {
 						inline: true
 					},
 				]
+
+				if (chest < 0) {
+					var counter = 0
+					var randNum = Math.random()
+					choiceArea.chests.forEach(async chestc => {
+						counter += chestc.chance
+						if (randNum < counter) {
+							chest = chestc.chest
+							row3.addComponents(new ButtonBuilder()
+								.setCustomId(`chest`)
+								.setLabel(`Chest?`)
+								.setStyle(ButtonStyle.Success))
+						} else if (chestc.keyChance) {
+							counter += chestc.keyChance
+							if (randNum < counter) {
+								const item = assets.items.find(({ name }) => name == chestc.key)
+								if (p.inventory) {
+									var inv = await p.inventory.split('-')
+									var updated = false;
+									for (a = 0; a < inv.length; a++) {
+										let iter = inv[a].split('_')
+										if (Number(iter[0]) == assets.items.indexOf(item)) {
+											iter[1] = Number(iter[1]) + 1
+											inv[a] = iter.join('_')
+											updated = true;
+											break;
+										}
+									}
+
+									if (!updated) inv.push(`${assets.items.indexOf(item)}_1_0`)
+									p.inventory = inv.join('-')
+								} else p.inventory = `${assets.items.indexOf(item)}_1_0`
+								await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
+								chatLog.push(`${p.name} found ${item.name.match(/\A[^aeiouAEIOU]/) && !(item.attack || item.armor) ? 'an' : 'a'} ${item.name}`)
+							}
+						}
+					})
+				}
+
 				file ? false : embed.embeds[0].color = 0x000000
 				file ? false : embed.embeds[0].footer.text = `${p.name}\n🪷 ${p.xp}/${Math.round((p.level / 0.07) ** 2)}`
 				embed.components = file ? [] : [row3]
 				embed.files = file ? [file] : []
 			}
+
 			return embed;
 		}
 

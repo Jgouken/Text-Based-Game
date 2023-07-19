@@ -368,7 +368,7 @@ module.exports = {
 		},
 		{
 			name: `Armorer Goblin`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://cdn.discordapp.com/attachments/1116445708279615641/1130915179828367360/armorer_goblin.gif',
 			weapon: "Spear & Shield",
 			maxHealth: 100 * mult,
 			attack: 20,
@@ -496,7 +496,7 @@ module.exports = {
 		},
 		{
 			name: `Orc`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1130919848256491520/orc.gif',
 			weapon: "Orc Club",
 			accuracy: 0.8,
 			critical: 0.1,
@@ -575,7 +575,7 @@ module.exports = {
 		},
 		{
 			name: `Health Slime`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1130928441622012005/Health_Slime.gif?width=671&height=671',
 			weapon: null,
 			accuracy: 1,
 			critical: 0.1,
@@ -634,7 +634,7 @@ module.exports = {
 		},
 		{
 			name: `Attack Slime`,
-			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1127663131330617445/image.gif',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1130925994115608797/Attack_Slime.gif',
 			weapon: null,
 			accuracy: 0.75,
 			critical: 0.07,
@@ -695,7 +695,7 @@ module.exports = {
 		},
 		{
 			name: `Defense Slime`,
-			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1116446666917158932/New_Piskel_2_1.gif',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1130931422882955345/Defense_Slime.gif',
 			weapon: null,
 			maxHealth: 50 * mult,
 			attack: 20,
@@ -756,7 +756,7 @@ module.exports = {
 		},
 		{
 			name: `Stamina Slime`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1130933661861154876/Stamina_Slime.gif',
 			weapon: null,
 			accuracy: 0.8,
 			critical: 0.05,
@@ -927,7 +927,7 @@ module.exports = {
 					wait: 3
 				},
 				{
-					name: "Swift Movement",
+					name: "Swift Movement", 
 					estatus: ["🎯", "💨"],
 					wait: 3,
 					chance: 0.1,
@@ -1792,16 +1792,16 @@ module.exports = {
 			],
 			chests: [
 				{
-					chest: 1,
+					chest: 0,
 					chance: 0.05,
 					keyChance: 0.02,
-					key: true
+					key: "Wooden Key"
 				},
 				{
-					chest: 2,
+					chest: 1,
 					chance: 0.03,
 					keyChance: 0.01,
-					key: true
+					key: "Iron Key"
 				},
 			]
 		},
@@ -1849,16 +1849,16 @@ module.exports = {
 			],
 			chests: [
 				{
-					chest: 1,
+					chest: 0,
 					chance: 0.05,
 					keyChance: 0.02,
-					key: true
+					key: "Wooden Key"
 				},
 				{
-					chest: 2,
+					chest: 1,
 					chance: 0.03,
 					keyChance: 0.01,
-					key: true
+					key: "Iron Key"
 				},
 			]
 		},
@@ -1910,16 +1910,16 @@ module.exports = {
 			],
 			chests: [
 				{
-					chest: 2,
+					chest: 1,
 					chance: 0.06,
 					keyChance: 0.01,
-					key: true
+					key: "Iron Key"
 				},
 				{
-					chest: 3,
+					chest: 2,
 					chance: 0.02,
 					keyChance: 0.01,
-					key: true
+					key: "Golden Key"
 				},
 			]
 		},
@@ -1967,16 +1967,16 @@ module.exports = {
 			],
 			chests: [
 				{
-					chest: 2,
+					chest: 1,
 					chance: 0.045,
 					keyChance: 0.01,
-					key: true
+					key: "Iron Key"
 				},
 				{
-					chest: 3,
+					chest: 2,
 					chance: 0.035,
 					keyChance: 0.01,
-					key: true
+					key: "Golden Key"
 				},
 			]
 		},
@@ -2024,16 +2024,16 @@ module.exports = {
 			],
 			chests: [
 				{
-					chest: 2,
+					chest: 1,
 					chance: 0.03,
 					keyChance: 0.01,
-					key: true
+					key: "Iron Key"
 				},
 				{
-					chest: 3,
+					chest: 2,
 					chance: 0.035,
 					keyChance: 0.01,
-					key: true
+					key: "Golden Key"
 				},
 			]
 		},
@@ -2085,16 +2085,16 @@ module.exports = {
 			],
 			chests: [
 				{
-					chest: 2,
+					chest: 1,
 					chance: 0.03,
 					keyChance: 0.01,
-					key: true
+					key: "Iron Key"
 				},
 				{
-					chest: 3,
+					chest: 2,
 					chance: 0.05,
 					keyChance: 0.01,
-					key: true
+					key: "Golden Key"
 				},
 			]
 		},
@@ -2150,16 +2150,16 @@ module.exports = {
 			],
 			chests: [
 				{
+					chest: 2,
+					chance: 0.025,
+					keyChance: 0.025,
+					key: "Golden Key"
+				},
+				{
 					chest: 3,
 					chance: 0.025,
 					keyChance: 0.025,
-					key: true
-				},
-				{
-					chest: 4,
-					chance: 0.025,
-					keyChance: 0.025,
-					key: true
+					key: "Platinum Key"
 				},
 			]
 		},
@@ -2207,16 +2207,16 @@ module.exports = {
 			],
 			chests: [
 				{
-					chest: 3,
+					chest: 2,
 					chance: 0.03,
 					keyChance: 0.03,
-					key: true
+					key: "Golden Key"
 				},
 				{
-					chest: 4,
+					chest: 3,
 					chance: 0.02,
 					keyChance: 0.02,
-					key: true
+					key: "Platinum Key"
 				},
 			]
 		},
@@ -2264,16 +2264,16 @@ module.exports = {
 			],
 			chests: [
 				{
-					chest: 4,
+					chest: 3,
 					chance: 0.05,
 					keyChance: 0.03,
-					key: true
+					key: "Platinum Key"
 				},
 				{
-					chest: 5,
+					chest: 4,
 					chance: 0.01,
 					keyChance: 0.02,
-					key: true
+					key: "Adamantine Key"
 				},
 			]
 		},
@@ -2309,16 +2309,16 @@ module.exports = {
 			],
 			chests: [
 				{
-					chest: 4,
+					chest: 3,
 					chance: 0.03,
 					keyChance: 0.02,
-					key: true
+					key: "Platinum Key"
 				},
 				{
-					chest: 5,
+					chest: 4,
 					chance: 0.03,
 					keyChance: 0.01,
-					key: true
+					key: "Adamantine Key"
 				},
 			]
 		},
@@ -2331,7 +2331,7 @@ module.exports = {
 			maxlvl: 1,
 			minlvl: 1,
 			description: `The enemies can catch these hands.`,
-			attack: 0,
+			attack: 1,
 			plvlmult: 0,
 			crit: 0,
 			skills: [
@@ -4197,31 +4197,31 @@ module.exports = {
 			name: "Wooden Key",
 			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1130288425271046226/Wooden_Key.gif",
 			emoji: '<a:wooden_key:1130297739087986738>',
-			chest: 1
+			chest: 0
 		},
 		{
 			name: "Iron Key",
 			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1130290916410798081/Iron_Key.gif",
 			emoji: '<a:iron_key:1130297737250881606>',
-			chest: 2
+			chest: 1
 		},
 		{
 			name: "Golden Key",
 			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1130297628266082395/Golden_Key.gif",
 			emoji: '<a:golden_key:1130297740367249440>',
-			chest: 3
+			chest: 2
 		},
 		{
 			name: "Platinum Key",
 			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1130306154476617768/Platinum_Key.gif",
 			emoji: '<a:platinum_key:1130306302355185695>',
-			chest: 4
+			chest: 3
 		},
 		{
 			name: "Adamantine Key",
 			sprite: "https://media.discordapp.net/attachments/1116445708279615641/1130319559363154030/Adamantine_Key.gif",
 			emoji: '<a:adamantine_key:1130319612790198373>',
-			chest: 5
+			chest: 4
 		},
 
 		// Craftables
@@ -4618,7 +4618,6 @@ module.exports = {
 					chance: 0.03
 				},
 			]
-			
 		},
 		{
 			name: "Golden Chest",
@@ -4779,7 +4778,6 @@ module.exports = {
 					chance: 0.01
 				},
 			]
-			
 		},
 		{
 			name: "Platinum Chest",
