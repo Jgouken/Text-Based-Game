@@ -300,7 +300,7 @@ module.exports = {
                 ephemeral: true 
             })
         } else if (area) {
-            if (interaction.options.getString('area').toLocaleLowerCase().replace(/[ ]/g, '') == "eternaldamnation") return interaction.reply({
+            if (interaction.options.getString('thing').toLocaleLowerCase().replace(/[ ]/g, '') == "eternaldamnation") return interaction.reply({
                 embeds: [
                     {
                         title: "Eternal Damnation",
@@ -342,7 +342,7 @@ module.exports = {
         } else if (enemy) {
             const enemylvl = interaction.options.getInteger('level')
 
-            if (!enemy) return interaction.reply({ content: `Hm, I can't seem to find an enemy by the name of "${interaction.options.getString('enemy')}." Make sure you spelled it correctly!`, ephemeral: true })
+            if (!enemy) return interaction.reply({ content: `Hm, I can't seem to find an enemy by the name of "${interaction.options.getString('thing')}." Make sure you spelled it correctly!`, ephemeral: true })
 
             let fields = [
                 {

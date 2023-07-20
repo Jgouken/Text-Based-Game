@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const assets = require('./assets.js');
+const inventory = require('./inventory.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,10 +13,27 @@ module.exports = {
                 .addIntegerOption(option =>
                     option.setName('level')
                         .setDescription('Choose a level to set it as.')
-                        .setMaxValue(50)
+                        .setMaxValue(100)
                         .setMinValue(1)
                         .setRequired(true)
                 )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('xp')
+                .setDescription(`Set your player level.`)
+                .addIntegerOption(option =>
+                    option.setName('xp')
+                        .setDescription('Add an amount of xp to yourself.')
+                        .setMaxValue(99999999)
+                        .setMinValue(1)
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('refill')
+                .setDescription(`Refill your health and stamina.`)
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -150,12 +168,102 @@ module.exports = {
                 p.maxStamina = Math.round(50 + (5 * (p.level - 1)))
                 p.baseAttack = Math.round(30 + (6 * (p.level - 1)))
                 p.baseArmor = Math.round(10 + (10 * (p.level - 1)))
+                p.health = p.maxHealth
+                p.stamina = p.maxStamina
 
                 if (p.health > p.maxHealth) p.health = p.maxHealth
                 if (p.stamina > p.maxStamina) p.stamina = p.maxStamina
 
                 await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
                 interaction.reply({ content: `Your level has been set to level ${p.level}.`, ephemeral: true })
+                break;
+            }
+
+            case 'xp': {
+                let player = (await db.get(`player_${interaction.user.id}`)).split('|')
+                let rawWeapon = player[9].split('_')
+                let rawArmor = player[10].split('_')
+                let weapon = assets.items[Number(rawWeapon[0])]
+                let armor = assets.items[Number(rawArmor[0])]
+                let level = Number(player[0])
+                var p = {
+                    level: level,
+
+                    maxHealth: Math.round(Number(player[1])),
+                    health: Math.round(Number(player[2])),
+
+                    maxStamina: Math.round(Number(player[5])),
+                    stamina: Math.round(Number(player[6])),
+
+                    baseAttack: Number(player[3]),
+                    baseArmor: Number(player[4]),
+
+                    accuracy: Number(player[7]),
+                    xp: Number(player[8]),
+                    critical: weapon.crit,
+                    evasion: armor.evasion,
+
+                    inventory: player[12],
+                }
+
+                p.xp += Number(interaction.options.getInteger('xp'))
+                while (p.xp >= Math.round((p.level / 0.07) ** 2)) {
+                    p.xp -= Math.round((p.level / 0.07) ** 2)
+                    p.level += 1
+                    p.maxHealth = Math.round(Number(player[1]) + (50 * (p.level - 1)))
+                    p.health = p.maxHealth
+                    p.maxStamina = Math.round(Number(player[5]) + (5 * (p.level - 1)))
+                    p.stamina = p.maxStamina
+                    p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
+                    p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
+                }
+
+                await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
+                interaction.reply({ content: `You have gained ${Number(interaction.options.getInteger('xp'))} and are level ${p.level}.`, ephemeral: true })
+                break;
+            }
+
+            case 'refill': {
+                let player = (await db.get(`player_${interaction.user.id}`)).split('|')
+                let rawWeapon = player[9].split('_')
+                let rawArmor = player[10].split('_')
+                let weapon = assets.items[Number(rawWeapon[0])]
+                let armor = assets.items[Number(rawArmor[0])]
+                let level = Number(player[0])
+                var p = {
+                    level: level,
+
+                    maxHealth: Math.round(Number(player[1])),
+                    health: Math.round(Number(player[2])),
+
+                    maxStamina: Math.round(Number(player[5])),
+                    stamina: Math.round(Number(player[6])),
+
+                    baseAttack: Number(player[3]),
+                    baseArmor: Number(player[4]),
+
+                    accuracy: Number(player[7]),
+                    xp: Number(player[8]),
+                    critical: weapon.crit,
+                    evasion: armor.evasion,
+
+                    inventory: player[12],
+                }
+
+                p.xp += Number(interaction.options.getInteger('xp'))
+                while (p.xp >= Math.round((p.level / 0.07) ** 2)) {
+                    p.xp -= Math.round((p.level / 0.07) ** 2)
+                    p.level += 1
+                    p.maxHealth = Math.round(Number(player[1]) + (50 * (p.level - 1)))
+                    p.health = p.maxHealth
+                    p.maxStamina = Math.round(Number(player[5]) + (5 * (p.level - 1)))
+                    p.stamina = p.maxStamina
+                    p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
+                    p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
+                }
+
+                await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
+                interaction.reply({ content: `You have gained ${Number(interaction.options.getInteger('xp'))} and are level ${p.level}.`, ephemeral: true })
                 break;
             }
 
@@ -184,26 +292,10 @@ module.exports = {
             }
 
             case 'item': {
-                let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(' ', '') == interaction.options.getString('item').toLowerCase().trim().replace(' ', ''))
-                if (!item) return interaction.reply({ content: `Sorry, but I can't seem to find the item by the name of "${interaction.options.getString('item')}." Ensure you've spelled it correctly!`, ephemeral: true})
-                var player = await db.get(`player_${interaction.user.id}`)
-                var changed = false
-                player = player.split('|')
-                if (player[12]) player[12] = (player[12]).split('-')
-                else player[12] = []
-                for (i = 0; i < player[12].length; i++) {
-                    if (player[12][i].startsWith(`${assets.items.indexOf(item)}_`) && player[12][i].endsWith(`_${item.maxlvl || item.minlvl || 0}`)) {
-                        player[12][i] = `${assets.items.indexOf(item)}_${Number(player[12][i].split('_')[1]) + 1}_${item.maxlvl || item.minlvl || 0}`
-                        changed = true;
-                        break;
-                    }
-                }
-
-                if (!changed) player[12].push(`${assets.items.indexOf(item)}_1_${item.maxlvl || item.minlvl || 0}`)
-                player[12] = player[12].join('-')
-
-                await db.set(`player_${interaction.user.id}`, player.join('|'))
-                interaction.reply({ content: `The item ${item.name} has been added to your inventory.`, ephemeral: true })
+                let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == interaction.options.getString('item').toLowerCase().trim().replace(/[ ]/, ''))
+                if (!item) return interaction.reply({ content: `Hm, I can't seem to add an item called "${interaction.options.getString('item')}". Ensure you've spelled everything correctly!`, ephemeral: true})
+                await inventory.player.add(interaction.user.id, item.name)
+                interaction.reply({ content: `Added the item ${item.name} into your inventory!`, ephemeral: true })
                 break;
             }
         }

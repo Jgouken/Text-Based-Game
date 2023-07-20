@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { db } = require('../config/config.js')
 const assets = require('./assets.js');
 
 module.exports = {
@@ -200,5 +201,78 @@ module.exports = {
 
             interaction.reply({ embeds: [embed] })
         }
-    }
+    },
+
+    player: {
+		add: async function (userid, itemName, level) {
+			let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
+			var player = await db.get(`player_${userid}`)
+
+			if (!item) return console.error(`"${itemName}" does not exist`);
+			if (!player) return console.error(`Player ID "${userid}" does not exist`);
+			var changed = false
+
+			player = player.split('|')
+			if (player[12]) player[12] = (player[12]).split('-')
+			else player[12] = []
+			for (i = 0; i < player[12].length; i++) {
+				if (player[12][i].startsWith(`${assets.items.indexOf(item)}_`) && player[12][i].endsWith(`_${level || item.maxlvl || item.minlvl || 0}`)) {
+					player[12][i] = `${assets.items.indexOf(item)}_${Number(player[12][i].split('_')[1]) + 1}_${level || item.maxlvl || item.minlvl || 0}`
+					changed = true;
+					break;
+				}
+			}
+
+			if (!changed) player[12].push(`${assets.items.indexOf(item)}_1_${level || item.maxlvl || item.minlvl || 0}`)
+			player[12] = player[12].join('-')
+			await db.set(`player_${userid}`, player.join('|'))
+			return true;
+		},
+
+		remove: async function (userid, itemName, level) {
+			let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
+			var player = await db.get(`player_${userid}`)
+
+			if (!item) return console.error(`"${itemName}" does not exist`);
+			if (!player) return console.error(`Player ID "${userid}" does not exist`);
+			var final = []
+
+			player = player.split('|')
+			if (player[12]) player[12] = (player[12]).split('-')
+			else player[12] = []
+			for (i = 0; i < player[12].length; i++) {
+				if (player[12][i].startsWith(`${assets.items.indexOf(item)}_`) && player[12][i].endsWith(`_${level || 0}`)) {
+					if (Number(player[12][i].split('_')[1]) > 1) final.push(`${assets.items.indexOf(item)}_${Number(player[12][i].split('_')[1]) - 1}_${level || 0}`)
+				} else {
+					final.push(player[12][i])
+				}
+			}
+
+			player[12] = final.join('-')
+			await db.set(`player_${userid}`, player.join('|'))
+			return true;
+		},
+
+		search: async function (userid, itemName, level) {
+			let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
+			var player = await db.get(`player_${userid}`)
+
+			if (!item) return console.error(`"${itemName}" does not exist`);
+			if (!player) return console.error(`Player ID "${userid}" does not exist`);
+			var hasItem = false
+
+			player = player.split('|')
+			if (player[12]) player[12] = (player[12]).split('-')
+			else player[12] = []
+			for (i = 0; i < player[12].length; i++) {
+				let minii = player[12][i].split('_')
+				if (Number(minii[0]) == assets.items.indexOf(item) && (Number(minii[2]) == (level || 0))) {
+                    hasItem = minii
+                    break;
+                }
+			}
+
+			return hasItem;
+		},
+	}
 }

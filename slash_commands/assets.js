@@ -368,7 +368,7 @@ module.exports = {
 		},
 		{
 			name: `Armorer Goblin`,
-			sprite: 'https://cdn.discordapp.com/attachments/1116445708279615641/1130915179828367360/armorer_goblin.gif',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1131295696910303342/image_3.gif',
 			weapon: "Spear & Shield",
 			maxHealth: 100 * mult,
 			attack: 20,
@@ -496,7 +496,7 @@ module.exports = {
 		},
 		{
 			name: `Orc`,
-			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1130919848256491520/orc.gif',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1131306751464067102/New_Piskel_5_1.gif',
 			weapon: "Orc Club",
 			accuracy: 0.8,
 			critical: 0.1,
@@ -927,7 +927,7 @@ module.exports = {
 					wait: 3
 				},
 				{
-					name: "Swift Movement", 
+					name: "Swift Movement",
 					estatus: ["🎯", "💨"],
 					wait: 3,
 					chance: 0.1,
@@ -2930,7 +2930,7 @@ module.exports = {
 		},
 		{
 			name: "Chainsaw",
-			maxlvl: 50,
+			maxlvl: 40,
 			minlvl: 26,
 			description: `A heavy-duty cutting tool with teeth set on a chain which moves around the edge of a blade.`,
 			attack: 10,
@@ -4385,7 +4385,7 @@ module.exports = {
 			uses: ["Whetstone & Polish"]
 		}
 	],
-	
+
 	chests: [
 		{
 			name: "Wooden Chest",
@@ -5139,5 +5139,5 @@ module.exports = {
 				},
 			]
 		},
-	]
+	],
 }

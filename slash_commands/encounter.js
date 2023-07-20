@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
 const assets = require('./assets.js');
+const inventory = require('./inventory.js');
 const fs = require('fs')
 
 module.exports = {
@@ -112,6 +113,7 @@ module.exports = {
 		var eLog = []
 		var timer = 750
 		var ended = false
+		var chestGotten = false
 		var chest = -1
 
 		const row = new ActionRowBuilder()
@@ -174,7 +176,7 @@ module.exports = {
 						p.stamina += Math.round(5 + ((p.level - 1) / 5)) > p.maxStamina ? p.maxStamina - p.stamina : Math.round(5 + ((p.level - 1) / 5))
 						if (p.stamina > p.maxStamina) p.stamina = p.maxStamina
 						chatLog.push(`${interaction.user.username} passed\nGained +${Math.round(5 + ((p.level - 1) / 5)) > p.maxStamina ? p.maxStamina - p.stamina : Math.round(5 + ((p.level - 1) / 5))}⚡`)
-						await confirmation.update(await embed(0xff0000, null)).catch(async () => { m.edit(await embed(0xff0000, null)).catch(() => { return }) })
+						await confirmation.update(await embed(0xff0000, null)).catch(async () => { m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) }) })
 						setTimeout(async () => {
 							contin(e)
 						}, 500)
@@ -182,7 +184,7 @@ module.exports = {
 						p.stamina += Math.round(5 + ((p.level - 1) / 5)) > p.maxStamina ? p.maxStamina - p.stamina : Math.round(5 + ((p.level - 1) / 5))
 						if (p.stamina > p.maxStamina) p.stamina = p.maxStamina
 						chatLog.push(`${interaction.user.username} passed\nUsing items during battles is not available yet.\nGained +${Math.round(5 + ((p.level - 1) / 5)) > p.maxStamina ? p.maxStamina - p.stamina : Math.round(5 + ((p.level - 1) / 5))}⚡`)
-						await confirmation.update(await embed(0xff0000, null)).catch(async () => { m.edit(await embed(0xff0000, null)).catch(() => { return }) })
+						await confirmation.update(await embed(0xff0000, null)).catch(async () => { m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) }) })
 						setTimeout(async () => {
 							contin(e)
 						}, 500)
@@ -196,7 +198,7 @@ module.exports = {
 						if (skill.times && hit > 0) {
 							chatLog.push(logging)
 							logging[0] = `+ ${p.name} used ${skill.name} and hit ${e.name} for `
-							m.edit(await embed(0xff0000, null)).catch(() => { return })
+							m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) })
 							for (i = 0; i < skill.times; i++) {
 								setTimeout(async () => {
 									let draft = p.attack + await debuffs(pstatus, p.attack, estatus, logging)
@@ -210,7 +212,7 @@ module.exports = {
 
 									logging = logging.filter((str) => str !== '')
 									chatLog[chatIndex] = logging[0] + logging.slice(1).join(', ') + `${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}`
-									m.edit(await embed(0xff0000, null)).catch(() => { return })
+									m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) })
 									if (i < skill.times - 1) chatLog[chatIndex] = String(chatLog[chatIndex]).replace(/(?<=\n).*/g, '')
 								}, 500 * i)
 							}
@@ -239,19 +241,18 @@ module.exports = {
 							(skill.pstatus || skill.estatus) && hit > 0 ? logging[logging.length - 1] = logging[logging.length - 1] + `${skill.estatus ? `\nInflicted: ${skill.estatus.join('')}` : ''}${skill.pstatus ? `\nGained: ${skill.pstatus.join('')}` : ''}` : false
 							chatLog.push(logging.join(' and '))
 							setTimeout(async () => {
-								m.edit(await embed(0xff0000, null)).catch(() => { return })
+								m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) })
 							}, 500)
 						}
 
-						await confirmation.update(await embed(0xff0000, null)).catch(async () => { m.edit(await embed(0xff0000, null)).catch(() => { return }) })
+						await confirmation.update(await embed(0xff0000, null)).catch(async () => { m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) }) })
 
 						setTimeout(async () => {
 							contin(e)
 						}, timer * i)
 					}
 
-				}
-				catch (error) { console.error(error) }
+				} catch (error) { console.error(error) }
 			}
 
 			async function ebattle() {
@@ -263,7 +264,7 @@ module.exports = {
 					if (skill.times && hit > 0) {
 						chatLog.push(logging)
 						logging[0] = `- ${e.name} used ${skill.name} and hit ${p.name} for `
-						m.edit(await embed(0xff0000, null)).catch(() => { return })
+						m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) })
 						for (i = 0; i < skill.times; i++) {
 							setTimeout(async () => {
 								let hit = await hitMissCrit(eaccuracy, ecritical, estatus)
@@ -280,7 +281,7 @@ module.exports = {
 
 								logging = logging.filter((str) => str !== '')
 								chatLog[chatIndex] = logging[0] + logging.slice(1).join(', ') + `${skill.pstatus ? `\nInflicted: ${skill.pstatus.join('')}` : ''}${skill.estatus ? `\nGained: ${skill.estatus.join('')}` : ''}`
-								m.edit(await embed(0xff0000, null)).catch(() => { return })
+								m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) })
 								if (i < skill.times - 1) chatLog[chatIndex] = String(chatLog[chatIndex]).replace(/(?<=\n).*/g, '')
 							}, 500 * i)
 						}
@@ -311,7 +312,7 @@ module.exports = {
 						(skill.pstatus || skill.estatus) && hit > 0 ? logging[logging.length - 1] = logging[logging.length - 1] + `${skill.pstatus ? `\nInflicted: ${skill.pstatus.join('')}` : ''}${skill.estatus ? `\nGained: ${skill.estatus.join('')}` : ''}` : false
 						chatLog.push(logging.join(' and '))
 						setTimeout(async () => {
-							m.edit(await embed(0xff0000, null)).catch(() => { return })
+							m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) })
 						}, 500)
 					}
 
@@ -380,7 +381,7 @@ module.exports = {
 								}
 							}
 						}
-						m.edit(embed(0xff0000, null)).catch(() => { return })
+						m.edit(embed(0xff0000, null)).catch(error => { console.log(error) })
 						break;
 					}
 				}
@@ -437,7 +438,7 @@ module.exports = {
 						}
 					}
 				}
-				m.edit(embed(0xff0000, null)).catch(() => { return })
+				m.edit(embed(0xff0000, null)).catch(error => { console.log(error) })
 				return true;
 			}
 
@@ -456,7 +457,7 @@ module.exports = {
 						} else bt.setDisabled(boolean)
 					}
 				})
-				return await m.edit(await embed(ended ? 0x2B2D31 : 0x00ff00)).catch(() => { return });
+				return await m.edit(await embed(ended ? 0x2B2D31 : 0x00ff00)).catch(error => { console.log(error) })
 			}
 
 			async function contin(turn) {
@@ -498,25 +499,7 @@ module.exports = {
 								item = assets.items.find(({ name }) => name == item.name)
 
 								if (item) {
-									if (item.attack || item.armor) itemlvl = (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl) || 0
-
-									if (p.inventory) {
-										var inv = await p.inventory.split('-')
-										var updated = false;
-										for (a = 0; a < inv.length; a++) {
-											let iter = inv[a].split('_')
-											if (Number(iter[0]) == assets.items.indexOf(item) && Number(iter[2]) == itemlvl) {
-												iter[1] = Number(iter[1]) + 1
-												inv[a] = iter.join('_')
-												updated = true;
-												break;
-											}
-										}
-
-										if (!updated) inv.push(`${assets.items.indexOf(item)}_1_${itemlvl}`)
-										p.inventory = inv.join('-')
-									} else p.inventory = `${assets.items.indexOf(item)}_1_${itemlvl}`
-
+									inventory.player.add(interaction.user.id, item.name, (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl) || 0)
 									chatLog.push(`${e.name} dropped ${item.name.match(/\A[^aeiouAEIOU]/) && !(item.attack || item.armor) ? 'an' : 'a'} ${(item.attack || item.armor) && itemlvl > 0 ? `Level ${itemlvl} ` : ''}${item.name}!`)
 								} else {
 									chatLog.push(`Something went wrong trying to collect an item.`)
@@ -524,89 +507,64 @@ module.exports = {
 							}
 						}
 
-						for (o = 0; o < exp; o) {
-							if (exp >= (Math.round((p.level / 0.07) ** 2) - p.xp)) {
-								p.level += 1
-								chatLog.push(`⬆️ ${p.name} leveled up to level ${p.level}! ⬆️`)
-								p.maxHealth = Math.round(Number(player[1]) + (50 * (p.level - 1)))
-								p.health = p.health + (50 * (p.level - 1))
-								p.maxStamina = Math.round(Number(player[5]) + (5 * (p.level - 1)))
-								p.stamina = p.stamina + (5 * (p.level - 1))
-								p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
-								p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
-								exp -= (Math.round((p.level / 0.07) ** 2) - p.xp)
-								p.xp = 0
-							} else {
-								p.xp += exp
-								exp -= exp
-							}
+						p.xp += exp
+						while (p.xp >= Math.round((p.level / 0.07) ** 2)) {
+							p.xp -= Math.round((p.level / 0.07) ** 2)
+							p.level += 1
+							p.maxHealth = Math.round(Number(player[1]) + (50 * (p.level - 1)))
+							p.health = p.maxHealth
+							p.maxStamina = Math.round(Number(player[5]) + (5 * (p.level - 1)))
+							p.stamina = p.maxStamina
+							p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
+							p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
+							chatLog.push(`⬆️ ${p.name} leveled up to level ${p.level}! ⬆️`)
 						}
 
 						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
-					}
+						m.edit(await embed(0x2B2D31, null)).catch(error => { console.log(error) })
 
-					m.edit(await embed(0x2B2D31, null)).catch(() => { return })
+						const collectorFilter = i => i.user.id === interaction.user.id;
+						const confirmation = await m.awaitMessageComponent({ filter: collectorFilter });
+						if (confirmation.customId == "log") {
+							await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
+							let file = await new AttachmentBuilder('../logs.txt');
+							confirmation.update(await embed(0x2B2D31, file)).catch(async () => { m.edit(await embed(0x2B2D31, file)).catch(error => { console.log(error) }) })
+						} else if (confirmation.customId == "chest") {
+							let chestChoice = assets.chests[chest]
+							let keyRequired = assets.items.find(({ name }) => name == chestChoice.key)
+							let row4 = new ActionRowBuilder()
+								.addComponents(new ButtonBuilder()
+									.setCustomId(`open`)
+									.setLabel(`Crack it Open!`)
+									.setStyle(ButtonStyle.Success))
+								.addComponents(new ButtonBuilder()
+									.setCustomId(`nothx`)
+									.setLabel(`No Thanks`)
+									.setStyle(ButtonStyle.Danger))
 
-					const collectorFilter = i => i.user.id === interaction.user.id;
-					const confirmation = await m.awaitMessageComponent({ filter: collectorFilter });
-					if (confirmation.customId == "log") {
-						await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
-						let file = await new AttachmentBuilder('../logs.txt');
-						m.edit(await embed(0x2B2D31, file)).catch(() => { return })
-					} else if (confirmation.customId == "chest") {
-						let chestChoice = assets.chests[chest]
-						let keyRequired = assets.items.find(({ name }) => name == chestChoice.key)
-						let row4 = new ActionRowBuilder()
-							.addComponents(new ButtonBuilder()
-								.setCustomId(`Crack it Open!`)
-								.setLabel(`yes`)
-								.setStyle(ButtonStyle.Success))
-							.addComponents(new ButtonBuilder()
-								.setCustomId(`No Thanks`)
-								.setLabel(`no`)
-								.setStyle(ButtonStyle.Danger))
-
-						m.edit({
-							embeds: [
-								{
-									title: chestChoice.name,
-									thumbnail: keyRequired,
-									description: `You've found ${chestChoice.name.match(/\A[^aeiouAEIOU]/) ? 'an' : 'a'} ${chestChoice.name}! If you have its corresponding key, you can unlock it!`,
-									image: {
-										url: chestChoice.sprite
-									},
-									footer: {
-										text: `Note: The key required is the ${keyRequired.name}.`
+							confirmation.update({
+								embeds: [
+									{
+										title: chestChoice.name,
+										thumbnail: keyRequired,
+										description: `You've found ${chestChoice.name.match(/\A[^aeiouAEIOU]/) ? 'an' : 'a'} ${chestChoice.name}! If you have its corresponding key, you can unlock it!`,
+										image: {
+											url: chestChoice.sprite
+										},
+										footer: {
+											text: `Note: The key required is the ${keyRequired.name}.`
+										}
 									}
-								}
-							],
-							components: [row4]
-						})
+								],
+								components: [row4]
+							}).catch(() => { return })
 
-						const chestComf = await m.awaitMessageComponent({ filter: collectorFilter });
-						if (chestComf.customId == 'yes') {
-							var hasKey = false
-							var finale = []
-							if (p.inventory) {
-								var inv = p.inventory.split('-')
-								// EACH ITEM FULL
-								for (i = 0; i < inv.length; i++) {
-									var invitem = inv[i].split('_')
-									// INDIVIDUAL ATTRIBUTES
-									var getitem = assets.items[invitem[0]]
-									if (getitem.name == item.name) {
-										invitem[1] = Number(invitem[1]) - 1
-										hasKey = true
-									}
-
-									if (Number(invitem[1]) > 0) finale.push(invitem.join('_'))
-								}
-
-								if (hasKey) {
-									await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${finale ? `|${finale.join('-')}` : ''}`)
+							const chestComf = await m.awaitMessageComponent({ filter: collectorFilter });
+							chestGotten = true
+							if (chestComf.customId == 'open') {
+								if (await inventory.player.search(interaction.user.id, chestChoice.key)) {
 									async function drop() {
 										var item = undefined;
-										var droplvl = undefined
 										var randomTrack = 0;
 										for (let i = 0; i < chestChoice.drops.length; i++) {
 											randomTrack += chestChoice.drops[i].chance;
@@ -619,92 +577,94 @@ module.exports = {
 										else return await drop();
 									}
 
-									var item;
-									while (!item) {
-										item = await drop()
-										if (item) item = assets.items.find(({ name }) => name == item.name)
-										if (item) droplvl = (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl) || 0
+									var item2;
+									var droplvl = undefined
+									while (!item2 || !item2.name) {
+										item2 = await drop()
+										if (item2) item2 = assets.items.find(({ name }) => name == item2.name)
+										if (item2) droplvl = (item2.maxlvl ? Math.floor(Math.random() * (item2.maxlvl - item2.minlvl) - item2.minlvl) : item2.minlvl) || 0
 									}
 
-									var inv = await p.inventory.split('-')
-									var updated = false;
-									for (a = 0; a < inv.length; a++) {
-										let iter = inv[a].split('_')
-										if (Number(iter[0]) == assets.items.indexOf(item) && Number(iter[0]) == droplvl) {
-											iter[1] = Number(iter[1]) + 1
-											inv[a] = iter.join('_')
-											updated = true;
-											break;
-										}
-									}
-
-									if (!updated) inv.push(`${assets.items.indexOf(item)}_1_${droplvl}`)
-									p.inventory = inv.join('-')
-									await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
-									chatLog.push(`${p.name} opened the ${chestChoice.name}\nCollected: ${droplvl > 0 ? `Level ${droplvl} ` : ''}${item.name}`)
-									m.edit({
-										title: `${chestChoice.name} Opened!`,
-										description: `The chest has been opened and you have collected...`,
-										fields: [
+									await inventory.player.add(interaction.user.id, item2.name, droplvl)
+									await inventory.player.remove(interaction.user.id, chestChoice.key)
+									chatLog.push(`${p.name} opened the ${chestChoice.name}\nCollected: ${droplvl > 0 ? `Level ${droplvl} ` : ''}${item2.name}`)
+									chestComf.update({
+										embeds: [
 											{
-												name: `${item.emoji ? `${item.emoji} `: ''}**${item.name}** - ${itemm[1]}`,
-												value: (`${Number(item[2]) > 0 ? `Level ${droplvl}\n` : ''}${item.attack ? 'Weapon' : (item.armor ? 'Armor' : '')}${item.name.includes('Potion') ? 'Consumable' : ''}${item.chest ? 'Chest Key' : ''}${(item.battle ? '\nBattle Item' : (!item.name.includes('Potion') && !item.attack && !item.armor && !item.chest ? 'Reagent' : ''))}`).trim()
+												title: `${chestChoice.name} Opened!`,
+												description: `The chest has been opened and you have collected...`,
+												fields: [
+													{
+														name: `${item2.emoji ? `${item2.emoji} ` : ''}**${item2.name}**`,
+														value: (`${droplvl > 0 ? `Level ${droplvl}\n` : ''}${item2.attack ? 'Weapon' : (item2.armor ? 'Armor' : '')}${item2.name.includes('Potion') ? 'Consumable' : ''}${item2.chest ? 'Chest Key' : ''}${(item2.battle ? '\nBattle Item' : (!item2.name.includes('Potion') && !item2.attack && !item2.armor && !item2.chest ? 'Reagent' : ''))}`).trim()
+													}
+												],
+												footer: {
+													text: `Changing back to battle view...`
+												}
 											}
 										],
-										footer: {
-											text: `Changing back to battle view...`
-										}
-									}).catch(() => {return})
+										components: []
+									}).catch(error => { console.log(error) })
 
 									setTimeout(async () => {
-										m.edit(await embed(0x2B2D31, null)).catch(() => { return })
-
+										m.edit(await embed(0x2B2D31, null)).catch(error => { console.log(error) })
 										const collectorFilter = i => i.user.id === interaction.user.id;
-										const confirmation = await m.awaitMessageComponent({ filter: collectorFilter }).catch(() => {return});
+										const confirmation = await m.awaitMessageComponent({ filter: collectorFilter }).catch(error => { console.log(error) })
 										if (confirmation.customId == "log") {
 											await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
 											let file = await new AttachmentBuilder('../logs.txt');
-											m.edit(await embed(0x2B2D31, file)).catch(() => { return })
+											confirmation.update(await embed(0x2B2D31, file)).catch(error => { console.log(error) })
 										}
 									}, 10000)
-									
 								} else {
-									m.edit({
+									chestComf.update({
 										embeds: [
 											{
-												title: `You don't own that key...`,
+												title: `Uh oh...`,
 												description: `Sorry, but you don't own the key required to unlock the chest.`,
 												footer: {
 													text: `Changing back to battle view...`
 												}
 											}
-										]
+										],
+										components: []
 									})
-									
+
 									setTimeout(async () => {
-										m.edit(await embed(0x2B2D31, null)).catch(() => { return })
+										m.edit(await embed(0x2B2D31, null)).catch(error => { console.log(error) })
 
 										const collectorFilter = i => i.user.id === interaction.user.id;
-										const confirmation = await m.awaitMessageComponent({ filter: collectorFilter }).catch(() => {return});
+										const confirmation = await m.awaitMessageComponent({ filter: collectorFilter }).catch(error => { console.log(error) })
 										if (confirmation.customId == "log") {
 											await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
 											let file = await new AttachmentBuilder('../logs.txt');
-											m.edit(await embed(0x2B2D31, file)).catch(() => { return })
+											confirmation.update(await embed(0x2B2D31, file)).catch(error => { console.log(error) })
 										}
 									}, 5000)
 								}
-							}
-						} else {
-							m.edit(await embed(0x2B2D31, null)).catch(() => { return })
 
-							const collectorFilter = i => i.user.id === interaction.user.id;
-							const confirmation = await m.awaitMessageComponent({ filter: collectorFilter });
-							if (confirmation.customId == "log") {
-								await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
-								let file = await new AttachmentBuilder('../logs.txt');
-								m.edit(await embed(0x2B2D31, file)).catch(() => { return })
+							} else {
+								chestComf.update(await embed(0x2B2D31, null)).catch(error => { console.log(error) })
+
+								const collectorFilter = i => i.user.id === interaction.user.id;
+								const confirmatio = await m.awaitMessageComponent({ filter: collectorFilter }).catch(error => { console.log(error) });
+								if (confirmatio.customId == "log") {
+									await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
+									let file = await new AttachmentBuilder('../logs.txt');
+									confirmatio.update(await embed(0x2B2D31, file)).catch(error => { console.log(error) })
+								}
 							}
 						}
+						return;
+					}
+
+					const collectorFilter = i => i.user.id === interaction.user.id;
+					const confirmation = await m.awaitMessageComponent({ filter: collectorFilter });
+					if (confirmation.customId == "log") {
+						await fs.writeFileSync('../logs.txt', `Starting Health:\n${e.name} (${elevel}) - ${emaxHealth}/${emaxHealth}\n\nTotal Rounds: ${chatLog.length - 2}\nDamage Recieved: ${p.maxHealth - p.health}\nEnemy Damage Received: ${emaxHealth - ehealth}\n---\n\n${chatLog.join('\n\n')}\n\n---\nRemaining Health:\n${p.name} - ${p.health}/${p.maxHealth}\n${e.name} - ${ehealth}/${emaxHealth}`)
+						let file = await new AttachmentBuilder('../logs.txt');
+						confirmation.update(await embed(0x2B2D31, file)).catch(async () => { m.edit(await embed(0x2B2D31, file)).catch(error => { console.log(error) }) })
 					}
 
 					return;
@@ -718,22 +678,18 @@ module.exports = {
 						chatLog.push(`${stat == pstatus ? p.name : e.name}'s effects were cleansed and devastated ✨🏴`)
 						if (stat == pstatus) pstatus.length = 0
 						else estatus.length = 0
-						setTimeout(async () => { m.edit(await embed(0xff0000, null)).catch(() => { return }) }, 500)
+						setTimeout(async () => { m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) }) }, 500)
 					} else if (badomen && !blessed) {
 						let removal = stat == pstatus ? pstatus.filter(eff => eff.positive === true) : estatus.filter(eff => eff.positive === true)
-						if (removal.length == 0) {
-							chatLog.push(`${stat == pstatus ? p.name : e.name}'s effects (${await statusList(removal)}) were devastated 🏴`)
-						}
-
-						stat == pstatus ? pstatus = removal : estatus = removal
-						setTimeout(async () => { m.edit(await embed(0xff0000, null)).catch(() => { return }) }, 500)
+						let lasting = stat == pstatus ? pstatus.filter(eff => eff.positive === false) : estatus.filter(eff => eff.positive === false)
+						if (removal.length > 0) chatLog.push(`${stat == pstatus ? p.name : e.name}'s effects (${await statusList(removal)}) were devastated 🏴`)
+						stat == pstatus ? pstatus = lasting : estatus = lasting
+						setTimeout(async () => { m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) }) }, 500)
 					} else if (!badomen && blessed) {
 						let removal = stat == pstatus ? pstatus.filter(eff => eff.positive === false) : estatus.filter(eff => eff.positive === false)
-						if (removal.length == 0) {
-							chatLog.push(`${stat == pstatus ? p.name : e.name}'s effects (${await statusList(removal)}) were cleansed ✨`)
-						}
-
-						stat == pstatus ? pstatus = removal : estatus = removal
+						let lasting = stat == pstatus ? pstatus.filter(eff => eff.positive === true) : estatus.filter(eff => eff.positive === true)
+						if (removal.length > 0) chatLog.push(`${stat == pstatus ? p.name : e.name}'s effects (${await statusList(removal)}) were cleansed ✨`)
+						stat == pstatus ? pstatus = lasting : estatus = lasting
 					}
 				})
 
@@ -746,13 +702,14 @@ module.exports = {
 					if (p.health > 0 && ehealth > 0) {
 						setTimeout(async () => {
 							try {
-								let end = await assets.statuses.find(stat => stat.id === status.id).use(turn, xstatus, xhealth, chatLog, turn.name, emaxHealth)
+								let end = await (assets.statuses.find(stat => stat.id === status.id)).use(turn, xstatus, xhealth, chatLog, turn.name, emaxHealth)
 								turn == p ? pstatus = end.statuses : estatus = end.statuses
 								turn == p ? p.health = end.currentHealth : ehealth = end.currentHealth
 								chatLog = end.chatLog
-								m.edit(await embed(0xff0000, null)).catch(() => { return })
+								m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) })
 							} catch {
-								return i--
+								i--
+								return;
 							}
 						}, (timer / 2) * i++)
 					}
@@ -764,7 +721,7 @@ module.exports = {
 							stunned = true
 							chatLog.push(`${turn.name} is stunned`)
 							xstatus == pstatus ? pstatus.splice(pstatus.indexOf(pstatus.find(({ id }) => id == '💫')), 1) : estatus.splice(estatus.indexOf(estatus.find(({ id }) => id == '💫')), 1)
-							m.edit(await embed(0xff0000, null)).catch(() => { return })
+							m.edit(await embed(0xff0000, null)).catch(error => { console.log(error) })
 						}
 
 						if (p.health > 0 && ehealth > 0) {
@@ -840,7 +797,7 @@ module.exports = {
 			}
 
 			if (ended) {
-				let row3 = new ActionRowBuilder()
+				var row3 = new ActionRowBuilder()
 				row3.addComponents(new ButtonBuilder()
 					.setCustomId(`log`)
 					.setLabel(`View Battle Logs`)
@@ -863,43 +820,58 @@ module.exports = {
 					},
 				]
 
-				if (chest < 0) {
+
+				if (!chestGotten && p.health > 0) {
 					var counter = 0
 					var randNum = Math.random()
+					var addedButton = false
 					choiceArea.chests.forEach(async chestc => {
-						counter += chestc.chance
-						if (randNum < counter) {
-							chest = chestc.chest
-							row3.addComponents(new ButtonBuilder()
-								.setCustomId(`chest`)
-								.setLabel(`Chest?`)
-								.setStyle(ButtonStyle.Success))
-						} else if (chestc.keyChance) {
-							counter += chestc.keyChance
-							if (randNum < counter) {
-								const item = assets.items.find(({ name }) => name == chestc.key)
-								if (p.inventory) {
-									var inv = await p.inventory.split('-')
-									var updated = false;
-									for (a = 0; a < inv.length; a++) {
-										let iter = inv[a].split('_')
-										if (Number(iter[0]) == assets.items.indexOf(item)) {
-											iter[1] = Number(iter[1]) + 1
-											inv[a] = iter.join('_')
-											updated = true;
-											break;
+						if (chest < 0) {
+							counter += chestc.chance
+							if (randNum <= counter) {
+								chest = chestc.chest
+								row3.addComponents(new ButtonBuilder()
+									.setCustomId(`chest`)
+									.setLabel(`Chest?`)
+									.setStyle(ButtonStyle.Success))
+								addedButton = true
+							} else if (chestc.keyChance) {
+								counter += chestc.keyChance
+								if (randNum < counter) {
+									const item = assets.items.find(({ name }) => name == chestc.key)
+									if (p.inventory) {
+										var inv = await p.inventory.split('-')
+										var updated = false;
+										for (a = 0; a < inv.length; a++) {
+											let iter = inv[a].split('_')
+											if (Number(iter[0]) == assets.items.indexOf(item)) {
+												iter[1] = Number(iter[1]) + 1
+												inv[a] = iter.join('_')
+												updated = true;
+												break;
+											}
 										}
-									}
 
-									if (!updated) inv.push(`${assets.items.indexOf(item)}_1_0`)
-									p.inventory = inv.join('-')
-								} else p.inventory = `${assets.items.indexOf(item)}_1_0`
-								await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
-								chatLog.push(`${p.name} found ${item.name.match(/\A[^aeiouAEIOU]/) && !(item.attack || item.armor) ? 'an' : 'a'} ${item.name}`)
+										if (!updated) inv.push(`${assets.items.indexOf(item)}_1_0`)
+										p.inventory = inv.join('-')
+									} else p.inventory = `${assets.items.indexOf(item)}_1_0`
+									await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
+									chatLog.push(`${p.name} found ${item.name.match(/\A[^aeiouAEIOU]/) && !(item.attack || item.armor) ? 'an' : 'a'} ${item.name}`)
+								}
+							}
+							return;
+						} else {
+							if (!addedButton) {
+								row3.addComponents(new ButtonBuilder()
+									.setCustomId(`chest`)
+									.setLabel(`Chest?`)
+									.setStyle(ButtonStyle.Success))
+								addedButton = true
 							}
 						}
 					})
 				}
+
 
 				file ? false : embed.embeds[0].color = 0x000000
 				file ? false : embed.embeds[0].footer.text = `${p.name}\n🪷 ${p.xp}/${Math.round((p.level / 0.07) ** 2)}`
