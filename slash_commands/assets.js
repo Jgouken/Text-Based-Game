@@ -575,7 +575,7 @@ module.exports = {
 		},
 		{
 			name: `Health Slime`,
-			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1130928441622012005/Health_Slime.gif?width=671&height=671',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1131691728290713620/Health_Slime.gif',
 			weapon: null,
 			accuracy: 1,
 			critical: 0.1,
@@ -1567,7 +1567,7 @@ module.exports = {
 		},
 		{
 			name: `Fox King`,
-			sprite: 'https://media0.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif?cid=6c09b952a0cecfa2e65767266c0ca341e9b9222c2dba7ec2&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=ts',
+			sprite: 'https://media.discordapp.net/attachments/1116445708279615641/1132724236050505798/image_5_1.gif',
 			weapon: null,
 			accuracy: 1,
 			critical: 0.15,
@@ -2369,24 +2369,24 @@ module.exports = {
 					attack: true
 				},
 				{
+					name: "Thwack",
+					description: `Thwack them with your stick!`,
+					cost: 5,
+					damage: 1.2,
+					attack: true
+				},
+				{
 					name: "Poke Eye",
 					description: `Poke 'em in the eye.`,
-					cost: 5,
+					cost: 7,
 					damage: 0.9,
 					estatus: ["👁️"],
 					attack: true
 				},
 				{
-					name: "Thwack",
-					description: `Thwack them with your stick!`,
-					cost: 8,
-					damage: 1.2,
-					attack: true
-				},
-				{
 					name: "Treat Wounds",
 					description: `Rub some dirt on your wounds.`,
-					cost: 20,
+					cost: 10,
 					health: 0.15,
 					attack: false
 				},
@@ -2408,7 +2408,7 @@ module.exports = {
 				{
 					name: "Hefty Swing",
 					description: `Batter up!`,
-					cost: 10,
+					cost: 8,
 					damage: 1.4,
 					attack: true
 				},
@@ -2422,7 +2422,7 @@ module.exports = {
 				{
 					name: "Treat Wounds",
 					description: `Rub some dirt on your wounds.`,
-					cost: 20,
+					cost: 10,
 					health: 0.15,
 					attack: false
 				},
@@ -2444,7 +2444,7 @@ module.exports = {
 				{
 					name: "Hope For The Best",
 					description: `Hope for the best.`,
-					cost: 9,
+					cost: 10,
 					pstatus: ["🍀"],
 					attack: false
 				},
@@ -2459,7 +2459,7 @@ module.exports = {
 				{
 					name: "Treat Wounds",
 					description: `Rub some dirt on your wounds.`,
-					cost: 20,
+					cost: 15,
 					health: 0.15,
 					attack: false
 				},
@@ -2496,7 +2496,7 @@ module.exports = {
 				{
 					name: "Treat Wounds",
 					description: `Rub some dirt on your wounds.`,
-					cost: 20,
+					cost: 15,
 					health: 0.15,
 					attack: false
 				},
@@ -2527,7 +2527,7 @@ module.exports = {
 				{
 					name: "Swift Attack",
 					description: `Stab faster than they can see!`,
-					cost: 9,
+					cost: 10,
 					pstatus: ["💨"],
 					damage: 1.1,
 					attack: true
@@ -2557,7 +2557,7 @@ module.exports = {
 				{
 					name: "Perfect Swing",
 					description: `Swing at the the enemy with perfect trajectory.`,
-					cost: 20,
+					cost: 15,
 					damage: 1.25,
 					pstatus: ["💪"],
 					attack: true
@@ -2565,7 +2565,7 @@ module.exports = {
 				{
 					name: "All or Nothing",
 					description: `Put all your eggs in one basket.`,
-					cost: 25,
+					cost: 20,
 					pstatus: ["💫"],
 					damage: 3.25,
 					attack: true

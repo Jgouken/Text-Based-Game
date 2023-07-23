@@ -147,7 +147,7 @@ module.exports = {
                 if (Number(invitem[1]) > 0) final.push(invitem.join('_'))
             }
 
-            if (!found) return interaction.reply({ content: `You do not own ${item.name.split('')[0].match(/\A[^aeiouAEIOU]/) ? 'an' : 'a'} ${item.name}`, ephemeral: true })
+            if (!found) return interaction.reply({ content: `You do not own ${item.name.split('')[0].match(/\A[^aeiouAEIOU]/) ? 'an' : 'a'} ${item.name}.`, ephemeral: true })
             if (!used) return interaction.reply({ content: `That item (${item.name}) cannot be used. ${item.damage ? 'That item can only be used in combat.' : (item.uses ? 'That is a crafting reagent.' : (item.chest ? 'That is a key, which can only be used at a chest.' : 'This item is currently useless.'))}`, ephemeral: true })
             else await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${final ? `|${final.join('-')}` : ''}`)
             
@@ -161,7 +161,7 @@ module.exports = {
                         },
                         description: `**${interaction.user.username}** used **${item.name}**:\n\n${interaction.user.username} **${chatLog.join(' and ')}!**`
                     }
-                ]
+                ], ephemeral: true 
             })
         } else {
             const fetchedUser = interaction.user.fetch(true)
@@ -199,7 +199,7 @@ module.exports = {
                 })
             }
 
-            interaction.reply({ embeds: [embed] })
+            interaction.reply({ embeds: [embed], ephemeral: true  })
         }
     },
 
