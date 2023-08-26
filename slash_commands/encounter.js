@@ -499,7 +499,7 @@ module.exports = {
 								item = assets.items.find(({ name }) => name == item.name)
 
 								if (item) {
-									inventory.player.add(interaction.user.id, item.name, (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl) || 0)
+									db.set(`player_${interaction.user.id}`, inventory.player.add(interaction.user.id, item.name, (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl || 0)))
 									chatLog.push(`${e.name} dropped ${item.name.match(/\A[^aeiouAEIOU]/) && !(item.attack || item.armor) ? 'an' : 'a'} ${(item.attack || item.armor) && itemlvl > 0 ? `Level ${itemlvl} ` : ''}${item.name}!`)
 								} else {
 									chatLog.push(`Something went wrong trying to collect an item.`)
@@ -585,8 +585,8 @@ module.exports = {
 										if (item2) droplvl = (item2.maxlvl ? Math.floor(Math.random() * (item2.maxlvl - item2.minlvl) - item2.minlvl) : item2.minlvl) || 0
 									}
 
-									await inventory.player.add(interaction.user.id, item2.name, droplvl)
-									await inventory.player.remove(interaction.user.id, chestChoice.key)
+									db.set(`player_${interaction.user.id}`, await inventory.player.add(interaction.user.id, item2.name, droplvl))
+									db.set(`player_${interaction.user.id}`, await inventory.player.remove(interaction.user.id, chestChoice.key))
 									chatLog.push(`${p.name} opened the ${chestChoice.name}\nCollected: ${droplvl > 0 ? `Level ${droplvl} ` : ''}${item2.name}`)
 									chestComf.update({
 										embeds: [
@@ -871,7 +871,6 @@ module.exports = {
 						}
 					})
 				}
-
 
 				file ? false : embed.embeds[0].color = 0x000000
 				file ? false : embed.embeds[0].footer.text = `${p.name}\n🪷 ${p.xp}/${Math.round((p.level / 0.07) ** 2)}`

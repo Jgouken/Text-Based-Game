@@ -26,7 +26,7 @@ module.exports = {
                         },
                         {
                             name: "📖 __Journal__",
-                            value: "`/jounral area <area>`\n`/jounral enemy <enemy>`\n`/jounral effects`\n`/jounral items`\n`/jounral player (@user)`\n\nView specific information about an area, an enemy, the effects in battle, an item, or a player! Use the player journal to learn information about yourself. \n\nThe journal command basically helps you attain knowledge for each attribute of the game.",
+                            value: "`/journal area <area>`\n`/journal enemy <enemy>`\n`/journal effects`\n`/journal items`\n`/journal player (@user)`\n\nView specific information about an area, an enemy, the effects in battle, an item, or a player! Use the player journal to learn information about yourself. \n\nThe journal command basically helps you attain knowledge for each attribute of the game.",
                             inline: true
                         },
                         {

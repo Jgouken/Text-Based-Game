@@ -172,7 +172,7 @@ module.exports = {
 
             if (item.description) embed.description = item.description
             if (item.sprite) embed.thumbnail = { url: item.sprite }
-            if (item.tier) embed.footer = { text: "Unobtainable" }
+            if (item.tier) embed.footer = { text: `Encounter Only\nKey: ${item.key}` }
             var fields = []
 
             if (item.armor) {
@@ -274,12 +274,6 @@ module.exports = {
                 })
 
                 if (item.tier) {
-                    fields.push({
-                        name: "Requires Key:",
-                        value: item.key,
-                        inline: true
-                    })
-
                     var fin = []
                     item.drops.forEach((d) => {
                         fin.push(`${d.name} - ${String(d.chance * 100).slice(0, 4)}%`)

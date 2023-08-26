@@ -5,7 +5,7 @@ const assets = require('./assets.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('inventory')
-        .setDescription(`Do an action regarding your inventory.`)
+        .setDescription(`View, or use an item from, your inventory.`)
         .addStringOption(option =>
             option.setName('use')
                 .setDescription('Type out the name of an item AND USE IT. Not case sensitive.')
@@ -82,7 +82,7 @@ module.exports = {
                                 chatLog.push(`gained ${add} stamina`)
                                 used = true;
                             }
-    
+
                             if (getitem.health) {
                                 let add = Math.round(p.maxHealth * getitem.health)
                                 if (add + p.health > p.maxHealth) add = p.maxHealth - p.health
@@ -94,7 +94,7 @@ module.exports = {
                                 chatLog.push(`gained ${add} health`)
                                 used = true;
                             }
-    
+
                             if (getitem.defense) {
                                 chatLog.push(`gained ${Math.round(p.baseArmor * getitem.defense)} defense`)
                                 p.baseArmor += Math.round(p.baseArmor * getitem.defense)
@@ -104,7 +104,7 @@ module.exports = {
                                 }
                                 used = true;
                             }
-    
+
                             if (getitem.buff) {
                                 chatLog.push(`gained ${Math.round(p.baseAttack * getitem.buff)} attack`)
                                 p.baseAttack += Math.round(p.baseAttack * getitem.buff)
@@ -114,7 +114,7 @@ module.exports = {
                                 }
                                 used = true;
                             }
-    
+
                             if (getitem.xp) {
                                 var exp = Math.round(getitem.xp)
                                 chatLog.push(`gained ${Math.round(exp)} xp`)
@@ -150,7 +150,7 @@ module.exports = {
             if (!found) return interaction.reply({ content: `You do not own ${item.name.split('')[0].match(/\A[^aeiouAEIOU]/) ? 'an' : 'a'} ${item.name}.`, ephemeral: true })
             if (!used) return interaction.reply({ content: `That item (${item.name}) cannot be used. ${item.damage ? 'That item can only be used in combat.' : (item.uses ? 'That is a crafting reagent.' : (item.chest ? 'That is a key, which can only be used at a chest.' : 'This item is currently useless.'))}`, ephemeral: true })
             else await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${final ? `|${final.join('-')}` : ''}`)
-            
+
             interaction.reply({
                 embeds: [
                     {
@@ -161,7 +161,7 @@ module.exports = {
                         },
                         description: `**${interaction.user.username}** used **${item.name}**:\n\n${interaction.user.username} **${chatLog.join(' and ')}!**`
                     }
-                ], ephemeral: true 
+                ], ephemeral: true
             })
         } else {
             const fetchedUser = interaction.user.fetch(true)
@@ -192,87 +192,91 @@ module.exports = {
                     let assetItem = assets.items[Number(itemm[0])]
                     // [itemIndex, itemAmount, itemLevel]
                     embed.fields.push({
-                        name: `${assetItem.emoji ? `${assetItem.emoji} `: ''}**${assetItem.name}** - ${itemm[1]}`,
+                        name: `${assetItem.emoji ? `${assetItem.emoji} ` : ''}**${assetItem.name}** - ${itemm[1]}`,
                         value: (`${Number(itemm[2]) > 0 ? `Level ${itemm[2]}\n` : ''}${assetItem.attack ? 'Weapon' : (assetItem.armor ? 'Armor' : '')}${assetItem.name.includes('Potion') ? 'Consumable' : ''}${assetItem.chest ? 'Chest Key' : ''}${(assetItem.battle ? '\nBattle Item' : (!assetItem.name.includes('Potion') && !assetItem.attack && !assetItem.armor && !assetItem.chest ? 'Reagent' : ''))}`).trim(),
                         inline: true
                     })
                 })
             }
 
-            interaction.reply({ embeds: [embed], ephemeral: true  })
+            interaction.reply({ embeds: [embed], ephemeral: true })
         }
     },
 
     player: {
-		add: async function (userid, itemName, level) {
-			let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
-			var player = await db.get(`player_${userid}`)
+        add: async function (userdb, itemName, level) {
+            if (!itemName) return console.error(`Cannot add an undefined item.`);
+            let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
+            var player = await userdb
+            var i = 0
 
-			if (!item) return console.error(`"${itemName}" does not exist`);
-			if (!player) return console.error(`Player ID "${userid}" does not exist`);
-			var changed = false
+            if (!item) return console.error(`"${itemName}" does not exist`);
+            if (!player) return console.error(`Player ID "${userdb}" does not exist`);
+            var changed = false
 
-			player = player.split('|')
-			if (player[12]) player[12] = (player[12]).split('-')
-			else player[12] = []
-			for (i = 0; i < player[12].length; i++) {
-				if (player[12][i].startsWith(`${assets.items.indexOf(item)}_`) && player[12][i].endsWith(`_${level || item.maxlvl || item.minlvl || 0}`)) {
-					player[12][i] = `${assets.items.indexOf(item)}_${Number(player[12][i].split('_')[1]) + 1}_${level || item.maxlvl || item.minlvl || 0}`
-					changed = true;
-					break;
-				}
-			}
-
-			if (!changed) player[12].push(`${assets.items.indexOf(item)}_1_${level || item.maxlvl || item.minlvl || 0}`)
-			player[12] = player[12].join('-')
-			await db.set(`player_${userid}`, player.join('|'))
-			return true;
-		},
-
-		remove: async function (userid, itemName, level) {
-			let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
-			var player = await db.get(`player_${userid}`)
-
-			if (!item) return console.error(`"${itemName}" does not exist`);
-			if (!player) return console.error(`Player ID "${userid}" does not exist`);
-			var final = []
-
-			player = player.split('|')
-			if (player[12]) player[12] = (player[12]).split('-')
-			else player[12] = []
-			for (i = 0; i < player[12].length; i++) {
-				if (player[12][i].startsWith(`${assets.items.indexOf(item)}_`) && player[12][i].endsWith(`_${level || 0}`)) {
-					if (Number(player[12][i].split('_')[1]) > 1) final.push(`${assets.items.indexOf(item)}_${Number(player[12][i].split('_')[1]) - 1}_${level || 0}`)
-				} else {
-					final.push(player[12][i])
-				}
-			}
-
-			player[12] = final.join('-')
-			await db.set(`player_${userid}`, player.join('|'))
-			return true;
-		},
-
-		search: async function (userid, itemName, level) {
-			let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
-			var player = await db.get(`player_${userid}`)
-
-			if (!item) return console.error(`"${itemName}" does not exist`);
-			if (!player) return console.error(`Player ID "${userid}" does not exist`);
-			var hasItem = false
-
-			player = player.split('|')
-			if (player[12]) player[12] = (player[12]).split('-')
-			else player[12] = []
-			for (i = 0; i < player[12].length; i++) {
-				let minii = player[12][i].split('_')
-				if (Number(minii[0]) == assets.items.indexOf(item) && (Number(minii[2]) == (level || 0))) {
-                    hasItem = minii
-                    break;
+            player = player.split('|')
+            if (player[12]) player[12] = (player[12]).split('-')
+            else player[12] = []
+            
+            player[12].forEach((playeri) => {
+                if (playeri.startsWith(`${assets.items.indexOf(item)}_`) && playeri.endsWith(`_${level || item.maxlvl || item.minlvl || "0"}`)) {
+                    player[12][i] = `${assets.items.indexOf(item)}_${Number(playeri.split('_')[1]) + 1}_${level || item.maxlvl || item.minlvl || "0"}`
+                    changed = true;
+                    return;
                 }
-			}
+                i++
+            })
 
-			return hasItem;
-		},
-	}
+            if (!changed) player[12].push(`${assets.items.indexOf(item)}_1_${level || item.maxlvl || item.minlvl || "0"}`)
+            player[12] = player[12].join('-')
+            return player.join('|');
+        },
+
+        remove: async function (userdb, itemName, level) {
+            if (!itemName) return console.error(`Cannot remove an undefined item.`);
+            let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
+            var player = await userdb
+
+            if (!item) return console.error(`"${itemName}" does not exist`);
+            if (!player) return console.error(`Player ID "${userdb}" does not exist`);
+            var final = []
+
+            player = player.split('|')
+            if (player[12]) player[12] = (player[12]).split('-')
+            else player[12] = []
+            player[12].forEach((playeri) => {
+                if (playeri.startsWith(`${assets.items.indexOf(item)}_`) && (Number(level) ? playeri.endsWith(`_${level}`) : true)) {
+                    if (Number(playeri.split('_')[1]) > 1) final.push(`${assets.items.indexOf(item)}_${Number(playeri.split('_')[1]) - 1}_${level || "0"}`)
+                } else {
+                    final.push(playeri)
+                }
+            })
+
+            player[12] = final.join('-')
+            return player.join('|')
+        },
+
+        search: async function (userdb, itemName, level) {
+            if (!itemName) return console.error(`Cannot search for an undefined item.`);
+            let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
+            var player = await userdb
+            var hasItem = false;
+
+            if (!item) return console.error(`"${itemName}" does not exist.`);
+            if (!player) return console.error(`Player Database does not exist.`);
+
+            player = player.split('|')
+            if (player[12]) player[12] = (player[12]).split('-')
+            else player[12] = []
+            player[12].forEach((playeri) => {
+                let minii = playeri.split('_')
+                if (Number(minii[0]) == assets.items.indexOf(item) && (Number(level) ? (Number(minii[2]) == level) : true)) {
+                    hasItem = minii
+                    return;
+                }
+            })
+
+            return hasItem || false;
+        },
+    }
 }

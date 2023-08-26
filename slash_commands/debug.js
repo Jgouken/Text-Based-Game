@@ -294,7 +294,7 @@ module.exports = {
             case 'item': {
                 let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == interaction.options.getString('item').toLowerCase().trim().replace(/[ ]/, ''))
                 if (!item) return interaction.reply({ content: `Hm, I can't seem to add an item called "${interaction.options.getString('item')}". Ensure you've spelled everything correctly!`, ephemeral: true})
-                await inventory.player.add(interaction.user.id, item.name)
+                db.set(`player_${interaction.user.id}`, await inventory.player.add(interaction.user.id, item.name))
                 interaction.reply({ content: `Added the item ${item.name} into your inventory!`, ephemeral: true })
                 break;
             }
