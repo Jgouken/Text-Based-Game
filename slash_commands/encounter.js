@@ -86,7 +86,7 @@ module.exports = {
 		var random = Math.random()
 		var randomTrack = 0;
 
-		if (p.level < choiceArea.minlvl - 1) return interaction.reply({ content: `You are too low leveled for that area! You must be at least level ${choiceArea.minlvl - 1} to use this area.`, ephemeral: true })
+		if (p.level < choiceArea.minlvl - 1) return interaction.reply({ content: `Your level is too low! You must be at least level ${choiceArea.minlvl - 1} to travel to that area.`, ephemeral: true })
 		for (let i = 0; i < choiceArea.enemies.length; i++) {
 			randomTrack += choiceArea.enemies[i].chance;
 			if (random <= randomTrack) {
@@ -810,7 +810,7 @@ module.exports = {
 					},
 					{
 						name: `${p.health == p.maxHealth ? '💖' : (p.health < p.maxHealth / 2 && p.health > 0 ? '❤️‍🩹' : (p.health > 0 ? '❤️' : '💔'))} ${p.health}/${p.maxHealth}`,
-						value: `${p.name}\nLevel ${p.level}`,
+						value: `⚡ ${p.stamina}/${p.maxStamina}\n${p.name}\nLevel ${p.level}`,
 						inline: true
 					},
 					{

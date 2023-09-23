@@ -19,7 +19,6 @@ module.exports = {
         if (interaction.options.getString('use')) {
             var player = await db.get(`player_${interaction.user.id}`)
             if (!item) return interaction.reply({ content: `Hm, it appears "${interaction.options.getString('use')}" is not an item!`, ephemeral: true })
-
             player = player.split('|')
             var rawWeapon = player[9].split('_')
             var rawArmor = player[10].split('_')
@@ -57,9 +56,9 @@ module.exports = {
                 if (getitem.name == item.name) {
                     found = true
                     if (item.attack) {
-                        let currentWeapon = rawWeapon
+                        let previousWeapon = rawWeapon
                         rawWeapon = invitem
-                        invitem = currentWeapon
+                        invitem = previousWeapon
                         chatLog.push(`equipped the ${item.name} weapon`)
                         used = true;
                     } else if (item.armor) {
@@ -166,7 +165,7 @@ module.exports = {
         } else {
             const fetchedUser = interaction.user.fetch(true)
             var player = await db.get(`player_${interaction.user.id}`)
-
+            console.log(player)
             var embed = {
                 thumbnail: {
                     url: interaction.user.avatarURL()
@@ -211,13 +210,13 @@ module.exports = {
             var i = 0
 
             if (!item) return console.error(`"${itemName}" does not exist`);
-            if (!player) return console.error(`Player ID "${userdb}" does not exist`);
+            if (!player) return console.error(`This Player Database (${userdb}) does not exist.`);
             var changed = false
 
             player = player.split('|')
             if (player[12]) player[12] = (player[12]).split('-')
             else player[12] = []
-            
+
             player[12].forEach((playeri) => {
                 if (playeri.startsWith(`${assets.items.indexOf(item)}_`) && playeri.endsWith(`_${level || item.maxlvl || item.minlvl || "0"}`)) {
                     player[12][i] = `${assets.items.indexOf(item)}_${Number(playeri.split('_')[1]) + 1}_${level || item.maxlvl || item.minlvl || "0"}`
@@ -234,25 +233,47 @@ module.exports = {
 
         remove: async function (userdb, itemName, level) {
             if (!itemName) return console.error(`Cannot remove an undefined item.`);
-            let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
             var player = await userdb
-
-            if (!item) return console.error(`"${itemName}" does not exist`);
-            if (!player) return console.error(`Player ID "${userdb}" does not exist`);
-            var final = []
-
+            if (!player) return console.error(`This Player Database (${userdb}) does not exist.`);
             player = player.split('|')
             if (player[12]) player[12] = (player[12]).split('-')
-            else player[12] = []
-            player[12].forEach((playeri) => {
-                if (playeri.startsWith(`${assets.items.indexOf(item)}_`) && (Number(level) ? playeri.endsWith(`_${level}`) : true)) {
-                    if (Number(playeri.split('_')[1]) > 1) final.push(`${assets.items.indexOf(item)}_${Number(playeri.split('_')[1]) - 1}_${level || "0"}`)
-                } else {
-                    final.push(playeri)
-                }
-            })
+            else return console.log(`Player inventory is empty.`)
 
-            player[12] = final.join('-')
+            if (typeof itemName === "string") {
+                let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
+                if (!item) return console.error(`"${itemName}" does not exist`);
+                player[12].forEach((playeri) => {
+                    if (playeri.startsWith(`${assets.items.indexOf(item)}_`) && (Number(level) ? playeri.endsWith(`_${level}`) : true)) {
+                        if (Number(playeri.split('_')[1]) > 1) final.push(`${assets.items.indexOf(item)}_${Number(playeri.split('_')[1]) - 1}_${level || "0"}`)
+                    } else {
+                        final.push(playeri)
+                    }
+                })
+
+                player[12] = final.join('-')
+            } else {
+                let item = []
+                var stop = false
+                itemName.forEach(i => {
+                    assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == i.toLowerCase().trim().replace(/[ ]/, '')) ? item.push(assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == i.toLowerCase().trim().replace(/[ ]/, ''))) : stop = true;
+                    if (stop == true) return;
+                })
+                if (stop == true) return console.error(`Cannot remove an undefined item.`);
+                item.forEach((ite) => {
+                    var final = []
+                    player[12].forEach((playeri) => {
+                        if (playeri.startsWith(`${assets.items.indexOf(ite)}_`) && (Number(level) ? playeri.endsWith(`_${level}`) : true)) {
+                            if (Number(playeri.split('_')[1]) > 1) final.push(`${assets.items.indexOf(ite)}_${Number(playeri.split('_')[1]) - 1}_${level || "0"}`)
+                        } else {
+                            final.push(playeri)
+                        }
+                    })
+
+                    player[12] = final
+                })
+            }
+
+            player[12] = player[12].join('-')
             return player.join('|')
         },
 
@@ -263,7 +284,7 @@ module.exports = {
             var hasItem = false;
 
             if (!item) return console.error(`"${itemName}" does not exist.`);
-            if (!player) return console.error(`Player Database does not exist.`);
+            if (!player) return console.error(`This Player Database (${userdb}) does not exist.`);
 
             player = player.split('|')
             if (player[12]) player[12] = (player[12]).split('-')

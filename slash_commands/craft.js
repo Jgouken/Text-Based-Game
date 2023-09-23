@@ -43,8 +43,8 @@ module.exports = {
                 return;
             }
 
-            for (i = 0; i < areEqual.length; i++) { db.set(`player_${interaction.user.id}`, await inventory.player.remove((await db.get(`player_${interaction.user.id}`)), areEqual[i], 0)) }
-            db.set(`player_${interaction.user.id}`, await inventory.player.add((await db.get(`player_${interaction.user.id}`)), item.name, (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : (item.minlvl || 0)) || 0))
+            await db.set(`player_${interaction.user.id}`, await inventory.player.remove((await db.get(`player_${interaction.user.id}`)), areEqual, 0))
+            await db.set(`player_${interaction.user.id}`, await inventory.player.add((await db.get(`player_${interaction.user.id}`)), item.name, (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : (item.minlvl || 0)) || 0))
             interaction.reply({ content: `You've crafted the ${item.name} and it has been placed in your inventory!`, ephemeral: true })
         } else {
             var embed = {

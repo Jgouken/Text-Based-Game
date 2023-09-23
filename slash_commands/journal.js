@@ -6,8 +6,8 @@ module.exports = {
         .setName('journal')
         .setDescription(`Search for a player, item, enemy, area, or effects by typing its name.`)
         .addStringOption(option =>
-            option.setName('thing')
-                .setDescription('Mention @player, item, enemy, or area by typing its name.')
+            option.setName('entity')
+                .setDescription('View another user, an item, weapon, armor, enemy, or area by typing its name.')
                 .setRequired(false)
         )
         .addIntegerOption(option =>
