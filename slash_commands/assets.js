@@ -13,9 +13,9 @@ module.exports = {
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
 				currentHealth = Math.round(currentHealth - ((EorP.armor ? EorP.maxHealth : emaxHealth) * 0.05 * crit))
-				chatLog.push(`${name} is posioned - ${crit == 2 ? 'CRITICAL ' : ''}💀${Math.round((EorP.armor ? EorP.maxHealth : emaxHealth) * 0.05 * crit)}`)
+				chatLog.push(`${name} is posioned - ${crit === 2 ? 'CRITICAL ' : ''}💀${Math.round((EorP.armor ? EorP.maxHealth : emaxHealth) * 0.05 * crit)}`)
 				status.length = status.length -= 1
-				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
+				if (status.length === 0) statuses.splice(statuses.indexOf(status), 1)
 				return {
 					EorP: EorP,
 					statuses: statuses,
@@ -38,7 +38,7 @@ module.exports = {
 				var heal = Math.round((EorP.armor ? EorP.maxHealth : emaxHealth) * 0.05 * crit)
 				if (currentHealth + heal > (EorP.armor ? EorP.maxHealth : emaxHealth)) heal = (EorP.armor ? EorP.maxHealth : emaxHealth) - currentHealth
 				currentHealth += heal
-				chatLog.push(`${name} has regeneration - ${crit == 2 ? 'CRITICAL ' : ''}💗${heal}`)
+				chatLog.push(`${name} has regeneration - ${crit === 2 ? 'CRITICAL ' : ''}💗${heal}`)
 				status.length = status.length -= 1
 				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
 				return {
@@ -61,7 +61,7 @@ module.exports = {
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
 				currentHealth = Math.round(currentHealth - (status.damage * 0.15 * crit))
-				chatLog.push(`${name} is bleeding - ${crit == 2 ? 'CRITICAL ' : ''}🩸${Math.round(status.damage * 0.15 * crit)}`)
+				chatLog.push(`${name} is bleeding - ${crit === 2 ? 'CRITICAL ' : ''}🩸${Math.round(status.damage * 0.15 * crit)}`)
 				status.length = status.length -= 1
 				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
 				return {
@@ -84,7 +84,7 @@ module.exports = {
 				var crit = 1
 				if (Math.random() * 100 < 5) crit = 1.6
 				currentHealth = Math.round(currentHealth - (status.damage * 0.05 * crit))
-				chatLog.push(`${name} is burned - ${crit == 2 ? 'CRITICAL ' : ''}🔥${Math.round(status.damage * 0.05 * crit)}`)
+				chatLog.push(`${name} is burned - ${crit === 2 ? 'CRITICAL ' : ''}🔥${Math.round(status.damage * 0.05 * crit)}`)
 				status.length = status.length -= 1
 				if (status.length == 0) statuses.splice(statuses.indexOf(status), 1)
 				return {

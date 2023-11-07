@@ -256,9 +256,9 @@ module.exports = {
                 var stop = false
                 itemName.forEach(i => {
                     assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == i.toLowerCase().trim().replace(/[ ]/, '')) ? item.push(assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == i.toLowerCase().trim().replace(/[ ]/, ''))) : stop = true;
-                    if (stop == true) return;
+                    if (stop === true) return;
                 })
-                if (stop == true) return console.error(`Cannot remove an undefined item.`);
+                if (stop === true) return console.error(`Cannot remove an undefined item.`);
                 item.forEach((ite) => {
                     var final = []
                     player[12].forEach((playeri) => {
