@@ -109,7 +109,7 @@ module.exports = {
                                 inline: true
                             },
                             {
-                                name: `🪖 ${p.armor}`,
+                                name: `⛑ ${p.armor}`,
                                 value: `- ${p.synergized ? '__' : ''}${p.armorer.name}${p.synergized ? '__' : ''}`,
                                 inline: true
                             },
@@ -140,7 +140,7 @@ module.exports = {
                             }
                         ],
                         footer: {
-                            text: `${p.name} - Level ${p.level}\n🪷 ${p.xp}/${Math.round((p.level / 0.07) ** 2)}`,
+                            text: `${p.name} - Level ${p.level}\n⭐ ${p.xp}/${Math.round((p.level / 0.07) ** 2)}`,
                             icon_url: user.avatarURL()
                         }
                     }
@@ -183,7 +183,7 @@ module.exports = {
                 // It is an armor
                 embed.footer = { text: `* Varies based on player and item level` }
                 fields.push({
-                    name: `🪖 +${Math.round(Number(Number((await db.get(`player_${interaction.user.id}`)).split('|')[0]) * Number(item.plvlmult)) + Number(Number(level) * Number(item.alvlmult)))}*`,
+                    name: `⛑ +${Math.round(Number(Number((await db.get(`player_${interaction.user.id}`)).split('|')[0]) * Number(item.plvlmult)) + Number(Number(level) * Number(item.alvlmult)))}*`,
                     value: `Armor`,
                     inline: true
                 })
@@ -199,7 +199,7 @@ module.exports = {
                         var syn = []
                         if (sng.critical) syn.push(`💥 +${sng.critical * 100}%`)
                         if (sng.evasion) syn.push(`💨 +${sng.evasion * 100}%`)
-                        if (sng.armor) syn.push(`🪖 +${sng.armor}`)
+                        if (sng.armor) syn.push(`⛑ +${sng.armor}`)
                         if (sng.attack) syn.push(`⚔️ +${sng.attack}`)
                         fields.push({
                             name: `Synergy: ${sng.weapon}`,
@@ -247,8 +247,8 @@ module.exports = {
                 var does = []
                 if (item.craft) embed.description = item.craft.join(' + ')
                 if (item.health) does.push(`💗 Heals ${item.health * 100}% HP`)
-                if (item.defense) does.push(`🪖 Grants +${item.defense * 100}% Armor`)
-                if (item.xp) does.push(`🪷 Generates +${item.xp}% XP`)
+                if (item.defense) does.push(`⛑ Grants +${item.defense * 100}% Armor`)
+                if (item.xp) does.push(`⭐ Generates +${item.xp}% XP`)
                 if (item.stamina) does.push(`⚡ Regenerates +${item.stamina * 100}% Stamina`)
                 if (item.attack) does.push(`⚔️ Grants +${item.attack * 100}% Attack`)
                 if (item.damage) does.push(`⚔️ Deals ${item.damage} damage (ignores defense)`)

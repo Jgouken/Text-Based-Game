@@ -34,6 +34,7 @@ module.exports = {
 		*/
 
 		let player = (await db.get(`player_${interaction.user.id}`)).split('|')
+		let playersettings = (await db.get(`playersettings_${interaction.user.id}`)).split('|')
 		let rawWeapon = player[9].split('_')
 		let rawArmor = player[10].split('_')
 		let weapon = assets.items[Number(rawWeapon[0])]
@@ -68,7 +69,8 @@ module.exports = {
 			armorer: armor,
 			inventory: player[12],
 
-			synergized: false
+			synergized: false,
+			tooltips: playersettings[0] === "1" ? true : false
 		}
 
 		if (p.armorer.synergies) p.armorer.synergies.forEach((syn) => {
@@ -472,7 +474,23 @@ module.exports = {
 						chatLog.push(`🌀 ${p.name} lost the battle 🌀`)
 						await db.set(`player_${interaction.user.id}`, player.join('|'))
 					} else {
-						chatLog.push(`🎉 ${p.name} won the battle! 🎉\n${p.name} gained 🪷${exp}!`)
+						chatLog.push(`🎉 ${p.name} won the battle! 🎉\n${p.name} gained ⭐${exp}!`)
+						
+						p.xp += exp
+						while (p.xp >= Math.round((p.level / 0.07) ** 2)) {
+							p.xp -= Math.round((p.level / 0.07) ** 2)
+							p.level += 1
+							p.maxHealth = Math.round(Number(player[1]) + (50 * (p.level - 1)))
+							p.health = p.maxHealth
+							p.maxStamina = Math.round(Number(player[5]) + (5 * (p.level - 1)))
+							p.stamina = p.maxStamina
+							p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
+							p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
+							chatLog.push(`⬆️ ${p.name} leveled up to level ${p.level}! ⬆️`)
+						}
+
+						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
+						
 						if (e.drops) {
 							async function drop() {
 								var item = undefined;
@@ -499,7 +517,7 @@ module.exports = {
 								item = assets.items.find(({ name }) => name == item.name)
 
 								if (item) {
-									db.set(`player_${interaction.user.id}`, inventory.player.add(interaction.user.id, item.name, (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl || 0)))
+									await db.set(`player_${interaction.user.id}`, await inventory.player.add(await db.get(`player_${interaction.user.id}`), item.name, (item.maxlvl ? Math.floor(Math.random() * (item.maxlvl - item.minlvl) - item.minlvl) : item.minlvl || 0)))
 									chatLog.push(`${e.name} dropped ${item.name.match(/\A[^aeiouAEIOU]/) && !(item.attack || item.armor) ? 'an' : 'a'} ${(item.attack || item.armor) && itemlvl > 0 ? `Level ${itemlvl} ` : ''}${item.name}!`)
 								} else {
 									chatLog.push(`Something went wrong trying to collect an item.`)
@@ -507,20 +525,6 @@ module.exports = {
 							}
 						}
 
-						p.xp += exp
-						while (p.xp >= Math.round((p.level / 0.07) ** 2)) {
-							p.xp -= Math.round((p.level / 0.07) ** 2)
-							p.level += 1
-							p.maxHealth = Math.round(Number(player[1]) + (50 * (p.level - 1)))
-							p.health = p.maxHealth
-							p.maxStamina = Math.round(Number(player[5]) + (5 * (p.level - 1)))
-							p.stamina = p.maxStamina
-							p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
-							p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
-							chatLog.push(`⬆️ ${p.name} leveled up to level ${p.level}! ⬆️`)
-						}
-
-						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
 						m.edit(await embed(0x2B2D31, null)).catch(error => { console.log(error) })
 
 						const collectorFilter = i => i.user.id === interaction.user.id;
@@ -533,11 +537,19 @@ module.exports = {
 							let chestChoice = assets.chests[chest]
 							let keyRequired = assets.items.find(({ name }) => name == chestChoice.key)
 							let row4 = new ActionRowBuilder()
-								.addComponents(new ButtonBuilder()
-									.setCustomId(`open`)
-									.setLabel(`Crack it Open!`)
-									.setStyle(ButtonStyle.Success))
-								.addComponents(new ButtonBuilder()
+							if (await inventory.player.search(await db.get(`player_${interaction.user.id}`), chestChoice.key)) {
+								row4.addComponents(new ButtonBuilder()
+								.setCustomId(`open`)
+								.setLabel(`Crack it Open!`)
+								.setStyle(ButtonStyle.Success))
+							} else {
+								row4.addComponents(new ButtonBuilder()
+								.setCustomId(`open`)
+								.setLabel(`Crack it Open!`)
+								.setStyle(ButtonStyle.Success)
+								.setDisabled(true))
+							}
+								row4.addComponents(new ButtonBuilder()
 									.setCustomId(`nothx`)
 									.setLabel(`No Thanks`)
 									.setStyle(ButtonStyle.Danger))
@@ -562,7 +574,7 @@ module.exports = {
 							const chestComf = await m.awaitMessageComponent({ filter: collectorFilter });
 							chestGotten = true
 							if (chestComf.customId == 'open') {
-								if (await inventory.player.search(interaction.user.id, chestChoice.key)) {
+								if (await inventory.player.search(await db.get(`player_${interaction.user.id}`), chestChoice.key)) {
 									async function drop() {
 										var item = undefined;
 										var randomTrack = 0;
@@ -585,8 +597,8 @@ module.exports = {
 										if (item2) droplvl = (item2.maxlvl ? Math.floor(Math.random() * (item2.maxlvl - item2.minlvl) - item2.minlvl) : item2.minlvl) || 0
 									}
 
-									db.set(`player_${interaction.user.id}`, await inventory.player.add(interaction.user.id, item2.name, droplvl))
-									db.set(`player_${interaction.user.id}`, await inventory.player.remove(interaction.user.id, chestChoice.key))
+									await db.set(`player_${interaction.user.id}`, await inventory.player.add(await db.get(`player_${interaction.user.id}`), item2.name, droplvl))
+									await db.set(`player_${interaction.user.id}`, await inventory.player.remove(await db.get(`player_${interaction.user.id}`), chestChoice.key))
 									chatLog.push(`${p.name} opened the ${chestChoice.name}\nCollected: ${droplvl > 0 ? `Level ${droplvl} ` : ''}${item2.name}`)
 									chestComf.update({
 										embeds: [
@@ -752,18 +764,18 @@ module.exports = {
 						},
 						fields: [
 							{
-								name: `${ehealth == emaxHealth ? '💖' : (ehealth < emaxHealth / 2 && ehealth > 0 ? (p.weapon.name == "Wooden Bow" ? '💘' : '❤️‍🩹') : (ehealth <= 0 ? '💔' : (p.weapon.name == "Wooden Bow" ? '💘' : '❤️')))} ${ehealth}/${emaxHealth}${estatusList.includes("🩸") || estatusList.includes("🔥") || estatusList.includes("💀") || estatusList.includes("💗") || estatusList.includes("🖤") ? '*' : ''}`,
+								name: `${(ehealth >= emaxHealth - (emaxHealth * .1)) ? '💖' : (ehealth < emaxHealth / 2 && ehealth > 0 ? (p.weapon.name == "Wooden Bow" ? '💘' : '❤️‍🩹') : (ehealth <= 0 ? '💔' : (p.weapon.name == "Wooden Bow" ? '💘' : '❤️')))} ${ehealth}/${emaxHealth}${estatusList.includes("🩸") || estatusList.includes("🔥") || estatusList.includes("💀") || estatusList.includes("💗") || estatusList.includes("🖤") ? '*' : ''}`,
 								value: `Level ${elevel}\n${estatusList || ''}`,
 								inline: true
 							},
 							{
 								name: `⚔️ ${eattack}${estatusList.includes("💪") || estatusList.includes("🏳️") || estatusList.includes("💢") || estatusList.includes("🌀") || pstatusList.includes("🛡️") ? '*' : ''}`,
-								value: `- ${e.weapon || "None"}`,
+								value: p.tooltips ? `- ${e.weapon || "None"}` : '',
 								inline: true
 							},
 							{
 								name: `🛡️ ${edefense * 10}%${estatusList.includes("🛡️") ? '*' : ''}`,
-								value: 'Defense',
+								value: p.tooltips ? 'Defense' : '',
 								inline: true
 							},
 							{
@@ -772,23 +784,23 @@ module.exports = {
 								inline: false
 							},
 							{
-								name: `${p.health == p.maxHealth ? '💖' : (p.health < p.maxHealth / 2 ? '❤️‍🩹' : '❤️')} ${p.health}/${p.maxHealth}${pstatusList.includes("🩸") || pstatusList.includes("🔥") || pstatusList.includes("💀") || pstatusList.includes("💗") || pstatusList.includes("🖤") ? '*' : ''}`,
-								value: `Level ${p.level}\n${pstatusList || ''}`,
+								name: `${p.health >= p.maxHealth - (p.maxHealth * .1) ? '💖' : (p.health < p.maxHealth / 2 ? '❤️‍🩹' : '❤️')} ${p.health}/${p.maxHealth}${pstatusList.includes("🩸") || pstatusList.includes("🔥") || pstatusList.includes("💀") || pstatusList.includes("💗") || pstatusList.includes("🖤") ? '*' : ''}`,
+								value: p.tooltips ? `Level ${p.level}\n${pstatusList || ''}` : pstatusList || '',
 								inline: true
 							},
 							{
 								name: `⚔️ ${p.attack}${pstatusList.includes("💪") || pstatusList.includes("🏳️") || pstatusList.includes("💢") || pstatusList.includes("🌀") || estatusList.includes("🛡️") ? '*' : ''}`,
-								value: `- ${p.synergized ? '__' : ''}${p.weapon.name}${p.synergized ? '__' : ''}\n- ${p.synergized ? '__' : ''}${p.armorer.name}${p.synergized ? '__' : ''}`,
+								value: p.tooltips ? `- ${p.synergized ? '__' : ''}${p.weapon.name}${p.synergized ? '__' : ''}\n- ${p.synergized ? '__' : ''}${p.armorer.name}${p.synergized ? '__' : ''}` : '',
 								inline: true
 							},
 							{
 								name: `⚡ ${p.stamina}/${p.maxStamina}`,
-								value: 'Stamina',
+								value: p.tooltips ? 'Stamina' : '',
 								inline: true
 							},
 						],
 						footer: {
-							text: `${p.name}\n🪷 ${p.xp}/${Math.round((p.level / 0.07) ** 2)} | 💥 ${String(p.critical * 100).slice(0, 4)}%${pstatusList.includes("🍀") || pstatusList.includes("🐈‍⬛") ? '*' : ''} | 🎯 ${String(p.accuracy * 100).slice(0, 4)}%${pstatusList.includes("👁️") || pstatusList.includes("🎯") || pstatusList.includes("💢") || estatusList.includes("💨") ? '*' : ''} | 💨 ${String(p.evasion * 100).slice(0, 4)}%${pstatusList.includes("💨") ? '*' : ''} | 🪖 ${p.armor}${pstatusList.includes("🛡️") ? '*' : ''}`,
+							text: `${p.name}\n⭐${p.tooltips ? '' : ` ${p.level} -`} ${p.xp}/${Math.round((p.level / 0.07) ** 2)} | 💥 ${String(p.critical * 100).slice(0, 4)}%${pstatusList.includes("🍀") || pstatusList.includes("🐈‍⬛") ? '*' : ''} | 🎯 ${String(p.accuracy * 100).slice(0, 4)}%${pstatusList.includes("👁️") || pstatusList.includes("🎯") || pstatusList.includes("💢") || estatusList.includes("💨") ? '*' : ''} | 💨 ${String(p.evasion * 100).slice(0, 4)}%${pstatusList.includes("💨") ? '*' : ''} | ⛑ ${p.armor}${pstatusList.includes("🛡️") ? '*' : ''}`,
 							icon_url: interaction.user.avatarURL()
 						}
 					}
@@ -873,7 +885,7 @@ module.exports = {
 				}
 
 				file ? false : embed.embeds[0].color = 0x000000
-				file ? false : embed.embeds[0].footer.text = `${p.name}\n🪷 ${p.xp}/${Math.round((p.level / 0.07) ** 2)}`
+				file ? false : embed.embeds[0].footer.text = `${p.name}\n⭐ ${p.xp}/${Math.round((p.level / 0.07) ** 2)}`
 				embed.components = file ? [] : [row3]
 				embed.files = file ? [file] : []
 			}

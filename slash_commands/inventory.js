@@ -210,7 +210,7 @@ module.exports = {
             var i = 0
 
             if (!item) return console.error(`"${itemName}" does not exist`);
-            if (!player) return console.error(`This Player Database (${userdb}) does not exist.`);
+            if (!player || typeof player != "string") return console.error(`This Player Database (${userdb}) does not exist.`);
             var changed = false
 
             player = player.split('|')
@@ -228,18 +228,20 @@ module.exports = {
 
             if (!changed) player[12].push(`${assets.items.indexOf(item)}_1_${level || item.maxlvl || item.minlvl || "0"}`)
             player[12] = player[12].join('-')
+            console.log(`Returning ${player.join('|')}`)
             return player.join('|');
         },
 
         remove: async function (userdb, itemName, level) {
             if (!itemName) return console.error(`Cannot remove an undefined item.`);
             var player = await userdb
-            if (!player) return console.error(`This Player Database (${userdb}) does not exist.`);
+            if (!player || typeof player != "string") return console.error(`This Player Database (${userdb}) does not exist.`);
             player = player.split('|')
             if (player[12]) player[12] = (player[12]).split('-')
             else return console.log(`Player inventory is empty.`)
 
             if (typeof itemName === "string") {
+                var final = []
                 let item = assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == itemName.toLowerCase().trim().replace(/[ ]/, ''))
                 if (!item) return console.error(`"${itemName}" does not exist`);
                 player[12].forEach((playeri) => {
@@ -250,18 +252,19 @@ module.exports = {
                     }
                 })
 
-                player[12] = final.join('-')
+                player[12] = final
             } else {
-                let item = []
+                // Array of items
+                var item = []
                 var stop = false
                 itemName.forEach(i => {
-                    assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == i.toLowerCase().trim().replace(/[ ]/, '')) ? item.push(assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == i.toLowerCase().trim().replace(/[ ]/, ''))) : stop = true;
                     if (stop === true) return;
+                    assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == i.toLowerCase().trim().replace(/[ ]/, '')) ? item.push(assets.items.find(({ name }) => name.toLowerCase().trim().replace(/[ ]/, '') == i.toLowerCase().trim().replace(/[ ]/, ''))) : stop = true;
                 })
                 if (stop === true) return console.error(`Cannot remove an undefined item.`);
                 item.forEach((ite) => {
-                    var final = []
-                    player[12].forEach((playeri) => {
+                    var final = player[12]
+                    final.forEach((playeri) => {
                         if (playeri.startsWith(`${assets.items.indexOf(ite)}_`) && (Number(level) ? playeri.endsWith(`_${level}`) : true)) {
                             if (Number(playeri.split('_')[1]) > 1) final.push(`${assets.items.indexOf(ite)}_${Number(playeri.split('_')[1]) - 1}_${level || "0"}`)
                         } else {
@@ -273,7 +276,6 @@ module.exports = {
                 })
             }
 
-            player[12] = player[12].join('-')
             return player.join('|')
         },
 
@@ -284,7 +286,7 @@ module.exports = {
             var hasItem = false;
 
             if (!item) return console.error(`"${itemName}" does not exist.`);
-            if (!player) return console.error(`This Player Database (${userdb}) does not exist.`);
+            if (!player || typeof player != "string") return console.error(`This Player Database (${userdb}) does not exist.`);
 
             player = player.split('|')
             if (player[12]) player[12] = (player[12]).split('-')
