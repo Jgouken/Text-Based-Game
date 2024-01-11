@@ -21,12 +21,12 @@ module.exports = {
 
     async execute(bot, interaction, db) {
         var level = Number(interaction.options.getInteger("level"))
-        var user = interaction.options.getString("thing") ? await bot.users.cache.get(interaction.options.getString("thing").replace(/[<@!>]/gm, '')) : interaction.user
+        var user = interaction.options.getString("entity") ? await bot.users.cache.get(interaction.options.getString("entity").replace(/[<@!>]/gm, '')) : interaction.user
 
         if (!user) {
-            var item = assets.items.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('thing').toLowerCase().trim().replace(/[ ]/g, '')) || assets.chests.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('thing').toLowerCase().trim().replace(/[ ]/g, ''))
-            var area = assets.areas.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('thing').toLowerCase().trim().replace(/[ ]/g, ''))
-            var enemy = assets.enemies.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('thing').toLowerCase().trim().replace(/[ ]/g, ''))
+            var item = assets.items.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('entity').toLowerCase().trim().replace(/[ ]/g, '')) || assets.chests.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('entity').toLowerCase().trim().replace(/[ ]/g, ''))
+            var area = assets.areas.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('entity').toLowerCase().trim().replace(/[ ]/g, ''))
+            var enemy = assets.enemies.find(a => a.name.toLocaleLowerCase().replace(/[ ]/g, '') == interaction.options.getString('entity').toLowerCase().trim().replace(/[ ]/g, ''))
         }
 
         if (user) {
@@ -164,7 +164,8 @@ module.exports = {
 
             interaction.reply(embed)
 
-        } else if (item) {
+        }
+				else if (item) {
             var embed = {
                 title: `${item.name}`,
                 color: 0x2B2D31,
@@ -293,8 +294,9 @@ module.exports = {
                 embeds: [embed],
                 ephemeral: true 
             })
-        } else if (area) {
-            if (interaction.options.getString('thing').toLocaleLowerCase().replace(/[ ]/g, '') == "eternaldamnation") return interaction.reply({
+        }
+				else if (area) {
+            if (interaction.options.getString('entity').toLocaleLowerCase().replace(/[ ]/g, '') == "eternaldamnation") return interaction.reply({
                 embeds: [
                     {
                         title: "Eternal Damnation",
@@ -333,10 +335,11 @@ module.exports = {
                 ephemeral: true 
             })
 
-        } else if (enemy) {
+        }
+				else if (enemy) {
             const enemylvl = interaction.options.getInteger('level')
 
-            if (!enemy) return interaction.reply({ content: `Hm, I can't seem to find an enemy by the name of "${interaction.options.getString('thing')}." Make sure you spelled it correctly!`, ephemeral: true })
+            if (!enemy) return interaction.reply({ content: `Hm, I can't seem to find an enemy by the name of "${interaction.options.getString('entity')}." Make sure you spelled it correctly!`, ephemeral: true })
 
             let fields = [
                 {
@@ -411,6 +414,7 @@ module.exports = {
                 ephemeral: true 
             })
 
-        } else return interaction.reply({ content: `Sorry, I can't find anything, or anyone, by the name of "${interaction.options.getString("thing")}." ${interaction.options.getString("thing").includes('@') ? 'If you\'re looking for a player, you did not mention them correctly' : 'Please make sure you\'ve spelled everything correctly. If you\'re looking for a user, mention them using @user'}.`, ephemeral: true })
+        }
+				else return interaction.reply({ content: `Sorry, I can't find anything, or anyone, by the name of "${interaction.options.getString("entity")}." ${interaction.options.getString("entity").includes('@') ? 'If you\'re looking for a player, you did not mention them correctly' : 'Please make sure you\'ve spelled everything correctly. If you\'re looking for a user, mention them using @user'}.`, ephemeral: true })
     }
 }
