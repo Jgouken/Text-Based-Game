@@ -701,8 +701,8 @@ module.exports = {
 			attack: 20,
 			accuracy: 0.85,
 			critical: 0.05,
-			maxdef: 1,
-			mindef: 6,
+			maxdef: 8,
+			mindef: 4,
 			skills: [
 				{
 					name: "Jump",

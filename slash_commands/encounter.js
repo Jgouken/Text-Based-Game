@@ -59,7 +59,7 @@ module.exports = {
 			attack: Math.round(Number(player[3]) + Number(6 * (level - 1)) + Number(weapon.attack) + Number(weaponlvl) + Number(level * Number(weapon.plvlmult))),
 			armor: Math.round(Number(Number(armor.armor) + Number(level * Number(armor.plvlmult)) + Number(Number(armorlvl) * Number(armor.alvlmult)))),
 
-			accuracy: Number(player[7]),
+			accuracy: weapon.maxlvl ? ((weapon.maxlvl < level && level < 50) ? Math.round(player[7] - weapon.maxlvl) : Number(player[7])) : Number(player[7]),
 			xp: Number(player[8]),
 			critical: weapon.crit,
 			evasion: armor.evasion,
@@ -143,7 +143,7 @@ module.exports = {
 		const row = new ActionRowBuilder()
 		const row2 = new ActionRowBuilder()
 		var y = 0
-		p.weapon.skills.forEach((sk) => {
+		weapon.skills.forEach((sk) => {
 			let skill = new ButtonBuilder()
 			if (y == 0) {
 				let attack = new ButtonBuilder()
@@ -151,7 +151,7 @@ module.exports = {
 					.setDisabled(true)
 					.setLabel(sk.name)
 					.setStyle(ButtonStyle.Danger)
-					.setEmoji('⚔️');
+					.setEmoji(p.weapon.name === "Wooden Bow" ? '🏹' : '⚔️');
 				row2.addComponents(attack)
 				buttons.push(attack)
 				y++
@@ -165,7 +165,7 @@ module.exports = {
 			if (sk.estatus) skill.setEmoji(sk.estatus[Math.floor(Math.random() * sk.estatus.length)])
 			else if (sk.pstatus) skill.setEmoji(sk.pstatus[Math.floor(Math.random() * sk.pstatus.length)])
 			else if (sk.health) skill.setEmoji('💖')
-			else skill.setEmoji('⚡')
+			else skill.setEmoji(['⚡', '🗡️'][Math.round(Math.random() * 5)])
 			if (skill.cost ? skill.cost > p.stamina : true) skill.setDisabled(true)
 			row.addComponents(skill)
 			buttons.push(skill)
