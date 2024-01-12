@@ -294,7 +294,7 @@ module.exports = {
 								let hit = await hitMissCrit(eaccuracy, ecritical, estatus)
 								let draft = eattack + await debuffs(estatus, eattack, pstatus, logging)
 								let finalHit = Math.round(draft * hit * (skill.damage || 1))
-								finalHit -= Math.round(finalHit / (1.25 ** p.armor))
+								finalHit = Math.round(finalHit / (1.25 ** p.armor))
 								var chatIndex = chatLog.length - 1
 
 								for (q = chatLog.length; q > -1; q--) { if (chatLog[q] ? String(chatLog[q]).startsWith(`- ${e.name} used ${skill.name}`) : false) chatIndex = q }
@@ -323,7 +323,7 @@ module.exports = {
 						if (skill.attack || skill.damage) {
 							let draft = eattack + await debuffs(estatus, eattack, pstatus, false)
 							let finalHit = Math.round(draft * hit * (skill.damage || 1))
-							finalHit -= Math.round(finalHit / (1.5 ** p.armor))
+							finalHit = Math.round(finalHit / (1.5 ** p.armor))
 							p.armor >= finalHit / 1.5 ? finalHit -= Math.round(finalHit / 1.5) : finalHit -= p.armor
 							if (hit == 1) logging.push(`hit ${p.name} for ⚔️${finalHit}`)
 							else if (hit == 1.6) logging.push(`hit ${p.name} for a CRITICAL ⚔️${finalHit}!`)
