@@ -27,7 +27,7 @@ module.exports = {
 		),
 
 	async execute(bot, interaction, db) {
-		if (Number(interaction.options.getString('area')) == 10) return interaction.reply({ content: "Eternal Damnation isn't quite ready yet, so come back soon!", ephemeral: true })
+		// if (Number(interaction.options.getString('area')) == 10) return interaction.reply({ content: "Eternal Damnation isn't quite ready yet, so come back soon!", ephemeral: true })
 		/*
 			  0		     1				2			3	     4		 	5		    	6	    	  7	  	  8	 	 				 9											10										  11													12
 			Level | Max Health | Current Health | Attack | Armor | Max Stamina | Current Stamina | Accuracy | XP | Weapon (itemIndex_itemAmount_itemLevel) | Armor Type (itemIndex_itemAmount_itemLevel) | Time since last played (milli) | Items (itemIndex_itemAmount_itemLevel-itemIndex_itemAmount_itemLevel-...)
@@ -83,35 +83,58 @@ module.exports = {
 			}
 		})
 
-		var e;
 		var choiceArea = assets.areas[area]
 		var random = Math.random()
 		var randomTrack = 0;
 
-		if (p.level < choiceArea.minlvl - 1) return interaction.reply({ content: `Your level is too low! You must be at least level ${choiceArea.minlvl - 1} to travel to that area.`, ephemeral: true })
-		for (let i = 0; i < choiceArea.enemies.length; i++) {
-			randomTrack += choiceArea.enemies[i].chance;
-			if (random <= randomTrack) {
-				e = assets.enemies.find(({ name }) => name.toLowerCase().trim() == choiceArea.enemies[i].name.toLowerCase().trim())
-				break;
-			}
-		}
-		while (!e) e = assets.enemies.find(({ name }) => name.toLowerCase().trim() == choiceArea.enemies[Math.floor(Math.random() * choiceArea.enemies.length)].name.toLowerCase().trim())
+		var e;
+		var elevel;
+		var emaxHealth;
+		var eattack;
+		var eaccuracy;
+		var ecritical;
+		var exp;
+		var ehealth;
+		var edefense;
 
-		var elevel = Math.floor(Math.random() * (choiceArea.maxlvl - choiceArea.minlvl) + choiceArea.minlvl);
-		var emaxHealth = Math.round(e.maxHealth + ((elevel / 2) ** 1.72424))
-		var eattack = Math.round(e.attack + (elevel ** 1.62424))
-		var eaccuracy = e.accuracy - p.evasion + (.0025 * (elevel - 1))
-		var ecritical = e.critical + (.000125 * (elevel - 1))
-		var exp = Math.round(((elevel ** 1.2) * (emaxHealth / eattack)) ** 1.2) * 2
-		var ehealth = emaxHealth
-		var edefense = e.maxdef ? Math.floor(Math.random() * (e.maxdef - e.mindef) + e.mindef) : 0
+		if (p.level < choiceArea.minlvl - 1) return interaction.reply({ content: `Your level is too low! You must be at least level ${choiceArea.minlvl - 1} to travel to that area.`, ephemeral: true })
+
+		if (Number(interaction.options.getString('area')) == 10) {
+			while (!e) e = assets.enemies[Math.round(Math.random() * assets.enemies.length)]
+			elevel = Math.floor(Math.random() * ((p.level + 5) - (p.level - 5)) + (p.level - 5));
+			emaxHealth = Math.round(e.maxHealth + ((elevel / 2) ** 1.82424))
+			eattack = Math.round(e.attack + (elevel ** 1.72424))
+			eaccuracy = e.accuracy - p.evasion + (.0025 * (elevel - 1))
+			ecritical = e.critical + (.000125 * (elevel - 1))
+			exp = Math.round(((elevel ** 1.2) * (emaxHealth / eattack)) ** 1.2) * 2
+			ehealth = emaxHealth
+			edefense = e.maxdef ? Math.floor(Math.random() * (e.maxdef - e.mindef) + e.mindef) : 0
+		} else {
+			for (let i = 0; i < choiceArea.enemies.length; i++) {
+				randomTrack += choiceArea.enemies[i].chance;
+				if (random <= randomTrack) {
+					e = assets.enemies.find(({ name }) => name.toLowerCase().trim() == choiceArea.enemies[i].name.toLowerCase().trim())
+					break;
+				}
+			}
+
+			while (!e) e = assets.enemies.find(({ name }) => name.toLowerCase().trim() == choiceArea.enemies[Math.floor(Math.random() * choiceArea.enemies.length)].name.toLowerCase().trim())
+
+			elevel = Math.floor(Math.random() * (choiceArea.maxlvl - choiceArea.minlvl) + choiceArea.minlvl);
+			emaxHealth = Math.round(e.maxHealth + ((elevel / 2) ** 1.82424))
+			eattack = Math.round(e.attack + (elevel ** 1.72424))
+			eaccuracy = e.accuracy - p.evasion + (.0025 * (elevel - 1))
+			ecritical = e.critical + (.000125 * (elevel - 1))
+			exp = Math.round(((elevel ** 1.2) * (emaxHealth / eattack)) ** 1.2) * 2
+			ehealth = emaxHealth
+			edefense = e.maxdef ? Math.floor(Math.random() * (e.maxdef - e.mindef) + e.mindef) : 0
+		}
 
 		if (eaccuracy > 1) eaccuracy = 1
 		var pstatus = []
 		var estatus = []
 		var buttons = []
-		var chatLog = [`⚔️ ${p.name} vs. ${e.name} ⚔️`]
+		var chatLog = [`⚔️ ${p.name} ${Math.random() * 10 > 5 ? '対' : (Math.random() * 10 > 5 ? 'versus' : 'vs.')} ${e.name} ⚔️`]
 		var eLog = []
 		var timer = 750
 		var ended = false
@@ -164,7 +187,6 @@ module.exports = {
 			.setStyle(ButtonStyle.Primary)
 		row2.addComponents(useitem)
 		buttons.push(useitem)
-
 
 		interaction.reply(await embed(0x00ff00, null)).then(async (m) => {
 			async function battle() {
@@ -272,7 +294,7 @@ module.exports = {
 								let hit = await hitMissCrit(eaccuracy, ecritical, estatus)
 								let draft = eattack + await debuffs(estatus, eattack, pstatus, logging)
 								let finalHit = Math.round(draft * hit * (skill.damage || 1))
-								finalHit -= Math.round(finalHit / (1.5 ** p.armor))
+								finalHit -= Math.round(finalHit / (1.25 ** p.armor))
 								var chatIndex = chatLog.length - 1
 
 								for (q = chatLog.length; q > -1; q--) { if (chatLog[q] ? String(chatLog[q]).startsWith(`- ${e.name} used ${skill.name}`) : false) chatIndex = q }
@@ -475,7 +497,7 @@ module.exports = {
 						await db.set(`player_${interaction.user.id}`, player.join('|'))
 					} else {
 						chatLog.push(`🎉 ${p.name} won the battle! 🎉\n${p.name} gained ⭐${exp}!`)
-						
+
 						p.xp += exp
 						while (p.xp >= Math.round((p.level / 0.07) ** 2)) {
 							p.xp -= Math.round((p.level / 0.07) ** 2)
@@ -490,7 +512,7 @@ module.exports = {
 						}
 
 						await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
-						
+
 						if (e.drops) {
 							async function drop() {
 								var item = undefined;
@@ -539,20 +561,20 @@ module.exports = {
 							let row4 = new ActionRowBuilder()
 							if (await inventory.player.search(await db.get(`player_${interaction.user.id}`), chestChoice.key)) {
 								row4.addComponents(new ButtonBuilder()
-								.setCustomId(`open`)
-								.setLabel(`Crack it Open!`)
-								.setStyle(ButtonStyle.Success))
+									.setCustomId(`open`)
+									.setLabel(`Crack it Open!`)
+									.setStyle(ButtonStyle.Success))
 							} else {
 								row4.addComponents(new ButtonBuilder()
-								.setCustomId(`open`)
-								.setLabel(`Crack it Open!`)
-								.setStyle(ButtonStyle.Success)
-								.setDisabled(true))
+									.setCustomId(`open`)
+									.setLabel(`Crack it Open!`)
+									.setStyle(ButtonStyle.Success)
+									.setDisabled(true))
 							}
-								row4.addComponents(new ButtonBuilder()
-									.setCustomId(`nothx`)
-									.setLabel(`No Thanks`)
-									.setStyle(ButtonStyle.Danger))
+							row4.addComponents(new ButtonBuilder()
+								.setCustomId(`nothx`)
+								.setLabel(`No Thanks`)
+								.setStyle(ButtonStyle.Danger))
 
 							confirmation.update({
 								embeds: [

@@ -2322,6 +2322,16 @@ module.exports = {
 				},
 			]
 		},
+		{
+			name: "Eternal Damnation",
+			minlvl: 50,
+			maxlevel: "Death",
+			enemies: [
+				{
+					name: "All. All of them."
+				}
+			]
+		}
 	],
 
 	items: [
