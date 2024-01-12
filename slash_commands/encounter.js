@@ -29,8 +29,8 @@ module.exports = {
 	async execute(bot, interaction, db) {
 		// if (Number(interaction.options.getString('area')) == 10) return interaction.reply({ content: "Eternal Damnation isn't quite ready yet, so come back soon!", ephemeral: true })
 		/*
-			  0		     1				2			3	     4		 	5		    	6	    	  7	  	  8	 	 				 9											10										  11													12
-			Level | Max Health | Current Health | Attack | Armor | Max Stamina | Current Stamina | Accuracy | XP | Weapon (itemIndex_itemAmount_itemLevel) | Armor Type (itemIndex_itemAmount_itemLevel) | Time since last played (milli) | Items (itemIndex_itemAmount_itemLevel-itemIndex_itemAmount_itemLevel-...)
+			  0		     1				2			3	   		  4				 	5		    	6	    	  7	  	  8	 	 				 9											10										  11													12
+			Level | Max Health | Current Health | Attack | Armor (DEPRECATED) | Max Stamina | Current Stamina | Accuracy | XP | Weapon (itemIndex_itemAmount_itemLevel) | Armor Type (itemIndex_itemAmount_itemLevel) | Time since last played (milli) | Items (itemIndex_itemAmount_itemLevel-itemIndex_itemAmount_itemLevel-...)
 		*/
 
 		let player = (await db.get(`player_${interaction.user.id}`)).split('|')
@@ -55,10 +55,9 @@ module.exports = {
 			stamina: Math.round(Number(player[6])),
 
 			baseAttack: Number(player[3]),
-			baseArmor: Number(player[4]),
 
 			attack: Math.round(Number(player[3]) + Number(6 * (level - 1)) + Number(weapon.attack) + Number(weaponlvl) + Number(level * Number(weapon.plvlmult))),
-			armor: Math.round(Number(Number(player[4]) + Number(armor.armor) + Number(level * Number(armor.plvlmult)) + Number(Number(armorlvl) * Number(armor.alvlmult)))),
+			armor: Math.round(Number(Number(armor.armor) + Number(level * Number(armor.plvlmult)) + Number(Number(armorlvl) * Number(armor.alvlmult)))),
 
 			accuracy: Number(player[7]),
 			xp: Number(player[8]),
@@ -507,7 +506,6 @@ module.exports = {
 							p.maxStamina = Math.round(Number(player[5]) + (5 * (p.level - 1)))
 							p.stamina = p.maxStamina
 							p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
-							p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
 							chatLog.push(`⬆️ ${p.name} leveled up to level ${p.level}! ⬆️`)
 						}
 
@@ -859,7 +857,7 @@ module.exports = {
 					var counter = 0
 					var randNum = Math.random()
 					var addedButton = false
-					choiceArea.chests.forEach(async chestc => {
+					if (choiceArea.chests) choiceArea.chests.forEach(async chestc => {
 						if (chest < 0) {
 							counter += chestc.chance
 							if (randNum <= counter) {

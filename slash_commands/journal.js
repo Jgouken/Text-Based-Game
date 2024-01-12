@@ -59,7 +59,7 @@ module.exports = {
                 stamina: Math.round(Number(player[6])),
 
                 attack: Math.round(Number(player[3]) + Number(6 * (level - 1)) + Number(weapon.attack) + Number(weaponlvl) + Number(level * Number(weapon.plvlmult))),
-                armor: Math.round(Number(Number(player[4]) + Number(armor.armor) + Number(level * Number(armor.plvlmult)) + Number(Number(armorlvl) * Number(armor.alvlmult)))),
+                armor: Math.round(Number(Number(armor.armor) + Number(level * Number(armor.plvlmult)) + Number(Number(armorlvl) * Number(armor.alvlmult)))),
 
                 accuracy: Number(player[7]),
                 xp: Number(player[8]),

@@ -163,7 +163,6 @@ module.exports = {
 										stamina: Math.round(Number(player[6])),
 
 										baseAttack: Number(player[3]),
-										baseArmor: Number(player[4]),
 
 										accuracy: Number(player[7]),
 										xp: Number(player[8]),
@@ -206,7 +205,6 @@ module.exports = {
 										stamina: Math.round(Number(player[6])),
 
 										baseAttack: Number(player[3]),
-										baseArmor: Number(player[4]),
 
 										accuracy: Number(player[7]),
 										xp: Number(player[8]),
@@ -225,7 +223,6 @@ module.exports = {
 										p.maxStamina = Math.round(Number(player[5]) + (5 * (p.level - 1)))
 										p.stamina = p.maxStamina
 										p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
-										p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
 								}
 
 								await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
@@ -250,7 +247,6 @@ module.exports = {
 										stamina: Math.round(Number(player[6])),
 
 										baseAttack: Number(player[3]),
-										baseArmor: Number(player[4]),
 
 										accuracy: Number(player[7]),
 										xp: Number(player[8]),
@@ -269,7 +265,6 @@ module.exports = {
 										p.maxStamina = Math.round(Number(player[5]) + (5 * (p.level - 1)))
 										p.stamina = p.maxStamina
 										p.baseAttack = Math.round(Number(player[3]) + (6 * (p.level - 1)))
-										p.baseArmor = Math.round(Number(player[4]) + (10 * (p.level - 1)))
 								}
 
 								await db.set(`player_${interaction.user.id}`, `${p.level}|${p.maxHealth}|${p.health}|${p.baseAttack}|${p.baseArmor}|${p.maxStamina}|${p.stamina}|${p.accuracy}|${p.xp}|${rawWeapon.join('_')}|${rawArmor.join('_')}|${Date.now()}${p.inventory ? `|${p.inventory}` : ''}`)
